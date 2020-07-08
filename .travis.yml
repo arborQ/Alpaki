@@ -3,4 +3,4 @@ mono: none
 dotnet: 3.1
 solution: backend/Alpaki.sln
 script:
-  - dotnet build
+  - dotnet build .\backend\Alpaki.sln
