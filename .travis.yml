@@ -3,3 +3,4 @@ mono: none
 dotnet: 3.1
 script:
   - dotnet build backend/Alpaki.sln
+  - dotnet test backend/Alpaki.sln
