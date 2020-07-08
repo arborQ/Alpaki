@@ -8,25 +8,15 @@ namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
 {
     public class CreateDreamerHandler : IRequestHandler<CreateDreamerRequest, CreateDreamerResponse>
     {
-        private readonly CreateDreamerRequestValidator _validationRules;
         private readonly IDatabaseContext _databaseContext;
 
-        public CreateDreamerHandler(CreateDreamerRequestValidator validationRules, IDatabaseContext databaseContext)
+        public CreateDreamerHandler(IDatabaseContext databaseContext)
         {
-            _validationRules = validationRules;
             _databaseContext = databaseContext;
         }
 
         public async Task<CreateDreamerResponse> Handle(CreateDreamerRequest request, CancellationToken cancellationToken)
         {
-            var validationResult = await _validationRules.ValidateAsync(request, cancellationToken);
-
-            if (!validationResult.IsValid)
-            {
-                // TODO: provide valid exception
-                throw new System.Exception("Invalid request");
-            }
-
             var newDream = new Database.Models.Dream
             {
                 FirstName = request.FirstName,
