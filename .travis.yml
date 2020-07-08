@@ -3,4 +3,4 @@ mono: none
 dotnet: 3.1
 solution: backend/Alpaki.sln
 script:
-  - dotnet run -p .\backend\Alpaki.WebApi
+  - dotnet build .\backend\Alpaki.WebApi
