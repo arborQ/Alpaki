@@ -16,7 +16,7 @@ using System.Data.Entity.Infrastructure;
 using MockQueryable.NSubstitute;
 using System.Linq.Expressions;
 
-namespace Alpaki.Tests.UnitTests
+namespace Alpaki.Tests.UnitTests.UserAuthorize
 {
     public class UserAuthorizeHandlerTests
     {

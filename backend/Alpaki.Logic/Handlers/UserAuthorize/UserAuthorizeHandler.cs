@@ -1,40 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.Database;
-using Alpaki.Database.Models;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Logic.Services
 {
-    public class UserAuthorizeResponse
-    {
-        public string Token { get; set; }
-
-        public bool IsSuccessfull { get; set; }
-    }
-
-    public class UserAuthorizeRequest : IRequest<UserAuthorizeResponse>
-    {
-        public string Login { get; set; }
-
-        public string Password { get; set; }
-    }
-
-    public class UserAuthorizeRequestValidation : AbstractValidator<UserAuthorizeRequest>, IValidator<UserAuthorizeRequest>
-    {
-        public UserAuthorizeRequestValidation()
-        {
-            RuleFor(d => d.Login).NotEmpty().WithMessage("Login jest wymagany");
-            RuleFor(d => d.Password).NotEmpty().WithMessage("Hasło jest wymagane");
-        }
-    }
-
     public class UserAuthorizeHandler : IRequestHandler<UserAuthorizeRequest, UserAuthorizeResponse>
     {
         private readonly IValidator<UserAuthorizeRequest> _validator;
