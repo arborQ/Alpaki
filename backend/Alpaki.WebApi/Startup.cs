@@ -15,7 +15,6 @@ using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Alpaki.WebApi.Filters;
 using Alpaki.CrossCutting.Interfaces;
-using Alpaki.Logic.Expressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 
@@ -83,8 +82,6 @@ namespace Alpaki.WebApi
         private static void RegisterServices(IServiceCollection services)
         {
             services.AddTransient<ICurrentUserService, CurrentUserService>();
-            services.AddTransient<VolontierDreamerExpressions>();
-            services.AddTransient<VolontierUserExpressions>();
             services.RegisterLogicServices();
         }
 
