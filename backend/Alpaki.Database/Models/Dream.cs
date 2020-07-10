@@ -12,12 +12,21 @@ namespace Alpaki.Database.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long DreamId { get; set; }
 
+        [MaxLength(250)]
+        [Required]
+        public string FirstName { get; set; }
+
+        [MaxLength(250)]
+        [Required]
+        public string LastName { get; set; }
+
+        public int Age { get; set; }
+
+        public GenderEnum Gender { get; set; }
+
+        public string DreamUrl { get; set; }
+
         public string Tags { get; set; }
-
-        [ForeignKey(nameof(Dreamer))]
-        public long DreamerId { get; set; }
-
-        public Dreamer Dreamer { get; set; }
 
         [ForeignKey(nameof(DreamCategory))]
         public long DreamCategoryId { get; set; }

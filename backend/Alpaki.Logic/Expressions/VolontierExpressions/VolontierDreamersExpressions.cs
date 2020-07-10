@@ -16,7 +16,7 @@ namespace Alpaki.Logic.Expressions
             _currentUserService = currentUserService;
         }
 
-        public Expression<Func<Dreamer, bool>> DreamersQuery
+        public Expression<Func<Dream, bool>> DreamersQuery
         {
             get
             {

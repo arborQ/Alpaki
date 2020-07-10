@@ -14,11 +14,11 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
 {
     public class DreamerResponse
     {
-        public DreamerItem[] Dreamers { get; set; }
+        public DreamItem[] Dreams { get; set; }
 
-        public class DreamerItem
+        public class DreamItem
         {
-            public long DreamerId { get; set; }
+            public long DreamId { get; set; }
 
             public long Age { get; set; }
 
@@ -63,8 +63,8 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 });
             var query = @"
                     query DreamerQuery {
-                      dreamers {
-                        dreamerId
+                      dreams {
+                        dreamId
                         age
                         gender
                         firstName
@@ -81,7 +81,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             var graphResponse = await _graphQL.Query<DreamerResponse>(query);
 
             // Assert
-            Assert.Equal(count, graphResponse.Dreamers.Length);
+            Assert.Equal(count, graphResponse.Dreams.Length);
             foreach (var response in responses)
             {
                 response.EnsureSuccessStatusCode(); // Status Code 200-299

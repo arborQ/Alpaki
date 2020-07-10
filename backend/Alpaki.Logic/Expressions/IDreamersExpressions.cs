@@ -6,6 +6,6 @@ namespace Alpaki.Logic.Expressions
 {
     public interface IDreamersExpressions
     {
-        Expression<Func<Dreamer, bool>> DreamersQuery { get; }
+        Expression<Func<Dream, bool>> DreamersQuery { get; }
     }
 }

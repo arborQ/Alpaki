@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using MediatR;
 
@@ -26,19 +27,22 @@ namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
                 throw new System.Exception("Invalid request");
             }
 
-            var newDreamer = new Database.Models.Dreamer
+            var newDream = new Database.Models.Dream
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Age = request.Age,
                 DreamUrl = request.DreamUrl,
-                Gender = request.Gender
+                Gender = request.Gender,
+                DreamCategoryId = 1,
+                Tags = "#MM",
+                DreamState = DreamStateEnum.Created
             };
 
-            await _databaseContext.Dreamers.AddAsync(newDreamer);
+            await _databaseContext.Dreams.AddAsync(newDream);
             await _databaseContext.SaveChangesAsync();
 
-            return new CreateDreamerResponse { DreamerId = newDreamer.DreamerId };
+            return new CreateDreamerResponse { DreamerId = newDream.DreamId };
         }
     }
 }

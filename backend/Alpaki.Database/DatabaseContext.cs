@@ -37,8 +37,6 @@ namespace Alpaki.Database
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Dreamer> Dreamers { get; set; }
-
         public DbSet<Dream> Dreams { get; set; }
 
         public DbSet<DreamCategory> DreamCategories { get; set; }

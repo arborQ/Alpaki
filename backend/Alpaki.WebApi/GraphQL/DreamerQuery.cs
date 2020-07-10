@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.WebApi.GraphQL
 {
-    public class DreamerQuery : ObjectGraphType<DreamerType>
+    public class DreamerQuery : ObjectGraphType<DreamType>
     {
         private readonly IDreamersExpressions _volontierDreamerExpressions;
         private readonly IUserExpressions _volontierUserExpressions;
 
         public DreamerQuery(DatabaseContext databaseContext, DatabaseContext userDatabaseContext, VolontierDreamerExpressions volontierDreamerExpressions, VolontierUserExpressions volontierUserExpressions)
         {
-            Name = "DreamerQuery";
+            Name = "DreamQuery";
             var arguments = new QueryArguments(new List<QueryArgument>
             {
-                new QueryArgument<IdGraphType> { Name = "dreamerId" },
+                new QueryArgument<IdGraphType> { Name = "dreamId" },
                 new QueryArgument<StringGraphType> { Name = "searchName" }
             });
 
@@ -40,20 +40,18 @@ namespace Alpaki.WebApi.GraphQL
                 return userQuery.ToListAsync();
             });
 
-            Field<ListGraphType<DreamerType>>("dreamers", arguments: arguments, resolve: context =>
+            Field<ListGraphType<DreamType>>("dreams", arguments: arguments, resolve: context =>
             {
-                var dreamerQuery = databaseContext.Dreamers
-                    .Include(d => d.Dreams)
-                        .ThenInclude(d => d.DreamCategory)
-                    .Include(d => d.Dreams)
-                        .ThenInclude(d => d.RequiredSteps)
+                var dreamerQuery = databaseContext.Dreams
+                    .Include(d => d.DreamCategory)
+                    .Include(d => d.RequiredSteps)
                     .Where(_volontierDreamerExpressions.DreamersQuery);
 
-                var dreamerId = context.GetArgument<int?>("dreamerId");
+                var dreamerId = context.GetArgument<int?>("dreamId");
 
                 if (dreamerId.HasValue)
                 {
-                    return dreamerQuery.Where(d => d.DreamerId == dreamerId).ToListAsync();
+                    return dreamerQuery.Where(d => d.DreamId == dreamerId).ToListAsync();
                 }
 
                 var searchName = context.GetArgument<string>("searchName");
