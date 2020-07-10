@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Alpaki.WebApi.Filters;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Logic.Expressions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace Alpaki.WebApi
 {
@@ -28,12 +30,19 @@ namespace Alpaki.WebApi
 
         public IConfiguration Configuration { get; }
 
+        public static readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => {
+            builder.AddConsole();
+        });
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
             services.AddDbContext<DatabaseContext>(opt =>
-               opt.UseSqlServer(connectionString), ServiceLifetime.Transient);
+               opt
+               .UseLoggerFactory(loggerFactory)
+               .EnableSensitiveDataLogging()
+               .UseSqlServer(connectionString), ServiceLifetime.Transient);
 
             RegisterGraphQL(services);
 

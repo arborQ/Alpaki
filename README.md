@@ -13,6 +13,7 @@
 ### Run backend
 
 ```sh
+$ dotnet ef database update -p .\Alpaki.Database\ -s .\Alpaki.WebApi\
 $ dotnet run -p .\backend\Alpaki.WebApi
 ```
 
