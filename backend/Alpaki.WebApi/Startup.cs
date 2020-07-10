@@ -17,6 +17,10 @@ using Alpaki.WebApi.Filters;
 using Alpaki.CrossCutting.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
+using System;
 
 namespace Alpaki.WebApi
 {
@@ -29,20 +33,52 @@ namespace Alpaki.WebApi
 
         public IConfiguration Configuration { get; }
 
-        public static readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => {
+        public static readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+        {
             builder.AddConsole();
         });
-
+        private static byte[] FromBase64Url(string base64Url)
+        {
+            string base64 = string.Empty;
+            if (!string.IsNullOrEmpty(base64Url))
+            {
+                string padded = base64Url.Length % 4 == 0
+                    ? base64Url : base64Url + "====".Substring(base64Url.Length % 4);
+                base64 = padded.Replace("_", "/")
+                                        .Replace("-", "+");
+            }
+            return Convert.FromBase64String(base64);
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
-            services.AddDbContext<DatabaseContext>(opt =>
+            services.AddDbContext<IDatabaseContext, DatabaseContext>(opt =>
                opt
                .UseLoggerFactory(loggerFactory)
                .EnableSensitiveDataLogging()
                .UseSqlServer(connectionString), ServiceLifetime.Transient);
 
+            string privateSecretKey = Configuration.GetValue<string>("SeacretKey");
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                   
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(FromBase64Url(privateSecretKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
             RegisterGraphQL(services);
 
             services.AddControllers();
@@ -91,12 +127,12 @@ namespace Alpaki.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DatabaseContext databaseContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDatabaseContext databaseContext)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                databaseContext.Database.EnsureCreated();
+                databaseContext.EnsureCreated();
             }
 
             ConfigureSwagger(app);
@@ -107,6 +143,7 @@ namespace Alpaki.WebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

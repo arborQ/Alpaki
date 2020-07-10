@@ -6,10 +6,10 @@ namespace Alpaki.WebApi.GraphQL
 {
     public class AdminDreamerQuery : DreamerQuery
     {
-        private readonly DatabaseContext _databaseContext;
-        private readonly DatabaseContext _userDatabaseContext;
+        private readonly IDatabaseContext _databaseContext;
+        private readonly IDatabaseContext _userDatabaseContext;
 
-        public AdminDreamerQuery(DatabaseContext databaseContext, DatabaseContext userDatabaseContext)
+        public AdminDreamerQuery(IDatabaseContext databaseContext, IDatabaseContext userDatabaseContext)
         {
             _databaseContext = databaseContext;
             _userDatabaseContext = userDatabaseContext;

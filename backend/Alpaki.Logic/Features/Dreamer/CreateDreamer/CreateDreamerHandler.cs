@@ -9,9 +9,9 @@ namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
     public class CreateDreamerHandler : IRequestHandler<CreateDreamerRequest, CreateDreamerResponse>
     {
         private readonly CreateDreamerRequestValidator _validationRules;
-        private readonly DatabaseContext _databaseContext;
+        private readonly IDatabaseContext _databaseContext;
 
-        public CreateDreamerHandler(CreateDreamerRequestValidator validationRules, DatabaseContext databaseContext)
+        public CreateDreamerHandler(CreateDreamerRequestValidator validationRules, IDatabaseContext databaseContext)
         {
             _validationRules = validationRules;
             _databaseContext = databaseContext;

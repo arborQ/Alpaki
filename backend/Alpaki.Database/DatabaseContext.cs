@@ -1,16 +1,28 @@
 ﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Database
 {
-    public class DatabaseContext : DbContext
+    public interface IDatabaseContext
+    {
+        DbSet<User> Users { get; }
+
+        DbSet<Dream> Dreams { get; }
+
+        void EnsureCreated();
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    }
+
+    public class DatabaseContext : DbContext, IDatabaseContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
-
         }
 
         private void SeedData(ModelBuilder modelBuilder)
@@ -33,6 +45,11 @@ namespace Alpaki.Database
             modelBuilder.Entity<AssignedDreams>().HasKey(ad => new { ad.DreamId, ad.VolunteerId });
 
             SeedData(modelBuilder);
+        }
+
+        public void EnsureCreated()
+        {
+            Database.EnsureCreated();
         }
 
         public DbSet<User> Users { get; set; }

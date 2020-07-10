@@ -10,6 +10,6 @@ namespace Alpaki.WebApi
     {
         public long CurrentUserId => 2;
 
-        public UserRoleEnum CurrentUserRole => UserRoleEnum.Volunteer;
+        public UserRoleEnum CurrentUserRole => UserRoleEnum.Admin;
     }
 }

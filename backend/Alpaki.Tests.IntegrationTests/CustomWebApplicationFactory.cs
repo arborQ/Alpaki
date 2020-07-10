@@ -24,7 +24,7 @@ namespace Alpaki.Tests.IntegrationTests
                     services.Remove(descriptor);
                 }
 
-                services.AddDbContext<DatabaseContext>(options =>
+                services.AddDbContext<IDatabaseContext, DatabaseContext>(options =>
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
@@ -34,10 +34,10 @@ namespace Alpaki.Tests.IntegrationTests
                 using (var scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<DatabaseContext>();
+                    var db = scopedServices.GetRequiredService<IDatabaseContext>();
 
                     // Ensure the database is created.
-                    db.Database.EnsureCreated();
+                    db.EnsureCreated();
                 }
             });
         }

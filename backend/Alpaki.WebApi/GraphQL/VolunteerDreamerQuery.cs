@@ -8,11 +8,11 @@ namespace Alpaki.WebApi.GraphQL
 {
     public class VolunteerDreamerQuery : DreamerQuery
     {
-        private readonly DatabaseContext _databaseContext;
-        private readonly DatabaseContext _userDatabaseContext;
+        private readonly IDatabaseContext _databaseContext;
+        private readonly IDatabaseContext _userDatabaseContext;
         private readonly ICurrentUserService _currentUserService;
 
-        public VolunteerDreamerQuery(DatabaseContext databaseContext, DatabaseContext userDatabaseContext, ICurrentUserService currentUserService)
+        public VolunteerDreamerQuery(IDatabaseContext databaseContext, IDatabaseContext userDatabaseContext, ICurrentUserService currentUserService)
         {
             _databaseContext = databaseContext;
             _userDatabaseContext = userDatabaseContext;
@@ -31,7 +31,7 @@ namespace Alpaki.WebApi.GraphQL
 
         protected override IQueryable<User> QueryUsers()
         {
-            return _databaseContext.Users.Where(u => u.UserId == _currentUserService.CurrentUserId);
+            return _userDatabaseContext.Users.Where(u => u.UserId == _currentUserService.CurrentUserId);
         }
     }
 }
