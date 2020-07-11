@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Alpaki.Database.Models;
+using Alpaki.Database.Models.Invitations;
 using Alpaki.Logic.Extensions;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ namespace Alpaki.WebApi.GraphQL
         protected abstract IQueryable<Dream> QueryDreams();
 
         protected abstract IQueryable<User> QueryUsers();
+
+        protected abstract IQueryable<Invitation> QueryInvitations();
 
         public DreamerQuery()
         {
@@ -75,6 +78,11 @@ namespace Alpaki.WebApi.GraphQL
 
                 return dreamerQuery.ToListAsync();
             });
+
+            Field<ListGraphType<InvitationType>>(
+                "invitations",
+                resolve: context => QueryInvitations().ToListAsync()
+            );
         }
     }
 }

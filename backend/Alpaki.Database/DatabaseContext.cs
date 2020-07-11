@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
+using Alpaki.Database.Models.Invitations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Database
@@ -12,6 +13,8 @@ namespace Alpaki.Database
         DbSet<User> Users { get; }
 
         DbSet<Dream> Dreams { get; }
+
+        DbSet<Invitation> Invitations { get; }
 
         DbSet<AssignedDreams> AssignedDreams { get; }
 
@@ -46,6 +49,8 @@ namespace Alpaki.Database
 
             modelBuilder.Entity<AssignedDreams>().HasKey(ad => new { ad.DreamId, ad.VolunteerId });
 
+            modelBuilder.Entity<Invitation>();
+
             SeedData(modelBuilder);
         }
 
@@ -63,5 +68,7 @@ namespace Alpaki.Database
         public DbSet<DreamStep> DreamSteps { get; set; }
 
         public DbSet<AssignedDreams> AssignedDreams { get; set; }
+
+        public DbSet<Invitation> Invitations { get; set; }
     }
 }
