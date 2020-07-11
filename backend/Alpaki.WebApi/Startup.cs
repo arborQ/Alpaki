@@ -1,25 +1,24 @@
+using System.Reflection;
+using Alpaki.CrossCutting.Interfaces;
+using Alpaki.Database;
+using Alpaki.Logic;
+using Alpaki.WebApi.Filters;
+using Alpaki.WebApi.GraphQL;
+using FluentValidation.AspNetCore;
+using GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Alpaki.Database;
-using MediatR;
-using System.Reflection;
-using Alpaki.Logic;
-using GraphQL;
-using GraphQL.Server;
-using Alpaki.WebApi.GraphQL;
-using GraphQL.Server.Ui.Playground;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Alpaki.WebApi.Filters;
-using Alpaki.CrossCutting.Interfaces;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
 using System;
 
 namespace Alpaki.WebApi
@@ -93,10 +92,12 @@ namespace Alpaki.WebApi
                 options.AllowSynchronousIO = true;
             });
 
-            services.AddControllers(options =>
-            {
-                options.Filters.Add(typeof(ApiKeyFilter));
-            });
+            services.AddControllers(
+                options =>
+                {
+                    options.Filters.Add(typeof(ApiKeyFilter));
+                }
+            ).AddFluentValidation(fv=>fv.RegisterValidatorsFromAssemblyContaining(typeof(InitializeLogic)));
         }
 
         private static void RegisterGraphQL(IServiceCollection services)
