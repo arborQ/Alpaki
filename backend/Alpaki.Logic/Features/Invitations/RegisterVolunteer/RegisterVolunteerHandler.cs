@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using Alpaki.Database.Models;
+using Alpaki.Logic.Services;
 using MediatR;
 using Microsoft.AspNet.Identity;
 
@@ -13,11 +14,13 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
     public class RegisterVolunteerHandler : IRequestHandler<RegisterVolunteer, RegisterVolunteerResponse>
     {
         private readonly IDatabaseContext _dBContext;
+        private readonly JwtGenerator _jwtGenerator;
         private readonly IPasswordHasher _passwordHasher;
 
-        public RegisterVolunteerHandler(IDatabaseContext dBContext)
+        public RegisterVolunteerHandler(IDatabaseContext dBContext, JwtGenerator jwtGenerator)
         {
             _dBContext = dBContext;
+            _jwtGenerator = jwtGenerator;
             _passwordHasher = new PasswordHasher();
         }
         public async Task<RegisterVolunteerResponse> Handle(RegisterVolunteer request, CancellationToken cancellationToken)
@@ -40,7 +43,6 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
 
             if (!invitation.Code.ToLower().Equals(request.Code.ToLower()))
             {
-                //TODO decrease number of tries
                 invitation.Attempts += 1;
                 await _dBContext.SaveChangesAsync(cancellationToken);
                 throw new Exception("Invalid code");
@@ -70,9 +72,9 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
             await _dBContext.Users.AddAsync(user, cancellationToken);
             await _dBContext.SaveChangesAsync(cancellationToken);
 
-            //generate jwt token
+            var jwtToken = _jwtGenerator.Generate(user);
 
-            return new RegisterVolunteerResponse(user.UserId, "");
+            return new RegisterVolunteerResponse(user.UserId, jwtToken);
         }
     }
 }

@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using Alpaki.Logic.Services;
 
 namespace Alpaki.WebApi
 {
@@ -78,6 +79,8 @@ namespace Alpaki.WebApi
                     ValidateAudience = false
                 };
             });
+            services.AddSingleton(x => new JwtGenerator(privateSecretKey));
+
             RegisterGraphQL(services);
 
             services.AddControllers();
@@ -86,7 +89,7 @@ namespace Alpaki.WebApi
             {
                 c.DescribeAllEnumsAsStrings();
             });
-
+            
             services.Configure<KestrelServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
