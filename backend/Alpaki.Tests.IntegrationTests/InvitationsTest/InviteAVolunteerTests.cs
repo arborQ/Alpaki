@@ -6,9 +6,8 @@ using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
 using AutoFixture;
 using FluentAssertions;
 using Xunit;
-using Xunit.Abstractions;
 
-namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
+namespace Alpaki.Tests.IntegrationTests.InvitationsTest
 {
     public class InviteAVolunteerFake
     {
@@ -28,14 +27,12 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
     }
     public class InviteAVolunteerTests : IClassFixture<CustomWebApplicationFactory>
     {
-        private readonly ITestOutputHelper _testOutputHelper;
         private readonly HttpClient _client;
         private readonly GraphQLClient _graphQL;
         private readonly Fixture _fixture;
 
-        public InviteAVolunteerTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
+        public InviteAVolunteerTests(CustomWebApplicationFactory factory)
         {
-            _testOutputHelper = testOutputHelper;
             _client = factory.CreateClient();
             _graphQL = new GraphQLClient(_client);
             _fixture = new Fixture();
@@ -82,6 +79,5 @@ query {
             );
             //TODO verify if event got published(mock IMediator to verify behaviour)
         }
-
     }
 }

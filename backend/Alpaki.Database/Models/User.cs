@@ -27,6 +27,8 @@ namespace Alpaki.Database.Models
 
         public string PhoneNumber { get; set; }
 
+        public string PasswordHash { get; set; }
+
         public UserRoleEnum Role { get; set; }
 
         public ICollection<AssignedDreams> AssignedDreams { get; set; }

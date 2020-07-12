@@ -21,6 +21,9 @@ namespace Alpaki.Database.Models.Invitations
         public InvitationStateEnum Status { get; set; }
         [Required]
         public DateTimeOffset Timestamp { get; set; }
+        [Required]
+        [DefaultValue(0)]
+        public int Attempts { get; set; }
     }
 
 }
