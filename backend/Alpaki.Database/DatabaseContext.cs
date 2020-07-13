@@ -13,6 +13,8 @@ namespace Alpaki.Database
 
         DbSet<Dream> Dreams { get; }
 
+        DbSet<AssignedDreams> AssignedDreams { get; }
+
         void EnsureCreated();
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

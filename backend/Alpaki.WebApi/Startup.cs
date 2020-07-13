@@ -133,8 +133,8 @@ namespace Alpaki.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                databaseContext.EnsureCreated();
             }
+            databaseContext.EnsureCreated();
 
             ConfigureSwagger(app);
 
