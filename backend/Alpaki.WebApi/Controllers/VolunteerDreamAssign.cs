@@ -21,6 +21,6 @@ namespace Alpaki.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponseModel), (int)HttpStatusCode.BadRequest)]
-        public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteerRequest) => await _mediator.Publish(assignVolunteerRequest);
+        public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteeErrorResponseModelrRequest) => await _mediator.Publish(assignVolunteeErrorResponseModelrRequest);
     }
 }
