@@ -17,6 +17,6 @@ namespace Alpaki.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteerRequest) => await _mediator.Send(assignVolunteerRequest);
+        public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteerRequest) => await _mediator.Publish(assignVolunteerRequest);
     }
 }

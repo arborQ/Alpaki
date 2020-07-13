@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Alpaki.Database;
 using Alpaki.WebApi;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -35,6 +36,8 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
     {
         public TestServer TestServer { get; }
 
+        public IDatabaseContext DatabaseContext;
+
         public HttpClient ServerClient { get; }
 
         public IConfiguration Configuration { get; }
@@ -45,7 +48,9 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
             var builder = new WebHostBuilder()
                 .UseConfiguration(Configuration)
                 .UseStartup<Startup>();
+            
             TestServer = new TestServer(builder);
+            DatabaseContext = TestServer.Services.GetService(typeof(IDatabaseContext)) as IDatabaseContext;
             ServerClient = TestServer.CreateClient();
         }
 
