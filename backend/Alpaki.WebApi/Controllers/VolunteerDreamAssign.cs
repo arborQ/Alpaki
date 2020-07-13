@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
+using Alpaki.CrossCutting.Models;
 using Alpaki.Logic.Handlers.AssignVolunteer;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +19,8 @@ namespace Alpaki.WebApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponseModel), (int)HttpStatusCode.BadRequest)]
         public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteerRequest) => await _mediator.Publish(assignVolunteerRequest);
     }
 }
