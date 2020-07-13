@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using Alpaki.Database.Models.Invitations;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
 {
     public class InviteAVolunteerHandler : IRequestHandler<InviteAVolunteerRequest, InviteAVolunteerResponse>
     {
         private readonly IDatabaseContext _databaseContext;
-        private readonly InvitationUniqueCodesGenerator _generator;
+        private readonly IInvitationCodesGenerator _generator;
         private readonly IMediator _mediator;
 
-        public InviteAVolunteerHandler(IDatabaseContext databaseContext, InvitationUniqueCodesGenerator generator, IMediator mediator)
+        public InviteAVolunteerHandler(IDatabaseContext databaseContext, IInvitationCodesGenerator generator, IMediator mediator)
         {
             _databaseContext = databaseContext;
             _generator = generator;
@@ -23,7 +23,12 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
         }
         public async Task<InviteAVolunteerResponse> Handle(InviteAVolunteerRequest request, CancellationToken cancellationToken)
         {
-            var existingInvitation = _databaseContext.Invitations.SingleOrDefault(x => x.Email.ToLower() == request.Email.ToLower() && x.Status == InvitationStateEnum.Pending);
+            if(await _databaseContext.Users.AnyAsync(x => x.Email.ToLower().Equals(request.Email.ToLower()), cancellationToken))
+                throw new Exception("There is already volunteer with given email.");
+
+            var existingInvitation = await _databaseContext.Invitations.SingleOrDefaultAsync(
+                x => x.Email.ToLower() == request.Email.ToLower() 
+                     && x.Status == InvitationStateEnum.Pending, cancellationToken);
 
             var invitation  = existingInvitation is null 
                 ? await CreateNew(request.Email, cancellationToken)
@@ -31,7 +36,7 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
 
             await _mediator.Publish(new InvitationGenerated(invitation.InvitationId, invitation.Email, invitation.Code), cancellationToken);
 
-            return new InviteAVolunteerResponse(invitation.InvitationId);
+            return new InviteAVolunteerResponse(invitation.InvitationId, invitation.Code);
         }
 
         private async Task<Invitation> CreateNew(string email, CancellationToken cancellationToken)
@@ -41,7 +46,7 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
             {
                 Email = email,
                 Code = code,
-                Timestamp = DateTimeOffset.UtcNow,
+                CreatedAt = DateTimeOffset.UtcNow,
                 Attempts = 0
             };
 
@@ -55,7 +60,7 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
         {
             var code = _generator.Generate(4);
             invitation.Code = code;
-            invitation.Timestamp = DateTimeOffset.UtcNow;
+            invitation.CreatedAt = DateTimeOffset.UtcNow;
             invitation.Attempts = 0;
 
             _databaseContext.Invitations.Update(invitation);

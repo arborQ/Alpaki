@@ -7,7 +7,7 @@ namespace Alpaki.Logic
     {
         public static IServiceCollection RegisterLogicServices(this IServiceCollection services)
         {
-            services.AddScoped<InvitationUniqueCodesGenerator>();
+            services.AddScoped<IInvitationCodesGenerator,InvitationCodesGenerator>();
             return services;
         }
     }

@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
 {
-    public class InvitationUniqueCodesGenerator
+    public class InvitationCodesGenerator : IInvitationCodesGenerator
     {
         public string Generate(int length)
         {

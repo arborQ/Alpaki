@@ -5,11 +5,10 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using Alpaki.Database.Models.Invitations;
 using Alpaki.Logic.Features.Invitations.RegisterVolunteer;
+using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Alpaki.Tests.IntegrationTests.InvitationsTest
 {
@@ -24,18 +23,17 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
         public string Password { get; set; }
     }
 
-    public class RegisterVolunteerTests : IClassFixture<CustomWebApplicationFactory>
+    [Collection("Invitations")]
+    public class RegisterVolunteerTests : IntegrationTestsClass
     {
-        private readonly ITestOutputHelper _testOutputHelper;
         private readonly HttpClient _client;
         private readonly GraphQLClient _graphQL;
         private readonly Fixture _fixture;
-        private readonly IServiceProvider _services;
-        public RegisterVolunteerTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
+        private readonly IDatabaseContext _dbContext;
+        public RegisterVolunteerTests(IntegrationTestsFixture integrationTestsFixture):base(integrationTestsFixture)
         {
-            _services = factory.Services;
-            _testOutputHelper = testOutputHelper;
-            _client = factory.CreateClient();
+            _dbContext = integrationTestsFixture.DatabaseContext;
+            _client = integrationTestsFixture.ServerClient;
             _graphQL = new GraphQLClient(_client);
             _fixture = new Fixture();
         }
@@ -43,22 +41,17 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
         [Fact]
         public async Task Basic_scenario()
         {
-            using (var scope = _services.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<IDatabaseContext>();
-                await db.Invitations.AddAsync(
-                    new Invitation
-                    {
-                        Email = "test@test.com",
-                        Status = InvitationStateEnum.Pending,
-                        Code = "A3B5",
-                        Timestamp = DateTimeOffset.UtcNow,
-                    }
-                );
-                await db.SaveChangesAsync();
-            }
-            
+            await _dbContext.Invitations.AddAsync(
+                new Invitation
+                {
+                    Email = "test@test.com",
+                    Status = InvitationStateEnum.Pending,
+                    Code = "A3B5",
+                    CreatedAt = DateTimeOffset.UtcNow,
+                }
+            );
+            await _dbContext.SaveChangesAsync();
+
             var (fake, request) = _fixture
                 .Build<RegisterVolunteerFake>()
                 .With(x=>x.FirstName,"test")
@@ -72,7 +65,6 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
                 .WithJsonContent();
 
             var response = await _client.PostAsync("/api/volunteers", request);
-            _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
             response.EnsureSuccessStatusCode();
             var body = await response.ReadAs<RegisterVolunteerResponse>();
             body.Should().NotBeNull();

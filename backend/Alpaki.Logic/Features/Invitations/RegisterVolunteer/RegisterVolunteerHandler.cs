@@ -8,16 +8,17 @@ using Alpaki.Database.Models;
 using Alpaki.Logic.Services;
 using MediatR;
 using Microsoft.AspNet.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
 {
     public class RegisterVolunteerHandler : IRequestHandler<RegisterVolunteer, RegisterVolunteerResponse>
     {
         private readonly IDatabaseContext _dBContext;
-        private readonly JwtGenerator _jwtGenerator;
+        private readonly IJwtGenerator _jwtGenerator;
         private readonly IPasswordHasher _passwordHasher;
 
-        public RegisterVolunteerHandler(IDatabaseContext dBContext, JwtGenerator jwtGenerator)
+        public RegisterVolunteerHandler(IDatabaseContext dBContext, IJwtGenerator jwtGenerator)
         {
             _dBContext = dBContext;
             _jwtGenerator = jwtGenerator;
@@ -25,15 +26,16 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
         }
         public async Task<RegisterVolunteerResponse> Handle(RegisterVolunteer request, CancellationToken cancellationToken)
         {
-            var invitation = _dBContext.Invitations.SingleOrDefault(
+            var invitation = await _dBContext.Invitations.SingleOrDefaultAsync(
                 x => x.Email.ToLower().Equals(request.Email.ToLower())
-                     && x.Status == InvitationStateEnum.Pending
+                     && x.Status == InvitationStateEnum.Pending,
+                cancellationToken
             );
             
             if(invitation is null)
                 throw new Exception("Not valid invitation was found");
 
-            if ((invitation.Timestamp - DateTimeOffset.UtcNow) > TimeSpan.FromHours(24))
+            if ((invitation.CreatedAt - DateTimeOffset.UtcNow) > TimeSpan.FromHours(24))
                 throw new Exception("Invitation has expired");
 
             if (invitation.Attempts >= 3)

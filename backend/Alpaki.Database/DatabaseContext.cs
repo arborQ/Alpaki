@@ -49,7 +49,9 @@ namespace Alpaki.Database
 
             modelBuilder.Entity<AssignedDreams>().HasKey(ad => new { ad.DreamId, ad.VolunteerId });
 
-            modelBuilder.Entity<Invitation>();
+            modelBuilder.Entity<Invitation>()
+                .HasIndex(x => x.Email)
+                .IsUnique();
 
             SeedData(modelBuilder);
         }

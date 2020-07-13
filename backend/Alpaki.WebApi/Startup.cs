@@ -53,11 +53,14 @@ namespace Alpaki.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
-            services.AddDbContext<IDatabaseContext, DatabaseContext>(opt =>
-               opt
-               .UseLoggerFactory(loggerFactory)
-               .EnableSensitiveDataLogging()
-               .UseSqlServer(connectionString), ServiceLifetime.Transient);
+            services.AddDbContext<IDatabaseContext, DatabaseContext>(
+                opt =>
+                    opt
+                        .UseLoggerFactory(loggerFactory)
+                        .EnableSensitiveDataLogging()
+                        .UseSqlServer(connectionString),
+                ServiceLifetime.Transient
+            );
 
             string privateSecretKey = Configuration.GetValue<string>("SeacretKey");
 
@@ -79,7 +82,7 @@ namespace Alpaki.WebApi
                     ValidateAudience = false
                 };
             });
-            services.AddSingleton(x => new JwtGenerator(privateSecretKey));
+            services.AddSingleton<IJwtGenerator>(x => new JwtGenerator(privateSecretKey));
 
             RegisterGraphQL(services);
 

@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
+using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using FluentAssertions;
 using Xunit;
@@ -25,15 +26,16 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
             public InvitationStateEnum Status { get; set; }
         }
     }
-    public class InviteAVolunteerTests : IClassFixture<CustomWebApplicationFactory>
+    [Collection("Invitations")]
+    public class InviteAVolunteerTests : IntegrationTestsClass
     {
         private readonly HttpClient _client;
         private readonly GraphQLClient _graphQL;
         private readonly Fixture _fixture;
 
-        public InviteAVolunteerTests(CustomWebApplicationFactory factory)
+        public InviteAVolunteerTests(IntegrationTestsFixture integrationTestsFixture):base(integrationTestsFixture)
         {
-            _client = factory.CreateClient();
+            _client = integrationTestsFixture.ServerClient;
             _graphQL = new GraphQLClient(_client);
             _fixture = new Fixture();
         }
@@ -65,6 +67,7 @@ query {
             response.EnsureSuccessStatusCode();
             var body = await response.ReadAs<InviteAVolunteerResponse>();
             body.InvitationId.Should().NotBe(0);
+            body.InvitationCode.Should().MatchRegex("[0-9A-Z]{4}");
             
             var gqlResponse = await _graphQL.Query<InvitationResponse>(query);
             gqlResponse.Should().NotBeNull();

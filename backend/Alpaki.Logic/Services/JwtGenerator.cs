@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Alpaki.Logic.Services
 {
-    public class JwtGenerator
+    public class JwtGenerator : IJwtGenerator
     {
         private readonly string _secret;
 
@@ -23,7 +23,8 @@ namespace Alpaki.Logic.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, user.UserId.ToString())
+                    new Claim(ClaimTypes.Name, user.UserId.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role.ToString()), 
                 }),
                 Expires = null,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -20,7 +20,7 @@ namespace Alpaki.Database.Models.Invitations
         [DefaultValue(InvitationStateEnum.Pending)]
         public InvitationStateEnum Status { get; set; }
         [Required]
-        public DateTimeOffset Timestamp { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
         [Required]
         [DefaultValue(0)]
         public int Attempts { get; set; }
