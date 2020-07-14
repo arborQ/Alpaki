@@ -26,7 +26,6 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
             public InvitationStateEnum Status { get; set; }
         }
     }
-    [Collection("Invitations")]
     public class InviteAVolunteerTests : IntegrationTestsClass
     {
         private readonly HttpClient _client;
@@ -41,7 +40,7 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
         }
 
         [Fact]
-        public async Task Basic_scenario()
+        public async Task returns_correct_successful_response()
         {
             var (fake,request )= _fixture
                 .Build<InviteAVolunteerFake>()
@@ -63,11 +62,11 @@ query {
 }
 ";
             var response = await _client.PostAsync("/api/invitations", request);
-
             response.EnsureSuccessStatusCode();
             var body = await response.ReadAs<InviteAVolunteerResponse>();
+            body.Should().NotBeNull();
             body.InvitationId.Should().NotBe(0);
-            body.InvitationCode.Should().MatchRegex("[0-9A-Z]{4}");
+            body.InvitationCode.Should().NotBeNullOrWhiteSpace();
             
             var gqlResponse = await _graphQL.Query<InvitationResponse>(query);
             gqlResponse.Should().NotBeNull();
@@ -80,7 +79,6 @@ query {
                     i.Status.Should().BeEquivalentTo(InvitationStateEnum.Pending);
                 }
             );
-            //TODO verify if event got published(mock IMediator to verify behaviour)
         }
     }
 }

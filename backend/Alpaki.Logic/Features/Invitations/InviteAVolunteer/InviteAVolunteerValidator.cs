@@ -7,7 +7,9 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
     {
         public InviteAVolunteerValidator()
         {
-            RuleFor(x => x.Email).EmailAddress(EmailValidationMode.AspNetCoreCompatible).WithMessage("Email nie jest poprawny.");
+            RuleFor(x => x.Email)
+                .NotEmpty()
+                .EmailAddress(EmailValidationMode.AspNetCoreCompatible).WithMessage("Email nie jest poprawny.");
         }
     }
 }

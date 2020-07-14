@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
@@ -9,6 +8,8 @@ using Alpaki.Logic.Services;
 using MediatR;
 using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Internal;
+using static Alpaki.Logic.Features.Invitations.Exceptions;
 
 namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
 {
@@ -16,12 +17,14 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
     {
         private readonly IDatabaseContext _dBContext;
         private readonly IJwtGenerator _jwtGenerator;
+        private readonly ISystemClock _clock;
         private readonly IPasswordHasher _passwordHasher;
 
-        public RegisterVolunteerHandler(IDatabaseContext dBContext, IJwtGenerator jwtGenerator)
+        public RegisterVolunteerHandler(IDatabaseContext dBContext, IJwtGenerator jwtGenerator, ISystemClock clock)
         {
             _dBContext = dBContext;
             _jwtGenerator = jwtGenerator;
+            _clock = clock;
             _passwordHasher = new PasswordHasher();
         }
         public async Task<RegisterVolunteerResponse> Handle(RegisterVolunteer request, CancellationToken cancellationToken)
@@ -33,28 +36,23 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
             );
             
             if(invitation is null)
-                throw new Exception("Not valid invitation was found");
+                throw new InvitationNotFoundException();
 
-            if ((invitation.CreatedAt - DateTimeOffset.UtcNow) > TimeSpan.FromHours(24))
-                throw new Exception("Invitation has expired");
+            if ( _clock.UtcNow - invitation.CreatedAt > TimeSpan.FromHours(24))
+                throw new InvitationHasExpiredException();
 
             if (invitation.Attempts >= 3)
-            {
-                throw new Exception("Code is no longer valid");
-            }
+                throw new InvitationHasBeenRevokedException();
 
             if (!invitation.Code.ToLower().Equals(request.Code.ToLower()))
             {
                 invitation.Attempts += 1;
                 await _dBContext.SaveChangesAsync(cancellationToken);
-                throw new Exception("Invalid code");
+                throw new InvalidInvitationCodeException();
             }
 
-            if(request.Password.Length < 8)
-                throw new Exception("Given password is not matching rules");
-
-            if(_dBContext.Users.Any(x => x.Email.ToLower().Equals(request.Email.ToLower())))
-                throw new Exception("There is already volunteer with given email.");
+            if(await _dBContext.Users.AnyAsync(x => x.Email.ToLower().Equals(request.Email.ToLower()), cancellationToken: cancellationToken))
+                throw new VolunteerAlreadyExistsException();
 
             var passwordHash = _passwordHasher.HashPassword(request.Password);
 

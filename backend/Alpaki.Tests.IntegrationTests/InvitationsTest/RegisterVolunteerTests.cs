@@ -23,7 +23,6 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
         public string Password { get; set; }
     }
 
-    [Collection("Invitations")]
     public class RegisterVolunteerTests : IntegrationTestsClass
     {
         private readonly HttpClient _client;
@@ -39,7 +38,7 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
         }
 
         [Fact]
-        public async Task Basic_scenario()
+        public async Task returns_correct_successful_response()
         {
             await _dbContext.Invitations.AddAsync(
                 new Invitation

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using Alpaki.Database.Models.Invitations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Internal;
 
 namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
 {
@@ -14,17 +14,19 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
         private readonly IDatabaseContext _databaseContext;
         private readonly IInvitationCodesGenerator _generator;
         private readonly IMediator _mediator;
+        private readonly ISystemClock _clock;
 
-        public InviteAVolunteerHandler(IDatabaseContext databaseContext, IInvitationCodesGenerator generator, IMediator mediator)
+        public InviteAVolunteerHandler(IDatabaseContext databaseContext, IInvitationCodesGenerator generator, IMediator mediator, ISystemClock clock)
         {
             _databaseContext = databaseContext;
             _generator = generator;
             _mediator = mediator;
+            _clock = clock;
         }
         public async Task<InviteAVolunteerResponse> Handle(InviteAVolunteerRequest request, CancellationToken cancellationToken)
         {
             if(await _databaseContext.Users.AnyAsync(x => x.Email.ToLower().Equals(request.Email.ToLower()), cancellationToken))
-                throw new Exception("There is already volunteer with given email.");
+                throw new Exceptions.VolunteerAlreadyExistsException();
 
             var existingInvitation = await _databaseContext.Invitations.SingleOrDefaultAsync(
                 x => x.Email.ToLower() == request.Email.ToLower() 
@@ -46,7 +48,7 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
             {
                 Email = email,
                 Code = code,
-                CreatedAt = DateTimeOffset.UtcNow,
+                CreatedAt = _clock.UtcNow,
                 Attempts = 0
             };
 
@@ -60,7 +62,7 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
         {
             var code = _generator.Generate(4);
             invitation.Code = code;
-            invitation.CreatedAt = DateTimeOffset.UtcNow;
+            invitation.CreatedAt = _clock.UtcNow;
             invitation.Attempts = 0;
 
             _databaseContext.Invitations.Update(invitation);
