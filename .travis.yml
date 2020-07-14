@@ -3,4 +3,5 @@ mono: none
 dotnet: 3.1
 script:
   - dotnet build backend/Alpaki.sln
+  - docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=test123!' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
   - dotnet test backend/Alpaki.sln

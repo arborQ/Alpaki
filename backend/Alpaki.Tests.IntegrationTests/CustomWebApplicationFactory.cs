@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Alpaki.Database;
 using Alpaki.WebApi;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Alpaki.Tests.IntegrationTests
 {
+    [Obsolete("Use IntegrationTestsFixture")]
     public class CustomWebApplicationFactory
     : WebApplicationFactory<Startup>
     {
