@@ -16,6 +16,7 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
                 .AddEnvironmentVariables()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("appsettings.Test.json")
+                .AddJsonFile("appsettings.TestLocal.json", true)
                 .Build();
 
             Configuration = defaultConfigurationBuilder;

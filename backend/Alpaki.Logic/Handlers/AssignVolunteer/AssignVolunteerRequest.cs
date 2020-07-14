@@ -2,7 +2,7 @@
 
 namespace Alpaki.Logic.Handlers.AssignVolunteer
 {
-    public class AssignVolunteerRequest : INotification
+    public class AssignVolunteerRequest : IRequest<AssignVolunteerResponse>
     {
         public long VolunteerId { get; set; }
 
