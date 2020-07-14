@@ -9,7 +9,6 @@ using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.Fixtures
 {
-    [Collection("IntegrationTests")]
     public class IntegrationTestsClass : IClassFixture<IntegrationTestsFixture>, IAsyncLifetime
     {
         public IntegrationTestsClass(IntegrationTestsFixture integrationTestsFixture)

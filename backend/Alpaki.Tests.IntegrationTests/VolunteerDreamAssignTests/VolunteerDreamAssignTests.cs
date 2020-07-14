@@ -2,11 +2,11 @@
 using System.Text;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
-using Alpaki.CrossCutting.Models;
 using Alpaki.Database.Models;
 using Alpaki.Tests.IntegrationTests.Extensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -30,7 +30,7 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
 
             // Act
             var response = await Client.PostAsync("/api/VolunteerDreamAssign", data);
-            var responseObject = await response.GetResponse<ErrorResponseModel>();
+            var responseObject = await response.GetResponse<ValidationProblemDetails>();
 
             // Assert
             Assert.False(response.IsSuccessStatusCode);
@@ -54,7 +54,7 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
             // Act
             var response1 = await Client.PostAsync("/api/VolunteerDreamAssign", data);
             var response2 = await Client.PostAsync("/api/VolunteerDreamAssign", data);
-            var responseObject = await response2.GetResponse<ErrorResponseModel>();
+            var responseObject = await response2.GetResponse<ValidationProblemDetails>();
 
             // Assert
             response1.EnsureSuccessStatusCode();

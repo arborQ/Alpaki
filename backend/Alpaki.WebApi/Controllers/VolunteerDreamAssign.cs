@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using Alpaki.CrossCutting.Models;
 using Alpaki.Logic.Handlers.AssignVolunteer;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +19,7 @@ namespace Alpaki.WebApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponseModel), (int)HttpStatusCode.BadRequest)]
-        public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteeErrorResponseModelrRequest) => await _mediator.Publish(assignVolunteeErrorResponseModelrRequest);
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteeRequest) => await _mediator.Send(assignVolunteeRequest);
     }
 }

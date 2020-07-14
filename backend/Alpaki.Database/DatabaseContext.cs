@@ -20,6 +20,8 @@ namespace Alpaki.Database
 
         void EnsureCreated();
 
+        void Migrate();
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 
@@ -59,6 +61,11 @@ namespace Alpaki.Database
         public void EnsureCreated()
         {
             Database.EnsureCreated();
+        }
+
+        public void Migrate()
+        {
+            Database.Migrate();
         }
 
         public DbSet<User> Users { get; set; }

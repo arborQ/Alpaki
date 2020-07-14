@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Alpaki.Logic.Handlers.AssignVolunteer
 {
-    public class AssignVolunteerHandler : INotificationHandler<AssignVolunteerRequest>
+    public class AssignVolunteerHandler : IRequestHandler<AssignVolunteerRequest, AssignVolunteerResponse>
     {
         private readonly IDatabaseContext _databaseContext;
 
@@ -15,12 +15,14 @@ namespace Alpaki.Logic.Handlers.AssignVolunteer
             _databaseContext = databaseContext;
         }
 
-        public async Task Handle(AssignVolunteerRequest notification, CancellationToken cancellationToken)
+        public async Task<AssignVolunteerResponse> Handle(AssignVolunteerRequest request, CancellationToken cancellationToken)
         {
-            var newAssign = new AssignedDreams() { VolunteerId = notification.VolunteerId, DreamId = notification.DreamId };
+            var newAssign = new AssignedDreams() { VolunteerId = request.VolunteerId, DreamId = request.DreamId };
 
             await _databaseContext.AssignedDreams.AddAsync(newAssign);
             await _databaseContext.SaveChangesAsync();
+
+            return new AssignVolunteerResponse();
         }
     }
 }

@@ -151,6 +151,7 @@ namespace Alpaki.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            databaseContext.EnsureCreated();
 
             databaseContext.EnsureCreated();
 
