@@ -1,14 +1,11 @@
-using System.Reflection;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Logic;
 using Alpaki.WebApi.Filters;
 using Alpaki.WebApi.GraphQL;
-using FluentValidation.AspNetCore;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -20,6 +17,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using FluentValidation;
+using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Http;
 
 namespace Alpaki.WebApi
 {
@@ -52,11 +52,14 @@ namespace Alpaki.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
-            services.AddDbContext<IDatabaseContext, DatabaseContext>(opt =>
-               opt
-               .UseLoggerFactory(loggerFactory)
-               .EnableSensitiveDataLogging()
-               .UseSqlServer(connectionString), ServiceLifetime.Transient);
+            services.AddDbContext<IDatabaseContext, DatabaseContext>(
+                opt =>
+                    opt
+                        .UseLoggerFactory(loggerFactory)
+                        .EnableSensitiveDataLogging()
+                        .UseSqlServer(connectionString),
+                ServiceLifetime.Transient
+            );
 
             string privateSecretKey = Configuration.GetValue<string>("SeacretKey");
 
@@ -78,15 +81,17 @@ namespace Alpaki.WebApi
                     ValidateAudience = false
                 };
             });
+
             RegisterGraphQL(services);
 
+            services.RegisterLogicServices(privateSecretKey);
+
             services.AddControllers();
-            services.AddMediatR(typeof(InitializeLogic).GetTypeInfo().Assembly);
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllEnumsAsStrings();
             });
-
+            
             services.Configure<KestrelServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
@@ -97,7 +102,18 @@ namespace Alpaki.WebApi
                 {
                     options.Filters.Add(typeof(ApiKeyFilter));
                 }
-            ).AddFluentValidation(fv=>fv.RegisterValidatorsFromAssemblyContaining(typeof(InitializeLogic)));
+            );
+            services.AddProblemDetails(
+                opt =>
+                {
+                    opt.Map<ValidationException>(x => x.ToValidationProblemDetails());
+                    opt.Map<LogicException>(x=>new StatusCodeProblemDetails(StatusCodes.Status400BadRequest)
+                    {
+                       Detail = x.Reason,
+                       Extensions = { ["errorCode"] = x.Code }
+                    });
+                }
+            );
         }
 
         private static void RegisterGraphQL(IServiceCollection services)
@@ -119,7 +135,6 @@ namespace Alpaki.WebApi
         private static void RegisterServices(IServiceCollection services)
         {
             services.AddTransient<ICurrentUserService, CurrentUserService>();
-            services.RegisterLogicServices();
         }
 
         private static void RegisterGraphQLSchemas(IServiceCollection services)
@@ -130,10 +145,14 @@ namespace Alpaki.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDatabaseContext databaseContext)
         {
+            app.UseProblemDetails();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            databaseContext.EnsureCreated();
+
             databaseContext.EnsureCreated();
 
             ConfigureSwagger(app);

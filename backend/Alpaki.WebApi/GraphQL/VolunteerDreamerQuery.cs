@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Database.Models;
+using Alpaki.Database.Models.Invitations;
 
 namespace Alpaki.WebApi.GraphQL
 {
@@ -32,6 +34,11 @@ namespace Alpaki.WebApi.GraphQL
         protected override IQueryable<User> QueryUsers()
         {
             return _userDatabaseContext.Users.Where(u => u.UserId == _currentUserService.CurrentUserId);
+        }
+
+        protected override IQueryable<Invitation> QueryInvitations()
+        {
+            return new List<Invitation>().AsQueryable();
         }
     }
 }
