@@ -3,12 +3,13 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using GraphQL;
 using GraphQL.Types;
+using Microsoft.AspNetCore.Http;
 
 namespace Alpaki.WebApi.GraphQL
 {
     public class DreamerSchema : Schema
     {
-        public DreamerSchema(IDependencyResolver resolver, ICurrentUserService currentUserService)
+        public DreamerSchema(IDependencyResolver resolver, ICurrentUserService currentUserService, IHttpContextAccessor httpContextAccessor)
             : base(resolver)
         {
             if (currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Coordinator))
@@ -21,7 +22,7 @@ namespace Alpaki.WebApi.GraphQL
             }
             else
             {
-                throw new UnauthorizedAccessException("Only authorized users can access GraphQL");
+                Query = resolver.Resolve<VolunteerDreamerQuery>();
             }
         }
     }

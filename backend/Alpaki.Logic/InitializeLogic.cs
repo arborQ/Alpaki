@@ -12,13 +12,13 @@ namespace Alpaki.Logic
 {
     public static class InitializeLogic
     {
-        public static IServiceCollection RegisterLogicServices(this IServiceCollection services, string privateSecretKey)
+        public static IServiceCollection RegisterLogicServices(this IServiceCollection services)
         {
             services.AddValidatorsFromAssemblyContaining(typeof(InitializeLogic));
             services.AddMediatR(typeof(InitializeLogic).GetTypeInfo().Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
             services.AddScoped<IInvitationCodesGenerator, InvitationCodesGenerator>();
-            services.AddSingleton<IJwtGenerator>(x => new JwtGenerator(privateSecretKey));
+            services.AddSingleton<IJwtGenerator, JwtGenerator>();
             services.AddSingleton<ISystemClock>(new SystemClock());
             
             return services;

@@ -18,7 +18,7 @@ namespace Alpaki.WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpPatch]
+        [HttpPatch("me")]
         [ProducesResponseType(typeof(UpdateUserDataResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public Task<UpdateUserDataResponse> UpdateUserData(UpdateUserDataRequest updateUserDataRequest) => _mediator.Send(updateUserDataRequest);

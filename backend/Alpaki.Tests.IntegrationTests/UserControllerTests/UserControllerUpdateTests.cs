@@ -26,7 +26,7 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
         public async Task UserControllerUpdate_Works()
         {
             // Arrange
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer, PasswordHash = "ddd" };
+            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer };
 
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
@@ -37,7 +37,7 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await Client.PatchAsync("/api/User", data);
+            var response = await Client.PatchAsync("/api/User/me", data);
 
             // Assert
             response.EnsureSuccessStatusCode();

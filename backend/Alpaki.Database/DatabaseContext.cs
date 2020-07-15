@@ -14,6 +14,8 @@ namespace Alpaki.Database
 
         DbSet<Dream> Dreams { get; }
 
+        DbSet<DreamCategory> DreamCategories { get; }
+
         DbSet<Invitation> Invitations { get; }
 
         DbSet<AssignedDreams> AssignedDreams { get; }
@@ -65,7 +67,7 @@ namespace Alpaki.Database
 
         public void Migrate()
         {
-            Database.Migrate();
+            Database.EnsureCreated();
         }
 
         public DbSet<User> Users { get; set; }

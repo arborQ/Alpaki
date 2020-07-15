@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Alpaki.CrossCutting.Enums;
@@ -42,7 +43,7 @@ namespace Alpaki.Tests.UnitTests.Services
                 .AddInMemoryCollection(myConfiguration)
                 .Build();
 
-            var sut = new JwtGenerator(key);
+            var sut = new JwtGenerator(configuration);
 
             // Act
             var token = sut.Generate(new User { UserId = userId, Role = role });
@@ -50,7 +51,7 @@ namespace Alpaki.Tests.UnitTests.Services
             // Assert
             Assert.NotNull(token);
             var securityToken = tokenHandler.ReadJwtToken(token);
-            Assert.Contains(securityToken.Claims, c => c.Type == "userId" && c.Value == userId.ToString());
+            Assert.Contains(securityToken.Claims, c => c.Type == "unique_name" && c.Value == userId.ToString());
             Assert.Contains(securityToken.Claims, c => c.Type == "role" && c.Value == ((int)role).ToString());
             //Assert.DoesNotContain(securityToken.Claims, c => c.Type == "exp");
         }

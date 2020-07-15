@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Claims;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -7,15 +8,14 @@ namespace Alpaki.WebApi
 {
     public class CurrentUserService : ICurrentUserService
     {
-        private readonly IHttpContextAccessor _httpContext;
-
         public CurrentUserService(IHttpContextAccessor httpContext)
         {
-            _httpContext = httpContext;
+            CurrentUserId = long.Parse(httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Name).Value);
+            CurrentUserRole = (UserRoleEnum)int.Parse(httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Role).Value);
         }
 
-        public long CurrentUserId => long.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == "userId").Value);
+        public long CurrentUserId { get; }
 
-        public UserRoleEnum CurrentUserRole => (UserRoleEnum)int.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == "role").Value);
+        public UserRoleEnum CurrentUserRole { get; }
     }
 }

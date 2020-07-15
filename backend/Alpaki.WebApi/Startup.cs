@@ -81,7 +81,7 @@ namespace Alpaki.WebApi
 
             RegisterGraphQL(services);
 
-            services.RegisterLogicServices(privateSecretKey);
+            services.RegisterLogicServices();
 
             services.AddControllers();
             services.AddHttpContextAccessor();
@@ -150,9 +150,8 @@ namespace Alpaki.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            databaseContext.EnsureCreated();
 
-            databaseContext.EnsureCreated();
+            databaseContext.Migrate();
 
             ConfigureSwagger(app);
 
@@ -174,7 +173,7 @@ namespace Alpaki.WebApi
         private static void ConfigureGraphQL(IApplicationBuilder app)
         {
             app.UseGraphQL<DreamerSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions { GraphQLEndPoint = "/ql" });
         }
 
         private static void ConfigureSwagger(IApplicationBuilder app)
