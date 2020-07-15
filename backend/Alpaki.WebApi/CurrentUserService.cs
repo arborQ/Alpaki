@@ -1,15 +1,21 @@
-﻿using Alpaki.CrossCutting.Enums;
+﻿using System.Linq;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace Alpaki.WebApi
 {
-    /// <summary>
-    /// TODO: Implement JWT and take data from token
-    /// </summary>
     public class CurrentUserService : ICurrentUserService
     {
-        public long CurrentUserId => 2;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public UserRoleEnum CurrentUserRole => UserRoleEnum.Admin;
+        public CurrentUserService(IHttpContextAccessor httpContext)
+        {
+            _httpContext = httpContext;
+        }
+
+        public long CurrentUserId => long.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == "userId").Value);
+
+        public UserRoleEnum CurrentUserRole => (UserRoleEnum)int.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == "role").Value);
     }
 }

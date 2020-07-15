@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
+using Alpaki.Logic.Services;
 using Alpaki.WebApi;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -52,6 +54,14 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
             TestServer = new TestServer(builder);
             DatabaseContext = TestServer.Services.GetService(typeof(IDatabaseContext)) as IDatabaseContext;
             ServerClient = TestServer.CreateClient();
+        }
+
+        public void SetUserContext(long userId, UserRoleEnum userRole)
+        {
+            var generator = TestServer.Services.GetService(typeof(IJwtGenerator)) as IJwtGenerator;
+            var token = generator.Generate(userId, userRole);
+
+            ServerClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         }
 
         public async Task InitializeAsync()

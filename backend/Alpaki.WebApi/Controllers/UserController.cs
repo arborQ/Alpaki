@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Logic.Handlers.UpdateUserData;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ namespace Alpaki.WebApi.Controllers
     {
         private readonly IMediator _mediator;
 
-        public UserController(IMediator mediator)
+        public UserController(IMediator mediator, ICurrentUserService currentUserService)
         {
             _mediator = mediator;
         }

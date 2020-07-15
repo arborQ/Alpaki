@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 
 namespace Alpaki.WebApi
 {
@@ -60,27 +61,22 @@ namespace Alpaki.WebApi
 
             string privateSecretKey = Configuration.GetValue<string>("SeacretKey");
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                   
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(FromBase64Url(privateSecretKey)),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(privateSecretKey))
                 };
             });
             RegisterGraphQL(services);
 
             services.AddControllers();
+            services.AddHttpContextAccessor();
             services.AddMediatR(typeof(InitializeLogic).GetTypeInfo().Assembly);
             services.AddSwaggerGen(c =>
             {
@@ -118,7 +114,7 @@ namespace Alpaki.WebApi
 
         private static void RegisterServices(IServiceCollection services)
         {
-            services.AddTransient<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.RegisterLogicServices();
         }
 
