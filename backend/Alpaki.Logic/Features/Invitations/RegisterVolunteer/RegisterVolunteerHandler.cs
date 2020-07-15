@@ -2,12 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
-using Alpaki.Database;
 using Alpaki.Database.Models;
+using Alpaki.Logic.Features.Invitations.Repositories;
 using Alpaki.Logic.Services;
 using MediatR;
 using Microsoft.AspNet.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
 using static Alpaki.Logic.Features.Invitations.Exceptions;
 
@@ -15,25 +14,23 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
 {
     public class RegisterVolunteerHandler : IRequestHandler<RegisterVolunteer, RegisterVolunteerResponse>
     {
-        private readonly IDatabaseContext _dBContext;
         private readonly IJwtGenerator _jwtGenerator;
         private readonly ISystemClock _clock;
+        private readonly IInvitationRepository _invitationRepository;
+        private readonly IVolunteerRepository _volunteerRepository;
         private readonly IPasswordHasher _passwordHasher;
 
-        public RegisterVolunteerHandler(IDatabaseContext dBContext, IJwtGenerator jwtGenerator, ISystemClock clock)
+        public RegisterVolunteerHandler(IJwtGenerator jwtGenerator, ISystemClock clock, IInvitationRepository invitationRepository, IVolunteerRepository volunteerRepository)
         {
-            _dBContext = dBContext;
             _jwtGenerator = jwtGenerator;
             _clock = clock;
+            _invitationRepository = invitationRepository;
+            _volunteerRepository = volunteerRepository;
             _passwordHasher = new PasswordHasher();
         }
         public async Task<RegisterVolunteerResponse> Handle(RegisterVolunteer request, CancellationToken cancellationToken)
         {
-            var invitation = await _dBContext.Invitations.SingleOrDefaultAsync(
-                x => x.Email.ToLower().Equals(request.Email.ToLower())
-                     && x.Status == InvitationStateEnum.Pending,
-                cancellationToken
-            );
+            var invitation = await _invitationRepository.GetInvitationAsync(request.Email, cancellationToken);
             
             if(invitation is null)
                 throw new InvitationNotFoundException();
@@ -47,11 +44,11 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
             if (!invitation.Code.ToLower().Equals(request.Code.ToLower()))
             {
                 invitation.Attempts += 1;
-                await _dBContext.SaveChangesAsync(cancellationToken);
+                await _invitationRepository.UpdateAsync(invitation, cancellationToken);
                 throw new InvalidInvitationCodeException();
             }
 
-            if(await _dBContext.Users.AnyAsync(x => x.Email.ToLower().Equals(request.Email.ToLower()), cancellationToken: cancellationToken))
+            if(await _volunteerRepository.ExitsAsync(invitation.Email, cancellationToken))
                 throw new VolunteerAlreadyExistsException();
 
             var passwordHash = _passwordHasher.HashPassword(request.Password);
@@ -69,8 +66,7 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
 
             invitation.Status = InvitationStateEnum.Accepted;
 
-            await _dBContext.Users.AddAsync(user, cancellationToken);
-            await _dBContext.SaveChangesAsync(cancellationToken);
+            await _volunteerRepository.AddAsync(user, cancellationToken);
 
             var jwtToken = _jwtGenerator.Generate(user);
 

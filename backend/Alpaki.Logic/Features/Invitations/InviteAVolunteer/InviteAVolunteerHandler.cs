@@ -1,36 +1,39 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Alpaki.CrossCutting.Enums;
-using Alpaki.Database;
 using Alpaki.Database.Models.Invitations;
+using Alpaki.Logic.Features.Invitations.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
 
 namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
 {
     public class InviteAVolunteerHandler : IRequestHandler<InviteAVolunteerRequest, InviteAVolunteerResponse>
     {
-        private readonly IDatabaseContext _databaseContext;
         private readonly IInvitationCodesGenerator _generator;
         private readonly IMediator _mediator;
         private readonly ISystemClock _clock;
+        private readonly IInvitationRepository _invitationRepository;
+        private readonly IVolunteerRepository _volunteerRepository;
 
-        public InviteAVolunteerHandler(IDatabaseContext databaseContext, IInvitationCodesGenerator generator, IMediator mediator, ISystemClock clock)
+        public InviteAVolunteerHandler(
+            IInvitationCodesGenerator generator, 
+            IMediator mediator, 
+            ISystemClock clock,
+            IInvitationRepository invitationRepository,
+            IVolunteerRepository volunteerRepository)
         {
-            _databaseContext = databaseContext;
+            _volunteerRepository = volunteerRepository;
             _generator = generator;
             _mediator = mediator;
             _clock = clock;
+            _invitationRepository = invitationRepository;
         }
         public async Task<InviteAVolunteerResponse> Handle(InviteAVolunteerRequest request, CancellationToken cancellationToken)
         {
-            if(await _databaseContext.Users.AnyAsync(x => x.Email.ToLower().Equals(request.Email.ToLower()), cancellationToken))
+            if(await _volunteerRepository.ExitsAsync(request.Email, cancellationToken))
                 throw new Exceptions.VolunteerAlreadyExistsException();
 
-            var existingInvitation = await _databaseContext.Invitations.SingleOrDefaultAsync(
-                x => x.Email.ToLower() == request.Email.ToLower() 
-                     && x.Status == InvitationStateEnum.Pending, cancellationToken);
+            var existingInvitation = await _invitationRepository.GetInvitationAsync(request.Email, cancellationToken);
 
             var invitation  = existingInvitation is null 
                 ? await CreateNew(request.Email, cancellationToken)
@@ -52,8 +55,7 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
                 Attempts = 0
             };
 
-            await _databaseContext.Invitations.AddAsync(newInvitation, cancellationToken);
-            await _databaseContext.SaveChangesAsync(cancellationToken);
+            await _invitationRepository.AddAsync(newInvitation, cancellationToken);
 
             return newInvitation;
         }
@@ -65,9 +67,7 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
             invitation.CreatedAt = _clock.UtcNow;
             invitation.Attempts = 0;
 
-            _databaseContext.Invitations.Update(invitation);
-
-            await _databaseContext.SaveChangesAsync(cancellationToken);
+            await _invitationRepository.UpdateAsync(invitation, cancellationToken);
 
             return invitation;
         }

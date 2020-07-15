@@ -7,7 +7,7 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
 {
     public class RegisterVolunteerValidator : AbstractValidator<RegisterVolunteer>
     {
-        public RegisterVolunteerValidator(IDatabaseContext context)
+        public RegisterVolunteerValidator()
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress(EmailValidationMode.AspNetCoreCompatible).WithMessage("Podany email jest niepoprawny.");
             RuleFor(x => x.Code).NotEmpty().Length(4).Matches("[0-9A-Z]{4}").WithMessage("Podany kod jest niepoprawny.");
