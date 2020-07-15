@@ -26,12 +26,12 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
         public async Task UserControllerUpdate_Works()
         {
             // Arrange
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer };
+            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer, PasswordHash = "ddd" };
 
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
-            IntegrationTestsFixture.SetUserContext(user.UserId, UserRoleEnum.Admin);
+            IntegrationTestsFixture.SetUserContext(user);
 
             var json = JsonConvert.SerializeObject(new { firstName = "new name", emailAddress = "lol@o2.pl" });
             var data = new StringContent(json, Encoding.UTF8, "application/json");

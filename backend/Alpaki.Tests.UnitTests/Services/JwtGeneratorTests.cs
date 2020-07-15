@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.Database.Models;
 using Alpaki.Logic.Services;
 using AutoFixture;
 using Microsoft.Extensions.Configuration;
@@ -41,10 +42,10 @@ namespace Alpaki.Tests.UnitTests.Services
                 .AddInMemoryCollection(myConfiguration)
                 .Build();
 
-            var sut = new JwtGenerator(configuration);
+            var sut = new JwtGenerator(key);
 
             // Act
-            var token = sut.Generate(userId, role);
+            var token = sut.Generate(new User { UserId = userId, Role = role });
 
             // Assert
             Assert.NotNull(token);

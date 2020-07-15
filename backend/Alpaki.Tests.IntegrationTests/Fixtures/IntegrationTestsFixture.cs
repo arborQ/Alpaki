@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
+using Alpaki.Database.Models;
 using Alpaki.Logic.Services;
 using Alpaki.WebApi;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.Fixtures
 {
+    [Collection("IntegrationTests")]
     public class IntegrationTestsClass : IClassFixture<IntegrationTestsFixture>, IAsyncLifetime
     {
         public IntegrationTestsClass(IntegrationTestsFixture integrationTestsFixture)
@@ -56,10 +58,10 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
             ServerClient = TestServer.CreateClient();
         }
 
-        public void SetUserContext(long userId, UserRoleEnum userRole)
+        public void SetUserContext(User user)
         {
             var generator = TestServer.Services.GetService(typeof(IJwtGenerator)) as IJwtGenerator;
-            var token = generator.Generate(userId, userRole);
+            var token = generator.Generate(user);
 
             ServerClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         }

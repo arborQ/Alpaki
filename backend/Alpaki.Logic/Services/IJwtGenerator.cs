@@ -1,9 +1,9 @@
-﻿using Alpaki.CrossCutting.Enums;
+﻿using Alpaki.Database.Models;
 
 namespace Alpaki.Logic.Services
 {
     public interface IJwtGenerator
     {
-        string Generate(long userId, UserRoleEnum role);
+        string Generate(User user);
     }
 }

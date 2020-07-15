@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using Alpaki.Database.Models;
+using Alpaki.Database.Models.Invitations;
 
 namespace Alpaki.WebApi.GraphQL
 {
@@ -23,6 +25,11 @@ namespace Alpaki.WebApi.GraphQL
         protected override IQueryable<User> QueryUsers()
         {
             return _userDatabaseContext.Users;
+        }
+
+        protected override IQueryable<Invitation> QueryInvitations()
+        {
+            return _databaseContext.Invitations.Where(x=>x.Status == InvitationStateEnum.Pending);
         }
     }
 }
