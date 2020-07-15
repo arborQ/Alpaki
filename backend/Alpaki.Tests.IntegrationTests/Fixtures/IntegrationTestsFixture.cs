@@ -44,6 +44,7 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
             var generator = TestServer.Services.GetService(typeof(IJwtGenerator)) as IJwtGenerator;
             var token = generator.Generate(user);
 
+            ServerClient.DefaultRequestHeaders.Clear();
             ServerClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         }
 
