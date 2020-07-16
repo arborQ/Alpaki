@@ -17,20 +17,26 @@ namespace Alpaki.WebApi.Controllers
     {
         private readonly AdminDreamerQuery _adminDreamerQuery;
         private readonly VolunteerDreamerQuery _volunteerDreamerQuery;
+        private readonly CoordinatorDreamerQuery _coordinatorDreamerQuery;
         private readonly ICurrentUserService _currentUserService;
 
-        public GraphQLController(AdminDreamerQuery adminDreamerQuery, VolunteerDreamerQuery volunteerDreamerQuery, ICurrentUserService currentUserService)
+        public GraphQLController(AdminDreamerQuery adminDreamerQuery, VolunteerDreamerQuery volunteerDreamerQuery, CoordinatorDreamerQuery coordinatorDreamerQuery, ICurrentUserService currentUserService)
         {
             _adminDreamerQuery = adminDreamerQuery;
             _volunteerDreamerQuery = volunteerDreamerQuery;
+            _coordinatorDreamerQuery = coordinatorDreamerQuery;
             _currentUserService = currentUserService;
         }
 
         private DreamerQuery ResolveUserGraphQLSchema()
         {
-            if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Coordinator))
+            if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Admin))
             {
                 return _adminDreamerQuery;
+            }
+            else if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Coordinator))
+            {
+                return _coordinatorDreamerQuery;
             }
             else if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Volunteer))
             {
@@ -45,7 +51,7 @@ namespace Alpaki.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string query)
         {
-            
+
             var schema = new Schema
             {
                 Query = ResolveUserGraphQLSchema()
