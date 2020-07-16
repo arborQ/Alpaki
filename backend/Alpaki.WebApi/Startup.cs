@@ -151,7 +151,7 @@ namespace Alpaki.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            databaseContext.Migrate();
+            databaseContext.EnsureCreated();
 
             ConfigureSwagger(app);
 
