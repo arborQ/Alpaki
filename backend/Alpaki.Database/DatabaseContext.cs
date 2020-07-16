@@ -71,7 +71,7 @@ namespace Alpaki.Database
 
         public void Migrate()
         {
-            Database.EnsureCreated();
+            Database.Migrate();
         }
 
         public DbSet<User> Users { get; set; }
