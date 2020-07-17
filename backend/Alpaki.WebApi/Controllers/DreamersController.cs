@@ -1,4 +1,5 @@
 ﻿using Alpaki.Logic.Features.Dreamer.CreateDreamer;
+using Alpaki.WebApi.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -17,11 +18,7 @@ namespace Alpaki.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<CreateDreamerResponse> GetDreamer([FromBody] CreateDreamerRequest request) {
-
-            var response = await _mediator.Send(request);
-
-            return response;
-        }
+        [VolunteerAccess]
+        public Task<CreateDreamerResponse> CreateDream([FromBody] CreateDreamerRequest request) => _mediator.Send(request);
     }
 }
