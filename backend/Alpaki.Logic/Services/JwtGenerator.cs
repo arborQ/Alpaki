@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Alpaki.Database.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Alpaki.Logic.Services
@@ -10,9 +11,9 @@ namespace Alpaki.Logic.Services
     {
         private readonly string _secret;
 
-        public JwtGenerator(string secret)
+        public JwtGenerator(IConfiguration configuration)
         {
-            _secret = secret;
+            _secret = configuration.GetValue<string>("SeacretKey");
         }
 
         public string Generate(User user)
@@ -24,7 +25,7 @@ namespace Alpaki.Logic.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, user.UserId.ToString()),
-                    new Claim(ClaimTypes.Role, user.Role.ToString()), 
+                    new Claim(ClaimTypes.Role, ((int)user.Role).ToString()), 
                 }),
                 Expires = null,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

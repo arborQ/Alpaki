@@ -20,6 +20,9 @@ using System;
 using FluentValidation;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Http;
+using System.Text;
+using MediatR;
+using System.Reflection;
 
 namespace Alpaki.WebApi
 {
@@ -63,30 +66,26 @@ namespace Alpaki.WebApi
 
             string privateSecretKey = Configuration.GetValue<string>("SeacretKey");
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                   
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(FromBase64Url(privateSecretKey)),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(privateSecretKey))
                 };
             });
 
             RegisterGraphQL(services);
 
-            services.RegisterLogicServices(privateSecretKey);
+            services.RegisterLogicServices();
 
             services.AddControllers();
+            services.AddHttpContextAccessor();
+            services.AddMediatR(typeof(InitializeLogic).GetTypeInfo().Assembly);
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllEnumsAsStrings();
@@ -134,7 +133,7 @@ namespace Alpaki.WebApi
 
         private static void RegisterServices(IServiceCollection services)
         {
-            services.AddTransient<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
         }
 
         private static void RegisterGraphQLSchemas(IServiceCollection services)
@@ -151,7 +150,6 @@ namespace Alpaki.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            databaseContext.EnsureCreated();
 
             databaseContext.EnsureCreated();
 
@@ -175,7 +173,7 @@ namespace Alpaki.WebApi
         private static void ConfigureGraphQL(IApplicationBuilder app)
         {
             app.UseGraphQL<DreamerSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions { GraphQLEndPoint = "/ql" });
         }
 
         private static void ConfigureSwagger(IApplicationBuilder app)

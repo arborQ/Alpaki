@@ -24,8 +24,8 @@ namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
                 Age = request.Age,
                 DreamUrl = request.DreamUrl,
                 Gender = request.Gender,
-                DreamCategoryId = 1,
-                Tags = "#MM",
+                DreamCategoryId = request.CategoryId,
+                Tags = request.Tags,
                 DreamState = DreamStateEnum.Created
             };
 
