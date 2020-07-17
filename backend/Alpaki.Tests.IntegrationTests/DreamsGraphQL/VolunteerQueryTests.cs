@@ -28,7 +28,6 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
         public async Task Volunteer_CanSearch_HisDreams(int allDreamsCount, int volunteerDreamCount)
         {
             // Arrange
-            IntegrationTestsFixture.SetUserCoordinatorContext();
             var category = _fixture.DreamCategoryBuilder().Create();
             await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category);
 
