@@ -7,6 +7,7 @@ using Alpaki.Database.Models;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using Xunit;
+using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 
 namespace Alpaki.Tests.IntegrationTests.UserControllerTests
 {
@@ -35,9 +36,9 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
         public async Task UserControllerDelete_IsForbidden_IfNotAdmin(UserRoleEnum role)
         {
             // Arrange
-            IntegrationTestsFixture.SetUserContext(new User { UserId= 10, Role = role });
+            IntegrationTestsFixture.SetUserContext(new User { UserId = 10, Role = role });
 
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer };
+            var user = _fixture.VolunteerBuilder().Create();
 
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
@@ -55,7 +56,7 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
             // Arrange
             IntegrationTestsFixture.SetUserAdminContext();
 
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer };
+            var user = _fixture.VolunteerBuilder().Create();
 
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
@@ -75,7 +76,9 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
             // Arrange
             IntegrationTestsFixture.SetUserAdminContext();
 
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer };
+            var user = _fixture.VolunteerBuilder().Create();
+            var dreams = _fixture.DreamBuilder().WithNewCategory().CreateMany(10);
+            await IntegrationTestsFixture.DatabaseContext.AssignedDreams.AddRangeAsync(dreams.Select(d => new AssignedDreams { Dream = d, Volunteer = user }));
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
@@ -93,7 +96,7 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
         {
             // Arrange
 
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Admin };
+            var user = _fixture.AdminBuilder().Create();
 
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
