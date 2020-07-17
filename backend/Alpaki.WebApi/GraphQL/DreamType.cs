@@ -4,18 +4,18 @@ using GraphQL.Types;
 
 namespace Alpaki.WebApi.GraphQL
 {
+    public class DreamStateEnumType : EnumerationGraphType<DreamStateEnum>
+    {
+    }
+
+
     public class GenderEnumType : EnumerationGraphType<GenderEnum>
     {
-        public GenderEnumType()
-        {
-        }
+
     }
 
     public class DreamType : ObjectGraphType<Dream>
     {
-        public class DreamStateEnumType : EnumerationGraphType<DreamStateEnum>
-        {
-        }
 
         public DreamType()
         {

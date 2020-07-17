@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
@@ -9,7 +7,6 @@ using Alpaki.Logic.Features.Dreamer.CreateDreamer;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using GraphQL;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
