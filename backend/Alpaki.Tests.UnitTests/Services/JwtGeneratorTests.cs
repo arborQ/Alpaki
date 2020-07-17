@@ -10,6 +10,7 @@ using Alpaki.Database.Models;
 using Alpaki.Logic.Services;
 using AutoFixture;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -34,14 +35,9 @@ namespace Alpaki.Tests.UnitTests.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var hmac = new HMACSHA256();
             var key = Convert.ToBase64String(hmac.Key);
-            var myConfiguration = new Dictionary<string, string>
-                {
-                    {"SeacretKey", key},
-                };
 
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(myConfiguration)
-                .Build();
+            var configuration = Substitute.For<IOptions<JwtConfig>>();
+            configuration.Value.Returns(new JwtConfig { SeacretKey = key });
 
             var sut = new JwtGenerator(configuration);
 

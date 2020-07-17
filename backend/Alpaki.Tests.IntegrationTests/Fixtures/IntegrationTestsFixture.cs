@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.Fixtures
 {
-    public class IntegrationTestsFixture: IAsyncLifetime
+    public class IntegrationTestsFixture : IAsyncLifetime
     {
         public TestServer TestServer { get; }
 
@@ -28,10 +28,15 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
             var builder = new WebHostBuilder()
                 .UseConfiguration(Configuration)
                 .UseStartup<Startup>();
-            
+
             TestServer = new TestServer(builder);
             DatabaseContext = TestServer.Services.GetService(typeof(IDatabaseContext)) as IDatabaseContext;
             ServerClient = TestServer.CreateClient();
+        }
+
+        public void SetUserCoordinatorContext()
+        {
+            SetUserContext(new User { Role = UserRoleEnum.Coordinator });
         }
 
         public void SetUserAdminContext()

@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Http;
 using System.Text;
 using MediatR;
 using System.Reflection;
+using Alpaki.Logic.Services;
 
 namespace Alpaki.WebApi
 {
@@ -64,7 +65,7 @@ namespace Alpaki.WebApi
                 ServiceLifetime.Transient
             );
 
-            string privateSecretKey = Configuration.GetValue<string>("SeacretKey");
+            var seacretKey = Configuration.GetValue<string>($"{nameof(JwtConfig)}:{nameof(JwtConfig.SeacretKey)}");
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -75,7 +76,7 @@ namespace Alpaki.WebApi
                     ValidateAudience = false,
                     ValidateLifetime = false,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(privateSecretKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(seacretKey))
                 };
             });
 
@@ -85,7 +86,6 @@ namespace Alpaki.WebApi
 
             services.AddControllers();
             services.AddHttpContextAccessor();
-            services.AddMediatR(typeof(InitializeLogic).GetTypeInfo().Assembly);
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllEnumsAsStrings();
@@ -113,6 +113,8 @@ namespace Alpaki.WebApi
                     });
                 }
             );
+
+            services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
         }
 
         private static void RegisterGraphQL(IServiceCollection services)

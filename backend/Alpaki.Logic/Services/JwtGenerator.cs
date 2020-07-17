@@ -2,28 +2,29 @@
 using System.Security.Claims;
 using System.Text;
 using Alpaki.Database.Models;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Alpaki.Logic.Services
 {
     public class JwtGenerator : IJwtGenerator
     {
-        private readonly string _secret;
+        private readonly JwtConfig _configuration;
 
-        public JwtGenerator(IConfiguration configuration)
+        public JwtGenerator(IOptions<JwtConfig> configuration)
         {
-            _secret = configuration.GetValue<string>("SeacretKey");
+            _configuration = configuration.Value;
         }
 
         public string Generate(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_secret);
+            var key = Encoding.ASCII.GetBytes(_configuration.SeacretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                     new Claim(ClaimTypes.Name, user.UserId.ToString()),
                     new Claim(ClaimTypes.Role, ((int)user.Role).ToString()), 
                 }),
