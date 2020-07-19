@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Alpaki.CrossCutting.Interfaces;
+using Alpaki.Logic.Handlers.ChangeUserRole;
 using Alpaki.Logic.Handlers.DeleteUser;
 using Alpaki.Logic.Handlers.UpdateUserData;
 using Alpaki.WebApi.Policies;
@@ -24,6 +26,10 @@ namespace Alpaki.WebApi.Controllers
         [ProducesResponseType(typeof(UpdateUserDataResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public Task<UpdateUserDataResponse> UpdateUserData(UpdateUserDataRequest updateUserDataRequest) => _mediator.Send(updateUserDataRequest);
+
+        [AdminAccess]
+        [HttpPost("role")]
+        public async Task<ChangeUserRoleResponse> ChangeUserRole(ChangeUserRoleRequest request) => await _mediator.Send(request);
 
         [AdminAccess]
         [HttpDelete]
