@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Alpaki.Logic.Handlers.DeleteUser;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Logic.Handlers.ChangeUserRole;
 using Alpaki.Logic.Handlers.DeleteUser;
