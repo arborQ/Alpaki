@@ -42,6 +42,7 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
         [Fact]
         public async Task returns_correct_successful_response()
         {
+            IntegrationTestsFixture.SetUserAdminContext();
             var (fake,request )= _fixture
                 .Build<InviteAVolunteerFake>()
                 .With(

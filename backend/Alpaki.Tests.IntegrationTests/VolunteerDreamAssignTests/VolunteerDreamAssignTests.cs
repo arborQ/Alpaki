@@ -14,6 +14,7 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
 {
     public class VolunteerDreamAssignTests : IntegrationTestsClass
     {
+        private const string ApiUrlPath = "/api/Volunteers/assign";
         private readonly Fixture _fixture;
 
         public VolunteerDreamAssignTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
@@ -29,7 +30,7 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await Client.PostAsync("/api/VolunteerDreamAssign", data);
+            var response = await Client.PostAsync(ApiUrlPath, data);
             var responseObject = await response.GetResponse<ValidationProblemDetails>();
 
             // Assert
@@ -48,12 +49,11 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
-            var json = JsonConvert.SerializeObject(new { dream.DreamId, VolunteerId = user.UserId });
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = new { dream.DreamId, VolunteerId = user.UserId }.WithJsonContent().json;
 
             // Act
-            var response1 = await Client.PostAsync("/api/VolunteerDreamAssign", data);
-            var response2 = await Client.PostAsync("/api/VolunteerDreamAssign", data);
+            var response1 = await Client.PostAsync(ApiUrlPath, data);
+            var response2 = await Client.PostAsync(ApiUrlPath, data);
             var responseObject = await response2.GetResponse<ValidationProblemDetails>();
 
             // Assert
@@ -73,11 +73,10 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
-            var json = JsonConvert.SerializeObject(new { dream.DreamId, VolunteerId = user.UserId });
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = new { dream.DreamId, VolunteerId = user.UserId }.WithJsonContent();
 
             // Act
-            var response = await Client.PostAsync("/api/VolunteerDreamAssign", data);
+            var response = await Client.PostAsync(ApiUrlPath, data.json);
 
             // Assert
             response.EnsureSuccessStatusCode();

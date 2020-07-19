@@ -21,7 +21,7 @@ namespace Alpaki.Tests.IntegrationTests
 
         public async Task<T> Query<T>(string query)
         {
-            var response = await this._httpClient.GetAsync($"/graphql?query={query}");
+            var response = await this._httpClient.GetAsync($"/gl?query={query}");
 
             var stringResponse = await response.Content.ReadAsStringAsync();
 

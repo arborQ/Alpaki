@@ -11,8 +11,12 @@ namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
 
         public int Age { get; set; }
 
+        public string Tags { get; set; }
+
         public GenderEnum Gender { get; set; }
 
         public string DreamUrl { get; set; }
+
+        public long CategoryId { get; set; }
     }
 }

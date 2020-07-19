@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
 using Alpaki.Logic.Extensions;
@@ -23,6 +24,11 @@ namespace Alpaki.WebApi.GraphQL
             {
                 new QueryArgument<IdGraphType> { Name = "dreamId" },
                 new QueryArgument<StringGraphType> { Name = "searchName" },
+                new QueryArgument<GenderEnumType> { Name = "gender" },
+                new QueryArgument<DreamStateEnumType> { Name = "status" },
+                new QueryArgument<IntGraphType> { Name = "ageFrom" },
+                new QueryArgument<IntGraphType> { Name = "ageTo" },
+                new QueryArgument<ListGraphType<IntGraphType>> { Name = "categories" },
                 new QueryArgument<StringGraphType> { Name = "orderBy", DefaultValue = "DreamId" },
                 new QueryArgument<BooleanGraphType> { Name = "orderAsc", DefaultValue = true }
             });
@@ -54,6 +60,11 @@ namespace Alpaki.WebApi.GraphQL
 
             Field<ListGraphType<DreamType>>("dreams", arguments: arguments, resolve: context =>
             {
+                var gender = context.GetArgument<GenderEnum?>("gender");
+                var status = context.GetArgument<DreamStateEnum?>("status");
+                var ageFrom = context.GetArgument<int?>("ageFrom");
+                var ageTo = context.GetArgument<int?>("ageTo");
+                var categoryIds = context.GetArgument<List<long>>("categories");
                 var orderBy = context.GetArgument<string>("orderBy");
                 var orderAsc = context.GetArgument<bool>("orderAsc");
 
@@ -69,11 +80,36 @@ namespace Alpaki.WebApi.GraphQL
                     return dreamerQuery.Where(d => d.DreamId == dreamerId).ToListAsync();
                 }
 
+                if (gender.HasValue)
+                {
+                    dreamerQuery = dreamerQuery.Where(d => d.Gender == gender.Value);
+                }
+
+                if (status.HasValue)
+                {
+                    dreamerQuery = dreamerQuery.Where(d => d.DreamState == status.Value);
+                }
+
+                if (ageFrom.HasValue)
+                {
+                    dreamerQuery = dreamerQuery.Where(d => d.Age >= ageFrom.Value);
+                }
+
+                if (ageTo.HasValue)
+                {
+                    dreamerQuery = dreamerQuery.Where(d => d.Age <= ageTo.Value);
+                }
+
+                if (categoryIds != null && categoryIds.Any())
+                {
+                    dreamerQuery = dreamerQuery.Where(d => categoryIds.Contains(d.DreamCategoryId));
+                }
+
                 var searchName = context.GetArgument<string>("searchName");
 
                 if (!string.IsNullOrEmpty(searchName))
                 {
-                    return dreamerQuery.Where(d => (d.FirstName + d.LastName).Contains(searchName)).ToListAsync();
+                    dreamerQuery = dreamerQuery.Where(d => (d.FirstName + d.LastName).Contains(searchName));
                 }
 
                 return dreamerQuery.ToListAsync();

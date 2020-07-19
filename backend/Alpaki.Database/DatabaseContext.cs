@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Alpaki.Database
 {
@@ -14,6 +16,8 @@ namespace Alpaki.Database
 
         DbSet<Dream> Dreams { get; }
 
+        DbSet<DreamCategory> DreamCategories { get; }
+
         DbSet<Invitation> Invitations { get; }
 
         DbSet<AssignedDreams> AssignedDreams { get; }
@@ -21,6 +25,8 @@ namespace Alpaki.Database
         void EnsureCreated();
 
         void Migrate();
+
+        EntityEntry<TEntity> Update<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

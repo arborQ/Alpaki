@@ -7,6 +7,7 @@ namespace Alpaki.WebApi.GraphQL
     {
         public UserType()
         {
+            Field(u => u.UserId);
             Field(u => u.Email);
             Field(u => u.FirstName);
             Field(u => u.LastName);

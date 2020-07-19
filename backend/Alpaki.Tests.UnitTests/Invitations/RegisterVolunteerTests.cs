@@ -59,11 +59,10 @@ namespace Alpaki.Tests.UnitTests.Invitations
            );
 
             var registerVolunteerResponse = await _handler.Handle(_validRequest, CancellationToken.None);
-
+          
             registerVolunteerResponse.Token.Should().NotBeNullOrWhiteSpace();
-
+          
             var createdUser = _fakeVolunteerRepository.Get(registerVolunteerResponse.UserId);
-
             createdUser.Should().NotBeNull();
             createdUser.Email.Should().BeEquivalentTo(_validRequest.Email);
             createdUser.FirstName.Should().BeEquivalentTo(_validRequest.FirstName);

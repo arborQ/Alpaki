@@ -1,13 +1,12 @@
 using System;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Dreamer.CreateDreamer;
+using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using GraphQL;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
@@ -29,17 +28,12 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             public string LastName { get; set; }
         }
     }
-    public class DreamersControllerTests
+    public class DreamersControllerTests : IntegrationTestsClass
     {
-        private readonly HttpClient _client;
         private readonly Fixture _fixture;
-        private readonly GraphQLClient _graphQL;
 
-        public DreamersControllerTests()
+        public DreamersControllerTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
-            var factory = new CustomWebApplicationFactory();
-            _client = factory.CreateClient();
-            _graphQL = new GraphQLClient(_client);
             _fixture = new Fixture();
         }
 
@@ -47,20 +41,23 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
         public async Task DreamersController_POST_CreateDreamer()
         {
             // Arrange
+            var category = new DreamCategory { CategoryName = "test" };
+            await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+
+            IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Admin });
+            var graphQL = new GraphQLClient(Client);
+
             var count = 20;
             var random = new Random();
             var requests = _fixture
                 .Build<CreateDreamerRequestFake>()
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.Gender, GenderEnum.Female)
+                .With(d => d.CategoryId, category.DreamCategoryId)
                 .CreateMany(count)
-                .Select(dreamer =>
-                {
-                    var json = JsonConvert.SerializeObject(dreamer);
-                    var data = new StringContent(json, Encoding.UTF8, "application/json");
+                .Select(dreamer => dreamer.WithJsonContent().json);
 
-                    return data;
-                });
             var query = @"
                     query DreamerQuery {
                       dreams {
@@ -76,9 +73,10 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             {
                 Query = query
             };
+
             // Act
-            var responses = await Task.WhenAll(requests.Select(r => _client.PostAsync($"/api/dreamers", r)));
-            var graphResponse = await _graphQL.Query<DreamerResponse>(query);
+            var responses = await Task.WhenAll(requests.Select(r => Client.PostAsync($"/api/dreamers", r)));
+            var graphResponse = await graphQL.Query<DreamerResponse>(query);
 
             // Assert
             Assert.Equal(count, graphResponse.Dreams.Length);
