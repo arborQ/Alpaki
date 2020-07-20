@@ -45,24 +45,5 @@ namespace Alpaki.Tests.UnitTests.ChangeUserRole
             result.Errors.Should().Contain(x => x.PropertyName == nameof(ChangeUserRoleRequest.Role));
 
         }
-
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        public async Task fails_on_invalid_userId(int userId)
-        {
-            var sut = new ChangeUserRoleValidator();
-
-            var result = await sut.ValidateAsync(
-                new ChangeUserRoleRequest
-                {
-                    UserId = userId,
-                    Role = UserRoleEnum.Admin
-                }
-            );
-
-            result.IsValid.Should().BeFalse();
-            result.Errors.Should().Contain(x => x.PropertyName == nameof(ChangeUserRoleRequest.UserId));
-        }
     }
 }

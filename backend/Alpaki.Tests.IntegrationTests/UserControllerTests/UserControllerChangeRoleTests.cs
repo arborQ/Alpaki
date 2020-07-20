@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Tests.IntegrationTests.Fixtures;
@@ -8,7 +7,6 @@ using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -39,10 +37,7 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
-            var json = JsonConvert.SerializeObject(new {userId=user.UserId, role=(int)to});
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await Client.PostAsync("api/user/role", data);
+            var response = await ChangeRole(new { userId = user.UserId, role = (int)to });
 
             _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync()); ;
             response.EnsureSuccessStatusCode();
@@ -63,10 +58,7 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(admin);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
-            var json = JsonConvert.SerializeObject(new { userId = admin.UserId, role = (int)toRole });
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await Client.PostAsync("api/user/role", data);
+            var response = await ChangeRole(new { userId = admin.UserId, role = (int)toRole });
 
             _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync()); ;
             response.IsSuccessStatusCode.Should().BeFalse();
@@ -91,13 +83,17 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
-            var json = JsonConvert.SerializeObject(new { userId = user.UserId, role = (int)UserRoleEnum.Admin });
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await Client.PostAsync("api/user/role", data);
+            var response = await ChangeRole(new {userId = user.UserId, role = (int) UserRoleEnum.Admin});
 
             _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync()); ;
             response.IsSuccessStatusCode.Should().BeFalse();
+        }
+
+        private async Task<HttpResponseMessage> ChangeRole<T>(T request)
+        {
+            var (_, data) = request.WithJsonContent();
+
+            return await Client.PatchAsync("api/user/role", data);
         }
     }
 }

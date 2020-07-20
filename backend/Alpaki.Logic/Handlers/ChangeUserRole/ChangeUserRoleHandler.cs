@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using static Alpaki.Logic.Handlers.ChangeUserRole.Exceptions;
 
 namespace Alpaki.Logic.Handlers.ChangeUserRole
 {
@@ -18,17 +17,20 @@ namespace Alpaki.Logic.Handlers.ChangeUserRole
         }
         public async Task<ChangeUserRoleResponse> Handle(ChangeUserRoleRequest request, CancellationToken cancellationToken)
         {
-            var userRoles = new[] {UserRoleEnum.Coordinator, UserRoleEnum.Volunteer};
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.UserId == request.UserId && userRoles.Contains(x.Role), cancellationToken);
+            var user = await _dbContext.Users.FindAsync(request.UserId);
 
             if (user is null)
             {
-                throw new InvalidUserException();
+                throw new UserNotFoundException(request.UserId);
+            }
+
+            if (user.Role == UserRoleEnum.Admin)
+            {
+                throw new UserWithInvalidRoleException();
             }
 
             user.Role = request.Role;
             
-            _dbContext.Update(user);
             await _dbContext.SaveChangesAsync(cancellationToken);
             
             return new ChangeUserRoleResponse();

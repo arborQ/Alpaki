@@ -10,10 +10,7 @@ namespace Alpaki.Logic.Handlers.ChangeUserRole
         {
             RuleFor(x => x.Role).IsInEnum()
                 .Must(x => new[] {UserRoleEnum.Admin, UserRoleEnum.Coordinator}.Contains(x))
-                .WithMessage("Podano niepoprawną role.");
-            RuleFor(x => x.UserId).NotEmpty()
-                .GreaterThan(0)
-                .WithMessage("Podano niepoprawny identyfikator użytkownika");
+                .WithMessage($"Podano niepoprawną role. Dostępne role to: administrator({(int)UserRoleEnum.Admin}) i koordynator({(int)UserRoleEnum.Coordinator}).");
         }
     }
 }
