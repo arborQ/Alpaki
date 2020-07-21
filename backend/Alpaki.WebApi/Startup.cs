@@ -28,6 +28,7 @@ using System.Security.Claims;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.WebApi.Policies;
 using System.Linq;
+using Alpaki.WebApi.Swagger;
 
 namespace Alpaki.WebApi
 {
@@ -74,7 +75,7 @@ namespace Alpaki.WebApi
             services.AddAuthorization(options =>
             {
                 var adminClaims = new[] { UserRoleEnum.Admin }.Select(c => ((int)c).ToString()).ToArray();
-                var coordinatorClaims = new[] { UserRoleEnum.Coordinator, UserRoleEnum.Volunteer }.Select(c => ((int)c).ToString()).ToArray();
+                var coordinatorClaims = new[] { UserRoleEnum.Coordinator, UserRoleEnum.Admin }.Select(c => ((int)c).ToString()).ToArray();
                 var volunteerClaims = new[] { UserRoleEnum.Admin, UserRoleEnum.Coordinator, UserRoleEnum.Volunteer }.Select(c => ((int)c).ToString()).ToArray();
 
                 options.AddPolicy(AdminAccessAttribute.PolicyName, policy => policy.RequireClaim(ClaimTypes.Role, adminClaims));
@@ -104,6 +105,7 @@ namespace Alpaki.WebApi
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllEnumsAsStrings();
+                c.OperationFilter<AddAuthorizedHeaderParameter>();
             });
 
             services.Configure<KestrelServerOptions>(options =>

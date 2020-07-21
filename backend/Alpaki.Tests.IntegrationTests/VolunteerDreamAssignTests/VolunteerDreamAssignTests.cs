@@ -1,10 +1,9 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Alpaki.CrossCutting.Enums;
-using Alpaki.Database.Models;
 using Alpaki.Tests.IntegrationTests.Extensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
+using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -26,6 +25,7 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
         public async Task VolunteerDreamAssign_CantCreateAssign()
         {
             // Arrange
+            IntegrationTestsFixture.SetUserCoordinatorContext();
             var json = JsonConvert.SerializeObject(new { DreamerId = 1, VolunteerId = 1 });
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -42,8 +42,9 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
         public async Task VolunteerDreamAssign_CantCreateAssignTwice()
         {
             // Arrange
-            var dream = new Dream { FirstName = "FirstName", LastName = "LastName", Age = 10, DreamCategory = new DreamCategory { CategoryName = "test" }, DreamUrl = "", Gender = CrossCutting.Enums.GenderEnum.Female };
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer };
+            IntegrationTestsFixture.SetUserCoordinatorContext();
+            var dream = _fixture.DreamBuilder().WithNewCategory().Create();
+            var user = _fixture.VolunteerBuilder().Create();
 
             await IntegrationTestsFixture.DatabaseContext.Dreams.AddAsync(dream);
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
@@ -66,8 +67,9 @@ namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests
         public async Task VolunteerDreamAssign_CanCreateAssign()
         {
             // Arrange
-            var dream = new Dream { FirstName = "FirstName", LastName = "LastName", Age = 10, DreamCategory = new DreamCategory { CategoryName = "test" }, DreamUrl = "", Gender = CrossCutting.Enums.GenderEnum.Female };
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer  };
+            IntegrationTestsFixture.SetUserCoordinatorContext();
+            var dream = _fixture.DreamBuilder().WithNewCategory().Create();
+            var user = _fixture.VolunteerBuilder().Create();
 
             await IntegrationTestsFixture.DatabaseContext.Dreams.AddAsync(dream);
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
