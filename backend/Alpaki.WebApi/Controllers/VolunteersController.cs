@@ -26,8 +26,13 @@ namespace Alpaki.WebApi.Controllers
             => await _mediator.Send(request);
 
         [HttpPost("assign")]
-        [ProducesResponseType(typeof(AssignVolunteerResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UnassignVolunteerResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteeRequest) => await _mediator.Send(assignVolunteeRequest);
+
+        [HttpDelete("assign")]
+        [ProducesResponseType(typeof(UnassignVolunteerResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        public async Task UnassingVolunteerToDream(UnassignVolunteerRequest assignVolunteeRequest) => await _mediator.Send(assignVolunteeRequest);
     }
 }
