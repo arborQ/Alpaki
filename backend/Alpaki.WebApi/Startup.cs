@@ -90,7 +90,7 @@ namespace Alpaki.WebApi
             {
                 c.DescribeAllEnumsAsStrings();
             });
-            
+
             services.Configure<KestrelServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
@@ -106,10 +106,10 @@ namespace Alpaki.WebApi
                 opt =>
                 {
                     opt.Map<ValidationException>(x => x.ToValidationProblemDetails());
-                    opt.Map<LogicException>(x=>new StatusCodeProblemDetails(StatusCodes.Status400BadRequest)
+                    opt.Map<LogicException>(x => new StatusCodeProblemDetails(StatusCodes.Status400BadRequest)
                     {
-                       Detail = x.Reason,
-                       Extensions = { ["errorCode"] = x.Code }
+                        Detail = x.Reason,
+                        Extensions = { ["errorCode"] = x.Code }
                     });
                 }
             );
