@@ -1,9 +1,11 @@
-﻿using Microsoft.OpenApi.Any;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Alpaki.WebApi.Swagger
 {
+    [ExcludeFromCodeCoverage]
     public class AddAuthorizedHeaderParameter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)

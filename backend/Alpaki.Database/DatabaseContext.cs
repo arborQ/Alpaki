@@ -31,6 +31,7 @@ namespace Alpaki.Database
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 
+    [ExcludeFromCodeCoverage]
     public class DatabaseContext : DbContext, IDatabaseContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
