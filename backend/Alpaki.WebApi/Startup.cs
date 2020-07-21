@@ -24,6 +24,10 @@ using System.Text;
 using MediatR;
 using System.Reflection;
 using Alpaki.Logic.Services;
+using System.Security.Claims;
+using Alpaki.CrossCutting.Enums;
+using Alpaki.WebApi.Policies;
+using System.Linq;
 
 namespace Alpaki.WebApi
 {
@@ -66,6 +70,17 @@ namespace Alpaki.WebApi
             );
 
             var seacretKey = Configuration.GetValue<string>($"{nameof(JwtConfig)}:{nameof(JwtConfig.SeacretKey)}");
+
+            services.AddAuthorization(options =>
+            {
+                var adminClaims = new[] { UserRoleEnum.Admin }.Select(c => ((int)c).ToString()).ToArray();
+                var coordinatorClaims = new[] { UserRoleEnum.Coordinator, UserRoleEnum.Volunteer }.Select(c => ((int)c).ToString()).ToArray();
+                var volunteerClaims = new[] { UserRoleEnum.Admin, UserRoleEnum.Coordinator, UserRoleEnum.Volunteer }.Select(c => ((int)c).ToString()).ToArray();
+
+                options.AddPolicy(AdminAccessAttribute.PolicyName, policy => policy.RequireClaim(ClaimTypes.Role, adminClaims));
+                options.AddPolicy(CoordinatorAccessAttribute.PolicyName, policy => policy.RequireClaim(ClaimTypes.Role, coordinatorClaims));
+                options.AddPolicy(VolunteerAccessAttribute.PolicyName, policy => policy.RequireClaim(ClaimTypes.Role, volunteerClaims));
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
