@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Alpaki.Logic.Features.Invitations.RegisterVolunteer;
 using Alpaki.Logic.Handlers.AssignVolunteer;
+using Alpaki.WebApi.Policies;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Alpaki.WebApi.Controllers
@@ -28,6 +28,13 @@ namespace Alpaki.WebApi.Controllers
         [HttpPost("assign")]
         [ProducesResponseType(typeof(AssignVolunteerResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [CoordinatorAccess]
         public async Task AssingVolunteerToDream(AssignVolunteerRequest assignVolunteeRequest) => await _mediator.Send(assignVolunteeRequest);
+
+        [HttpDelete("assign")]
+        [ProducesResponseType(typeof(UnassignVolunteerResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [CoordinatorAccess]
+        public async Task UnassingVolunteerToDream([FromQuery]UnassignVolunteerRequest assignVolunteeRequest) => await _mediator.Send(assignVolunteeRequest);
     }
 }
