@@ -19,7 +19,7 @@ $ docker-compose up --build
 ```
 
 See Swagger:
-https://localhost:5001/swagger/index.html
+http://localhost:5000/swagger/index.html
 
 To authorize as admin, access Seq logs
 
