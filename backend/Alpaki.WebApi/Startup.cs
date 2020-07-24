@@ -60,7 +60,7 @@ namespace Alpaki.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
-            services.AddDbContext<IDatabaseContext, DatabaseContext>(
+            services.AddDbContext<DatabaseContext>(
                 opt =>
                     opt
                         .UseLoggerFactory(loggerFactory)
@@ -68,6 +68,8 @@ namespace Alpaki.WebApi
                         .UseSqlServer(connectionString),
                 ServiceLifetime.Transient
             );
+
+            services.AddTransient<IDatabaseContext, DatabaseContext>();
 
             var seacretKey = Configuration.GetValue<string>($"{nameof(JwtConfig)}:{nameof(JwtConfig.SeacretKey)}");
 
@@ -117,9 +119,30 @@ namespace Alpaki.WebApi
                     options.Filters.Add(typeof(ApiKeyFilter));
                 }
             );
+            services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
+            services.AddLogging(loggingBuilder =>
+            {
+                var seqConfigruation = Configuration.GetSection("Seq");
+                var apiKey = seqConfigruation.GetValue<string>("ApiKey");
+
+                if (!string.IsNullOrEmpty(apiKey))
+                {
+                    loggingBuilder.AddSeq(seqConfigruation);
+                    Console.WriteLine($"[Log]: Using Seq: [{apiKey}]");
+                }
+                else
+                {
+                    loggingBuilder.AddConsole();
+                    Console.WriteLine($"[Log]: Using Console");
+                }
+            });
+
             services.AddProblemDetails(
                 opt =>
                 {
+                    opt.OnBeforeWriteDetails = (http, problemDetails) =>
+                    {
+                    };
                     opt.Map<ValidationException>(x => x.ToValidationProblemDetails());
                     opt.Map<LogicException>(x => new StatusCodeProblemDetails(StatusCodes.Status400BadRequest)
                     {
@@ -184,6 +207,7 @@ namespace Alpaki.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
 

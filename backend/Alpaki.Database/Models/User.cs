@@ -2,10 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.CrossCutting.Interfaces;
 
 namespace Alpaki.Database.Models
 {
-    public class User
+    public class User: IUser
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

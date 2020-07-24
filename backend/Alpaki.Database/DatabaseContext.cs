@@ -1,41 +1,23 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Logging;
 
 namespace Alpaki.Database
 {
-    public interface IDatabaseContext
-    {
-        DbSet<User> Users { get; }
-
-        DbSet<Dream> Dreams { get; }
-
-        DbSet<DreamCategory> DreamCategories { get; }
-
-        DbSet<Invitation> Invitations { get; }
-
-        DbSet<AssignedDreams> AssignedDreams { get; }
-
-        void EnsureCreated();
-
-        void Migrate();
-
-        EntityEntry<TEntity> Update<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
-
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    }
-
     public class DatabaseContext : DbContext, IDatabaseContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+        private readonly ILogger<DatabaseContext> _logger;
+        private readonly IJwtGenerator _jwtGenerator;
+
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, ILogger<DatabaseContext> logger, IJwtGenerator jwtGenerator)
             : base(options)
         {
+            _logger = logger;
+            _jwtGenerator = jwtGenerator;
         }
 
         private void SeedData(ModelBuilder modelBuilder)
@@ -47,7 +29,9 @@ namespace Alpaki.Database
                    CategoryName = name,
                }));
 
-            modelBuilder.Entity<User>().HasData(new User { FirstName = "admin", LastName = "admin", Email = "admin@admin.pl", UserId = 1, Role = UserRoleEnum.Admin });
+            var adminUser = new User { FirstName = "admin", LastName = "admin", Email = "admin@admin.pl", UserId = 1, Role = UserRoleEnum.Admin };
+            modelBuilder.Entity<User>().HasData(adminUser);
+            _logger.LogInformation($"[ADMIN]: admin user was created with token: [{_jwtGenerator.Generate(adminUser)}]");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

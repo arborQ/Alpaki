@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Alpaki.Database.Models;
+using Alpaki.CrossCutting.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,7 +16,7 @@ namespace Alpaki.Logic.Services
             _configuration = configuration.Value;
         }
 
-        public string Generate(User user)
+        public string Generate(IUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration.SeacretKey);

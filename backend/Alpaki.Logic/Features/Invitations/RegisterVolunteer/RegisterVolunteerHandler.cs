@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Database.Models;
-using Alpaki.Logic.Services;
 using MediatR;
 using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,11 +34,11 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
                      && x.Status == InvitationStateEnum.Pending,
                 cancellationToken
             );
-            
-            if(invitation is null)
+
+            if (invitation is null)
                 throw new InvitationNotFoundException();
 
-            if ( _clock.UtcNow - invitation.CreatedAt > TimeSpan.FromHours(24))
+            if (_clock.UtcNow - invitation.CreatedAt > TimeSpan.FromHours(24))
                 throw new InvitationHasExpiredException();
 
             if (invitation.Attempts >= 3)
@@ -51,7 +51,7 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
                 throw new InvalidInvitationCodeException();
             }
 
-            if(await _dBContext.Users.AnyAsync(x => x.Email.ToLower().Equals(request.Email.ToLower()), cancellationToken: cancellationToken))
+            if (await _dBContext.Users.AnyAsync(x => x.Email.ToLower().Equals(request.Email.ToLower()), cancellationToken: cancellationToken))
                 throw new VolunteerAlreadyExistsException();
 
             var passwordHash = _passwordHasher.HashPassword(request.Password);
