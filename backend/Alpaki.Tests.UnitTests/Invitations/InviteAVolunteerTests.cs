@@ -1,30 +1,34 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
-using Alpaki.Database;
+using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Invitations;
 using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
-using Alpaki.Logic.Features.Invitations.RegisterVolunteer;
 using FluentAssertions;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using MediatR;
 using Microsoft.Extensions.Internal;
 using NSubstitute;
 using Xunit;
 
 namespace Alpaki.Tests.UnitTests.Invitations
 {
-    public class InviteAVolunteerTests : UnitTest, IDisposable
+    public class InviteAVolunteerTests
     {
         private readonly InviteAVolunteerRequest _validRequest = new InviteAVolunteerRequest{Email = "test@test.com"};
         private readonly ISystemClock _fakeClock;
-
+        private readonly FakeInvitationRepository _fakeInvitationRepository;
+        private readonly FakeVolunteerRepository _fakeVolunteerRepository;
+        private readonly IMediator _mediator;
+        private readonly InviteAVolunteerHandler _handler;
         public InviteAVolunteerTests()
-            :base(x=>x.Replace(ServiceDescriptor.Singleton(Substitute.For<ISystemClock>())))
         {
-            _fakeClock = RootProvider.GetService<ISystemClock>();
+            _fakeClock = Substitute.For<ISystemClock>();
+            _fakeInvitationRepository = new FakeInvitationRepository();
+            _fakeVolunteerRepository = new FakeVolunteerRepository();
+            _mediator = Substitute.For<IMediator>();
+
+            _handler = new InviteAVolunteerHandler(new InvitationCodesGenerator(), _mediator, _fakeClock, _fakeInvitationRepository, _fakeVolunteerRepository);
         }
         
         [Fact]
@@ -32,12 +36,11 @@ namespace Alpaki.Tests.UnitTests.Invitations
         {
             var now = DateTimeOffset.UtcNow;
             _fakeClock.UtcNow.Returns(now);
-            var response = await Send(_validRequest);
+            var response = await _handler.Handle(_validRequest, CancellationToken.None);
 
             response.InvitationCode.Should().MatchRegex("[0-9A-Z]{4}");
-            
-            var db = RootProvider.GetService<IDatabaseContext>();
-            var invitation = await db.Invitations.AsNoTracking().SingleOrDefaultAsync(x=>x.InvitationId==response.InvitationId);
+
+            var invitation = _fakeInvitationRepository.Get(response.InvitationId);
             invitation.Attempts.Should().Be(0);
             invitation.Code.Should().BeEquivalentTo(response.InvitationCode);
             invitation.Status.Should().Be(InvitationStateEnum.Pending);
@@ -50,13 +53,12 @@ namespace Alpaki.Tests.UnitTests.Invitations
         {
             var now = DateTimeOffset.UtcNow;
             _fakeClock.UtcNow.Returns(now);
-            var response = await Send(_validRequest);
-            var db = RootProvider.GetService<IDatabaseContext>();
-            var invitation = await db.Invitations.AsNoTracking().SingleOrDefaultAsync(x => x.InvitationId == response.InvitationId);
+            var response = await _handler.Handle(_validRequest, CancellationToken.None);
+            var invitation = _fakeInvitationRepository.Get(response.InvitationId);
 
             _fakeClock.UtcNow.Returns(now + TimeSpan.FromHours(1));
-            var response2 = await Send(_validRequest);
-            var invitation2 = await db.Invitations.AsNoTracking().SingleOrDefaultAsync(x => x.InvitationId == response2.InvitationId);
+            var response2 = await _handler.Handle(_validRequest, CancellationToken.None);
+            var invitation2 = _fakeInvitationRepository.Get(response2.InvitationId);
 
             response.InvitationId.Should().Be(response2.InvitationId);
             response.InvitationCode.Should().NotBe(response2.InvitationCode);
@@ -67,40 +69,25 @@ namespace Alpaki.Tests.UnitTests.Invitations
         [Fact]
         public async Task fails_when_there_is_volunteer_with_given_email()
         {
-            var response = await Send(_validRequest);
-            await Send(
-                new RegisterVolunteer
+            await _fakeVolunteerRepository.AddAsync(
+                new User
                 {
-                    Email = _validRequest.Email, Code = response.InvitationCode,
-                    Password = "test1234",
-                    PhoneNumber = "123456789",
-                    Brand = "test",
+                    Email = _validRequest.Email, 
+                    PhoneNumber = "123456789", 
+                    Brand = "test", 
+                    FirstName = "test", 
                     LastName = "test",
-                    FirstName = "test"
-                }
+                    Role = UserRoleEnum.Volunteer, 
+                    PasswordHash = "some_hash", 
+                    UserId = 1
+                },
+                CancellationToken.None
             );
 
-            Func<Task> action = () => Send(_validRequest);
+            Func<Task> action = () => _handler.Handle(_validRequest, CancellationToken.None);
 
             await action.Should().ThrowAsync<Exceptions.VolunteerAlreadyExistsException>();
         }
 
-        [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        [InlineData("test")]
-        public async Task fails_when_given_email_has_invalid_form(string invalidEmail)
-        {
-            _validRequest.Email = invalidEmail;
-            Func<Task> action = () => Send(_validRequest);
-
-            var r = await action.Should().ThrowAsync<ValidationException>();
-            r.Which.Errors.Should().Contain(x => x.PropertyName == nameof(InviteAVolunteerRequest.Email));
-        }
-
-        public void Dispose()
-        {
-            
-        }
     }
 }

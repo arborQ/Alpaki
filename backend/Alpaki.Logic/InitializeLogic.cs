@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
+using Alpaki.Logic.Features.Invitations.Repositories;
 using Alpaki.Logic.PipelineBehaviours;
 using Alpaki.Logic.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
-using SystemClock = Microsoft.Extensions.Internal.SystemClock;
 
 namespace Alpaki.Logic
 {
@@ -21,7 +21,9 @@ namespace Alpaki.Logic
             services.AddScoped<IInvitationCodesGenerator, InvitationCodesGenerator>();
             services.AddSingleton<IJwtGenerator, JwtGenerator>();
             services.AddSingleton<ISystemClock>(new SystemClock());
-            
+            services.AddScoped<IInvitationRepository, InvitationRepository>();
+            services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+          
             return services;
         }
     }

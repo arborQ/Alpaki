@@ -1,36 +1,37 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Logic;
+using Alpaki.Logic.Services;
 using Alpaki.WebApi.Filters;
 using Alpaki.WebApi.GraphQL;
+using Alpaki.WebApi.Policies;
+using Alpaki.WebApi.Swagger;
+using FluentValidation;
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using FluentValidation;
-using Hellang.Middleware.ProblemDetails;
-using Microsoft.AspNetCore.Http;
-using System.Text;
-using MediatR;
-using System.Reflection;
-using Alpaki.Logic.Services;
-using System.Security.Claims;
-using Alpaki.CrossCutting.Enums;
-using Alpaki.WebApi.Policies;
-using System.Linq;
 
 namespace Alpaki.WebApi
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -76,7 +77,7 @@ namespace Alpaki.WebApi
             services.AddAuthorization(options =>
             {
                 var adminClaims = new[] { UserRoleEnum.Admin }.Select(c => ((int)c).ToString()).ToArray();
-                var coordinatorClaims = new[] { UserRoleEnum.Coordinator, UserRoleEnum.Volunteer }.Select(c => ((int)c).ToString()).ToArray();
+                var coordinatorClaims = new[] { UserRoleEnum.Coordinator, UserRoleEnum.Admin }.Select(c => ((int)c).ToString()).ToArray();
                 var volunteerClaims = new[] { UserRoleEnum.Admin, UserRoleEnum.Coordinator, UserRoleEnum.Volunteer }.Select(c => ((int)c).ToString()).ToArray();
 
                 options.AddPolicy(AdminAccessAttribute.PolicyName, policy => policy.RequireClaim(ClaimTypes.Role, adminClaims));
@@ -106,6 +107,7 @@ namespace Alpaki.WebApi
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllEnumsAsStrings();
+                c.OperationFilter<AddAuthorizedHeaderParameter>();
             });
 
             services.Configure<KestrelServerOptions>(options =>
