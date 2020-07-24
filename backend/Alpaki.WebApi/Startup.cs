@@ -150,9 +150,6 @@ namespace Alpaki.WebApi
             services.AddProblemDetails(
                 opt =>
                 {
-                    opt.OnBeforeWriteDetails = (http, problemDetails) =>
-                    {
-                    };
                     opt.Map<ValidationException>(x => x.ToValidationProblemDetails());
                     opt.Map<LogicException>(x => new StatusCodeProblemDetails(StatusCodes.Status400BadRequest)
                     {
