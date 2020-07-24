@@ -9,7 +9,7 @@ using MockQueryable.NSubstitute;
 using NSubstitute;
 using Xunit;
 
-namespace Alpaki.Tests.UnitTests
+namespace Alpaki.Tests.UnitTests.Logic.Handlers
 {
     public class AssignVolunteerHandlerTests
     {

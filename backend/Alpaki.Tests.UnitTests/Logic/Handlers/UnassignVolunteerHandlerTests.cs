@@ -10,7 +10,7 @@ using MockQueryable.NSubstitute;
 using NSubstitute;
 using Xunit;
 
-namespace Alpaki.Tests.UnitTests
+namespace Alpaki.Tests.UnitTests.Logic.Handlers
 {
     public class UnassignVolunteerHandlerTests
     {
@@ -27,7 +27,7 @@ namespace Alpaki.Tests.UnitTests
             // Arrange
             var request = _fixture.Create<UnassignVolunteerRequest>();
             var databaseContextMock = Substitute.For<IDatabaseContext>();
-            
+
             var assignDbMock = new List<AssignedDreams> {
                 new AssignedDreams { VolunteerId = request.VolunteerId, DreamId = request.DreamId }
             }
