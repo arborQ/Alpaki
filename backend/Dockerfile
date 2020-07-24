@@ -4,7 +4,7 @@ WORKDIR /app
 # Copy csproj and restore as distinct layers
 COPY . ./
 RUN dotnet restore Alpaki.sln
-RUN dotnet publish -c Release -o out -p:PublishTrimmed=true
+RUN dotnet publish -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
