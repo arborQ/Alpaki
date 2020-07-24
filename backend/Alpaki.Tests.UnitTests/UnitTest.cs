@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Logic;
-using Alpaki.Logic.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

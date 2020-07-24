@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
 using Alpaki.Logic.Features.Invitations.RegisterVolunteer;

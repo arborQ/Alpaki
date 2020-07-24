@@ -1,0 +1,36 @@
+version: "3"
+services:
+    api:
+        build: ./backend
+        ports:
+            - "5000:80"
+        environment:
+            - DefaultConnectionString=Server=db;Database=AlpakiDatabas;User=sa;Password=D.`(>q8'5d,ngL>H;
+            - Seq:ApiKey=123456789
+            - Seq:ServerUrl=http://seq:5341
+        depends_on:
+            - db
+            - seq
+    db:
+        container_name: db
+        image: "microsoft/mssql-server-linux"
+        restart: always
+        ports:
+            - "1433:1433"
+        expose: 
+            - 1433
+        volumes:
+            - ./mssql-data/data/mssql:/var/opt/mssql/data
+            - ./mssql-data/logs/mssql:/var/opt/mssql/log
+        environment:
+            ACCEPT_EULA: "Y"
+            SA_PASSWORD: "D.`(>q8'5d,ngL>H"
+    seq:
+        image: datalust/seq:latest
+        ports:
+            - "5341:80"
+        environment:
+            ACCEPT_EULA: Y
+        restart: unless-stopped
+        volumes:
+            - ./seq-data:/data

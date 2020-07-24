@@ -9,16 +9,25 @@
 * Swagger
 * MediatR
 * FluentValidator
+* Seq
+* Docker
 
 ### Run backend
 
 ```sh
-$ dotnet ef database update -p .\Alpaki.Database\ -s .\Alpaki.WebApi\
-$ dotnet run -p .\backend\Alpaki.WebApi
+$ docker-compose up --build
 ```
 
 See Swagger:
-https://localhost:5001/swagger/index.html
+http://localhost:5000/swagger/index.html
 
-Play with GraphQL:
-https://localhost:5001/ui/playground
+To authorize as admin, access Seq logs
+
+http://localhost:5341
+
+and see for admin token you can use
+
+```sh
+$ [ADMIN]: admin user was created with token: [TOKEN]
+```
+

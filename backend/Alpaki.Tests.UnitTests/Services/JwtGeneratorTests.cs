@@ -10,6 +10,7 @@ using Alpaki.Database.Models;
 using Alpaki.Logic.Services;
 using AutoFixture;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
@@ -19,10 +20,13 @@ namespace Alpaki.Tests.UnitTests.Services
     public class JwtGeneratorTests
     {
         private readonly Fixture _fixture;
+        private readonly ISystemClock _systemClock;
 
         public JwtGeneratorTests()
         {
             _fixture = new Fixture();
+            _systemClock = Substitute.For<ISystemClock>();
+            _systemClock.UtcNow.Returns(DateTime.UtcNow);
         }
 
         [Theory]
@@ -39,7 +43,7 @@ namespace Alpaki.Tests.UnitTests.Services
             var configuration = Substitute.For<IOptions<JwtConfig>>();
             configuration.Value.Returns(new JwtConfig { SeacretKey = key });
 
-            var sut = new JwtGenerator(configuration);
+            var sut = new JwtGenerator(configuration, _systemClock);
 
             // Act
             var token = sut.Generate(new User { UserId = userId, Role = role });
