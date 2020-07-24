@@ -15,7 +15,7 @@ namespace Alpaki.WebApi.Swagger
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Description = "JWT token",
-                Required = true,
+                Required = false,
                 Schema = new OpenApiSchema
                 {
                     Type = "String",
