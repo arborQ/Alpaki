@@ -2,7 +2,7 @@
 using AutoFixture;
 using AutoFixture.Dsl;
 
-namespace Alpaki.Tests.IntegrationTests.Fixtures.Builders
+namespace Alpaki.Tests.Common.Builders
 {
     public static class DreamCategoryFixtureBuilder
     {

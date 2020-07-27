@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Alpaki.Database.Models;
+using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.DreamersControllerTests;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
