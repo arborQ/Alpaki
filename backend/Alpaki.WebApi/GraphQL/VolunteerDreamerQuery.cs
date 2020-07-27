@@ -33,7 +33,10 @@ namespace Alpaki.WebApi.GraphQL
 
         protected override IQueryable<User> QueryUsers()
         {
-            return _userDatabaseContext.Users.Where(u => u.UserId == _currentUserService.CurrentUserId);
+            var currentUserId = _currentUserService.CurrentUserId;
+            var dreamIds = _userDatabaseContext.AssignedDreams.Where(ad => ad.VolunteerId == currentUserId).Select(ad => ad.DreamId);
+
+            return _userDatabaseContext.Users.Where(u => u.UserId == currentUserId || u.AssignedDreams.Any(ad => dreamIds.Contains(ad.DreamId)));
         }
 
         protected override IQueryable<Invitation> QueryInvitations()

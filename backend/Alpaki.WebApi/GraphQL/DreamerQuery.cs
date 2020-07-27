@@ -36,6 +36,7 @@ namespace Alpaki.WebApi.GraphQL
             var userArguments = new QueryArguments(new List<QueryArgument>
             {
                 new QueryArgument<IdGraphType> { Name = "userId" },
+                new QueryArgument<IdGraphType> { Name = "dreamId" },
                 new QueryArgument<StringGraphType> { Name = "orderBy", DefaultValue = "UserId" },
                 new QueryArgument<BooleanGraphType> { Name = "orderAsc", DefaultValue = true }
             });
@@ -52,7 +53,14 @@ namespace Alpaki.WebApi.GraphQL
 
                 if (userId.HasValue)
                 {
-                    return userQuery.Where(u => u.UserId == userId).ToListAsync();
+                    userQuery = userQuery.Where(u => u.UserId == userId);
+                }
+
+                var dreamId = context.GetArgument<int?>("dreamId");
+
+                if (dreamId.HasValue)
+                {
+                    userQuery = userQuery.Where(u => u.AssignedDreams.Any(ad => ad.DreamId == dreamId.Value));
                 }
 
                 return userQuery.ToListAsync();
