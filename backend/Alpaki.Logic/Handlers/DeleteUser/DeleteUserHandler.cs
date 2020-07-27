@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.Database;
@@ -23,7 +22,7 @@ namespace Alpaki.Logic.Handlers.DeleteUser
 
             if (!(await userToRemove.AnyAsync()))
             {
-                throw new ArgumentException($"User with given UserId does not exists [UserId={request.UserId}]");
+                throw new UserNotFoundException(request.UserId);
             }
 
             var assignedDreamsConnections = _databaseContext.AssignedDreams.Where(a => a.VolunteerId == request.UserId);
