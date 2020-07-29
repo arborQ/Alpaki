@@ -1,0 +1,24 @@
+<form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmitted()">
+    <mat-card class="content-card">
+        <mat-card-title>Login to application</mat-card-title>
+        <mat-card-content>
+            <p>
+                <mat-form-field>
+                    <mat-label>Login</mat-label>
+                    <input matInput formControlName="login">
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" formControlName="password">
+                </mat-form-field>
+            </p>
+
+            <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
+                Sign in
+            </button>
+        </mat-card-content>
+    </mat-card>
+</form>
