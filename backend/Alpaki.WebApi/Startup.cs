@@ -223,7 +223,7 @@ namespace Alpaki.WebApi
         private static void ConfigureGraphQL(IApplicationBuilder app)
         {
             app.UseGraphQL<DreamerSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions { GraphQLEndPoint = "/ql" });
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions { });
         }
 
         private static void ConfigureSwagger(IApplicationBuilder app)

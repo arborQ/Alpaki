@@ -32,3 +32,8 @@ and see for admin token you can use
 $ [ADMIN]: admin user was created with token: [TOKEN]
 ```
 
+GraphQL playground available:
+https://localhost:5001/ui/playground
+
+with endpoint
+https://localhost:5001/graphql
