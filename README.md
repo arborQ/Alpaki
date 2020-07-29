@@ -2,6 +2,7 @@
 
 ### Backend
 [![Build Status](https://travis-ci.org/arborQ/Alpaki.svg?branch=master)](https://travis-ci.org/arborQ/Alpaki)
+![.NET Core](https://github.com/arborQ/Alpaki/workflows/.NET%20Core/badge.svg)
 
 * .net core 3.1
 * EntityFramework
@@ -31,3 +32,8 @@ and see for admin token you can use
 $ [ADMIN]: admin user was created with token: [TOKEN]
 ```
 
+GraphQL playground available:
+https://localhost:5001/ui/playground
+
+with endpoint
+https://localhost:5001/graphql

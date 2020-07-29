@@ -8,6 +8,7 @@ using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Logic;
 using Alpaki.Logic.Services;
+using Alpaki.WebApi.Behaviors;
 using Alpaki.WebApi.Filters;
 using Alpaki.WebApi.GraphQL;
 using Alpaki.WebApi.Policies;
@@ -17,6 +18,7 @@ using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using Hellang.Middleware.ProblemDetails;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -102,7 +104,7 @@ namespace Alpaki.WebApi
             RegisterGraphQL(services);
 
             services.RegisterLogicServices();
-
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddControllers();
             services.AddHttpContextAccessor();
             services.AddSwaggerGen(c =>
@@ -221,7 +223,7 @@ namespace Alpaki.WebApi
         private static void ConfigureGraphQL(IApplicationBuilder app)
         {
             app.UseGraphQL<DreamerSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions { GraphQLEndPoint = "/ql" });
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions { });
         }
 
         private static void ConfigureSwagger(IApplicationBuilder app)

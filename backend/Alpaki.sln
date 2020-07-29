@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.Logic", "Alpaki.Logi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{27CFBAD5-8ADF-423D-B6A0-322960E6C787}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaki.Tests.UnitTests", "Alpaki.Tests.UnitTests\Alpaki.Tests.UnitTests.csproj", "{CB811AF3-81E2-409D-9BC0-480048FCE36D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.Tests.UnitTests", "Alpaki.Tests.UnitTests\Alpaki.Tests.UnitTests.csproj", "{CB811AF3-81E2-409D-9BC0-480048FCE36D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaki.Tests.IntegrationTests", "Alpaki.Tests.IntegrationTests\Alpaki.Tests.IntegrationTests.csproj", "{09B34B19-134D-40CA-980C-849A2F997123}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.Tests.IntegrationTests", "Alpaki.Tests.IntegrationTests\Alpaki.Tests.IntegrationTests.csproj", "{09B34B19-134D-40CA-980C-849A2F997123}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaki.Tests.Common", "Alpaki.Tests.Common\Alpaki.Tests.Common.csproj", "{254CD1EE-E485-4AED-BB77-7CE1B869F897}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,18 @@ Global
 		{09B34B19-134D-40CA-980C-849A2F997123}.Release|x64.Build.0 = Release|Any CPU
 		{09B34B19-134D-40CA-980C-849A2F997123}.Release|x86.ActiveCfg = Release|Any CPU
 		{09B34B19-134D-40CA-980C-849A2F997123}.Release|x86.Build.0 = Release|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Debug|x64.Build.0 = Debug|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Debug|x86.Build.0 = Debug|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Release|x64.ActiveCfg = Release|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Release|x64.Build.0 = Release|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Release|x86.ActiveCfg = Release|Any CPU
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +120,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CB811AF3-81E2-409D-9BC0-480048FCE36D} = {27CFBAD5-8ADF-423D-B6A0-322960E6C787}
 		{09B34B19-134D-40CA-980C-849A2F997123} = {27CFBAD5-8ADF-423D-B6A0-322960E6C787}
+		{254CD1EE-E485-4AED-BB77-7CE1B869F897} = {27CFBAD5-8ADF-423D-B6A0-322960E6C787}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF56E54C-11EB-4345-A6CF-D4ECDA5CA4D1}
