@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Alpaki.Database;
 using Alpaki.Database.Models;
+using Alpaki.Logic;
 using Alpaki.Logic.Handlers.DeleteUser;
 using AutoFixture;
 using MockQueryable.NSubstitute;
@@ -36,7 +37,7 @@ namespace Alpaki.Tests.UnitTests.DeleteUser
             _databaseContext.AssignedDreams.Returns(assignedDreams);
 
             // Act && Assert
-            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            await Assert.ThrowsAnyAsync<LogicException>(async () =>
             {
                 await _sut.Handle(_fixture.Create<DeleteUserRequest>(), default);
             });
