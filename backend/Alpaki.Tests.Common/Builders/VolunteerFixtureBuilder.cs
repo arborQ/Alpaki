@@ -1,6 +1,7 @@
 ﻿using Alpaki.Database.Models;
 using AutoFixture;
 using AutoFixture.Dsl;
+using Microsoft.AspNet.Identity;
 
 namespace Alpaki.Tests.IntegrationTests.Fixtures.Builders
 {
@@ -29,6 +30,12 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures.Builders
         {
             return fixture.UserBuilder()
                 .With(u => u.Role, CrossCutting.Enums.UserRoleEnum.Admin);
+        }
+
+        public static IPostprocessComposer<User> WithPassword(this IPostprocessComposer<User> postProcessComposer, string password)
+        {
+            var hasher = new PasswordHasher();
+            return postProcessComposer.With(u => u.PasswordHash, hasher.HashPassword(password));
         }
     }
 }

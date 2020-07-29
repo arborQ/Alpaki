@@ -5,7 +5,6 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Invitations.Repositories;
-using Alpaki.Logic.Services;
 using MediatR;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.Internal;
@@ -21,14 +20,15 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IPasswordHasher _passwordHasher;
 
-        public RegisterVolunteerHandler(IJwtGenerator jwtGenerator, ISystemClock clock, IInvitationRepository invitationRepository, IVolunteerRepository volunteerRepository)
+        public RegisterVolunteerHandler(IJwtGenerator jwtGenerator, ISystemClock clock, IInvitationRepository invitationRepository, IVolunteerRepository volunteerRepository, IPasswordHasher passwordHasher)
         {
             _jwtGenerator = jwtGenerator;
             _clock = clock;
             _invitationRepository = invitationRepository;
             _volunteerRepository = volunteerRepository;
-            _passwordHasher = new PasswordHasher();
+            _passwordHasher = passwordHasher;
         }
+
         public async Task<RegisterVolunteerResponse> Handle(RegisterVolunteer request, CancellationToken cancellationToken)
         {
             var invitation = await _invitationRepository.GetInvitationAsync(request.Email, cancellationToken);

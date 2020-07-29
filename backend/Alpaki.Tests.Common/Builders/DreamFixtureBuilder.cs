@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
+using Alpaki.Tests.Common.Builders;
 using AutoFixture;
 using AutoFixture.Dsl;
 
