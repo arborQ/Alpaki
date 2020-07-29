@@ -2,6 +2,7 @@
 
 ### Backend
 [![Build Status](https://travis-ci.org/arborQ/Alpaki.svg?branch=master)](https://travis-ci.org/arborQ/Alpaki)
+![.NET Core](https://github.com/arborQ/Alpaki/workflows/.NET%20Core/badge.svg)
 
 * .net core 3.1
 * EntityFramework
