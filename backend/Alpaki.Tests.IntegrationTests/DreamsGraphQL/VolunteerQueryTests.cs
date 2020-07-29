@@ -5,7 +5,9 @@ using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.DreamersControllerTests;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
+using Alpaki.Tests.IntegrationTests.UserControllerTests;
 using AutoFixture;
+using FluentAssertions;
 using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
@@ -36,7 +38,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
             var otherVolunteerUser = _fixture.VolunteerBuilder().Create();
 
             var dreams = _fixture.DreamBuilder().WithCategory(category).CreateMany(allDreamsCount).ToList();
-            
+
             await IntegrationTestsFixture.DatabaseContext.Dreams
                 .AddRangeAsync(dreams);
             await IntegrationTestsFixture.DatabaseContext.Users
@@ -62,6 +64,122 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
 
             // Assert
             Assert.Equal(volunteerDreamCount, response.Dreams.Count());
+        }
+
+        [Theory]
+        [InlineData(10, 5)]
+        [InlineData(1, 10)]
+        [InlineData(10, 10)]
+        [InlineData(20, 30)]
+        public async Task Volunteer_CanSeeVolounteers_AssignedToHisDreams(int dreamUsersCount, int otherUsersCount)
+        {
+            // Arrange
+            var volunteerUsers = _fixture.VolunteerBuilder().CreateMany(dreamUsersCount);
+            var otherDreamVolunteers = _fixture.VolunteerBuilder().CreateMany(otherUsersCount);
+            var dreams = _fixture.DreamBuilder().WithNewCategory().CreateMany(2).ToList();
+
+            await IntegrationTestsFixture.DatabaseContext.Dreams
+                .AddRangeAsync(dreams);
+            await IntegrationTestsFixture.DatabaseContext.Users
+                .AddRangeAsync(volunteerUsers);
+            await IntegrationTestsFixture.DatabaseContext.Users
+                 .AddRangeAsync(otherDreamVolunteers);
+
+            await IntegrationTestsFixture.DatabaseContext.AssignedDreams.AddRangeAsync(volunteerUsers.Select(u => new AssignedDreams { Volunteer = u, Dream = dreams.First() }));
+            await IntegrationTestsFixture.DatabaseContext.AssignedDreams.AddRangeAsync(otherDreamVolunteers.Select(u => new AssignedDreams { Volunteer = u, Dream = dreams.Last() }));
+
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+            IntegrationTestsFixture.SetUserContext(volunteerUsers.First());
+
+            // Act
+            var response = await _graphQLClient.Query<UserResponse>(@"
+                      query DreamerQuery {
+                          users {
+                            userId,
+                            firstName,
+                            lastName,
+                            email,
+                            brand,
+                            phoneNumber
+                          }
+                        }  
+                ");
+
+            //Assert
+            response.Users.Should().HaveCount(dreamUsersCount);
+        }
+
+
+        [Theory]
+        [InlineData(10, 5)]
+        [InlineData(1, 10)]
+        [InlineData(10, 10)]
+        [InlineData(20, 30)]
+        public async Task Volunteer_CanFilterVolounteers_AssignedToHisDreams(int dreamUsersCount, int otherUsersCount)
+        {
+            // Arrange
+            var volunteerUsers = _fixture.VolunteerBuilder().CreateMany(dreamUsersCount);
+            var otherDreamVolunteers = _fixture.VolunteerBuilder().CreateMany(otherUsersCount);
+            var dreams = _fixture.DreamBuilder().WithNewCategory().CreateMany(2).ToList();
+
+            await IntegrationTestsFixture.DatabaseContext.Dreams
+                .AddRangeAsync(dreams);
+            await IntegrationTestsFixture.DatabaseContext.Users
+                .AddRangeAsync(volunteerUsers);
+            await IntegrationTestsFixture.DatabaseContext.Users
+                 .AddRangeAsync(otherDreamVolunteers);
+
+            await IntegrationTestsFixture.DatabaseContext.AssignedDreams.AddRangeAsync(volunteerUsers.Select(u => new AssignedDreams { Volunteer = u, Dream = dreams.First() }));
+            await IntegrationTestsFixture.DatabaseContext.AssignedDreams.AddRangeAsync(otherDreamVolunteers.Select(u => new AssignedDreams { Volunteer = u, Dream = dreams.Last() }));
+            await IntegrationTestsFixture.DatabaseContext.AssignedDreams.AddAsync(new AssignedDreams { Volunteer = volunteerUsers.First(), Dream = dreams.Last() });
+
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+            IntegrationTestsFixture.SetUserContext(volunteerUsers.First());
+
+            // Act
+            var response1 = await _graphQLClient.Query<UserResponse>(@$"
+                      query DreamerQuery {{
+                          users(dreamId:{dreams.First().DreamId}) {{
+                            userId,
+                            firstName,
+                            lastName,
+                            email,
+                            brand,
+                            phoneNumber
+                          }}
+                        }}  
+                ");
+
+            var response2 = await _graphQLClient.Query<UserResponse>(@$"
+                      query DreamerQuery {{
+                          users(dreamId:{dreams.Last().DreamId}) {{
+                            userId,
+                            firstName,
+                            lastName,
+                            email,
+                            brand,
+                            phoneNumber
+                          }}
+                        }}  
+                ");
+
+            var response3 = await _graphQLClient.Query<UserResponse>(@$"
+                      query DreamerQuery {{
+                          users {{
+                            userId,
+                            firstName,
+                            lastName,
+                            email,
+                            brand,
+                            phoneNumber
+                          }}
+                        }}  
+                ");
+
+            //Assert
+            response1.Users.Should().HaveCount(dreamUsersCount);
+            response2.Users.Should().HaveCount(otherUsersCount + 1);
+            response3.Users.Should().HaveCount(dreamUsersCount + otherUsersCount);
         }
     }
 }
