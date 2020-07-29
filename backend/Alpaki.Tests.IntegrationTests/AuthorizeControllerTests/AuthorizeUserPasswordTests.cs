@@ -40,6 +40,28 @@ namespace Alpaki.Tests.IntegrationTests.AuthorizeControllerTests
             responseBody.Token.Should().NotBeNullOrEmpty();
         }
 
+        [Theory]
+        [InlineData("arbor123@O2.PL", "Arbor123@o2.pl", "password")]
+        [InlineData("ARBOR@gmail.com", "arbor@gmail.com", "password1234!!!!###")]
+        [InlineData("ArBoRRR!@tessssXtttt.com", "ArBoRRR!@tessssxtttt.COM", "!@#$%^&*()_+=-0987654321ŻółXCĆŚźś")]
+        [InlineData("AAAAAA@BBBBBB.COM", "aaaaaa@bbbbbb.com", "!@#$%^&*()_+=-0987654321ŻółXCĆŚźś")]
+        public async Task AuthorizeUserPassword_ReturnsToken_IfValidPassword_CaseInsensitive(string login, string differentCaseLogin, string password)
+        {
+            // Arrange
+            var user = _fixture.VolunteerBuilder().With(u => u.Email, login).WithPassword(password).Create();
+
+            await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+
+            // Act
+            var response = await Client.PostAsync("/api/Authorize", new { login = differentCaseLogin, password }.WithJsonContent().json);
+            var responseBody = await response.GetResponse<AuthorizeUserPasswordResponse>();
+
+            // Arrange
+            response.EnsureSuccessStatusCode();
+            responseBody.Token.Should().NotBeNullOrEmpty();
+        }
+
         [Fact]
         public async Task AuthorizeUserPassword_ReturnsBadRequest_IfInvalidValidPassword()
         {

@@ -2,7 +2,7 @@
 {
     public class InvalidPasswordException : LogicException
     {
-        public InvalidPasswordException() : base("Invalid password")
+        public InvalidPasswordException() : base("Niepoprawne hasło")
         {
         }
 
