@@ -12,7 +12,7 @@ using MockQueryable.NSubstitute;
 using NSubstitute;
 using Xunit;
 
-namespace Alpaki.Tests.UnitTests
+namespace Alpaki.Tests.UnitTests.Logic.Handlers
 {
     public class UpdateUserDataHandlerTests
     {
@@ -125,7 +125,11 @@ namespace Alpaki.Tests.UnitTests
             var validator = new UpdateUserDataRequestValidator();
             var request = new UpdateUserDataRequest
             {
-                FirstName = "", LastName = "", Brand = "", Email = "not email", PhoneNumber = ""
+                FirstName = "",
+                LastName = "",
+                Brand = "",
+                Email = "not email",
+                PhoneNumber = ""
             };
 
             // Act
