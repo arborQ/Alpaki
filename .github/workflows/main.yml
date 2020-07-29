@@ -1,0 +1,25 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Build
+      run: dotnet build backend/Alpaki.sln
+    - name: Setup test database
+      run: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=test123!' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+    - name: Test
+      run: dotnet test backend/Alpaki.sln
