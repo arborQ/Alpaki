@@ -2,7 +2,7 @@
 
 ### Backend
 [![Build Status](https://travis-ci.org/arborQ/Alpaki.svg?branch=master)](https://travis-ci.org/arborQ/Alpaki)
-
+![.github/workflows/ci.yml](https://github.com/arborQ/Alpaki/workflows/.github/workflows/ci.yml/badge.svg)
 * .net core 3.1
 * EntityFramework
 * GraphQL
