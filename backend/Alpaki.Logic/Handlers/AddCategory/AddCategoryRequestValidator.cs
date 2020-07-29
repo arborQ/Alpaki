@@ -15,6 +15,8 @@ namespace Alpaki.Logic.Handlers.AddCategory
             RuleFor(r => r.CategoryName).NotEmpty().WithMessage("Kategoria nie może mieć pustej nazwy");
             RuleFor(r => r.CategoryName).MaximumLength(250).WithMessage("Nazwa kategorii nie może być dłuższa niż 250 znaków");
             RuleFor(r => r.CategoryName).MustAsync(CategoryDoesNotExists).When(c => !string.IsNullOrWhiteSpace(c.CategoryName)).WithMessage("Taka kategoria już istnieje");
+            RuleFor(r => r.DefaultSteps).NotEmpty().WithMessage("Kategoria musi mieć przypisane kroki");
+
             _databaseContext = databaseContext;
         }
         private Task<bool> CategoryDoesNotExists(string categoryName, CancellationToken cancellationToken)

@@ -64,6 +64,8 @@ namespace Alpaki.Database
 
         public DbSet<DreamCategory> DreamCategories { get; set; }
 
+        public DbSet<DreamCategoryDefaultStep> DreamCategoryDefaultSteps { get; set; }
+
         public DbSet<DreamStep> DreamSteps { get; set; }
 
         public DbSet<AssignedDreams> AssignedDreams { get; set; }

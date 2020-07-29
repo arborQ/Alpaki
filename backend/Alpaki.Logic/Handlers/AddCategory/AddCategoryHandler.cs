@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.Database;
 using Alpaki.Database.Models;
@@ -17,11 +18,20 @@ namespace Alpaki.Logic.Handlers.AddCategory
 
         public async Task<AddCategoryResponse> Handle(AddCategoryRequest request, CancellationToken cancellationToken)
         {
-            var newCategory = new DreamCategory { CategoryName = request.CategoryName };
+            var newCategory = new DreamCategory
+            {
+                CategoryName = request.CategoryName,
+                DefaultSteps = request.DefaultSteps.Select(ds => new DreamCategoryDefaultStep
+                {
+                    IsSponsorRelated = ds.IsSponsorRelated,
+                    StepDescription = ds.StepName
+                }).ToList()
+            };
+
             await _databaseContext.DreamCategories.AddAsync(newCategory);
             await _databaseContext.SaveChangesAsync();
 
-            return new AddCategoryResponse {  DreamCategoryId = newCategory.DreamCategoryId };
+            return new AddCategoryResponse { DreamCategoryId = newCategory.DreamCategoryId };
         }
     }
 }
