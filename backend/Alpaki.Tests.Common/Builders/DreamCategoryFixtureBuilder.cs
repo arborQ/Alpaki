@@ -23,7 +23,7 @@ namespace Alpaki.Tests.Common.Builders
 
         public static IPostprocessComposer<DreamCategoryDefaultStep> DreamCategoryDefaultStepBuilder(this Fixture fixture)
         {
-            return fixture.Build<DreamCategoryDefaultStep>().Without(c => c.DreamCategory);
+            return fixture.Build<DreamCategoryDefaultStep>().Without(c => c.DreamCategory).Without(c => c.DreamCategoryDefaultStepId);
         }
     }
 }

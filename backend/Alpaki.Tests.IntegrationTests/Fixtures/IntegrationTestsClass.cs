@@ -17,14 +17,14 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
 
         protected HttpClient Client { get; }
 
-        public Task DisposeAsync()
+        public async Task DisposeAsync()
         {
-            return IntegrationTestsFixture.DisposeAsync();
+            await IntegrationTestsFixture.Checkpoint.Reset(IntegrationTestsFixture.DatabaseConnectionString);
         }
 
-        public Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            return IntegrationTestsFixture.InitializeAsync();
+            await IntegrationTestsFixture.Checkpoint.Reset(IntegrationTestsFixture.DatabaseConnectionString);
         }
     }
 
