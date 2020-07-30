@@ -13,7 +13,7 @@ services:
             - seq
     db:
         container_name: db
-        image: "microsoft/mssql-server-linux"
+        image: "mcr.microsoft.com/mssql/server:2017-latest"
         restart: always
         ports:
             - "1433:1433"
@@ -23,7 +23,7 @@ services:
             - sql:/var/opt/mssql
         environment:
             ACCEPT_EULA: "Y"
-            MSSQL_SA_PASSWORD: "D.`(>q8'5d,ngL>H"
+            SA_PASSWORD: "D.`(>q8'5d,ngL>H"
     seq:
         image: datalust/seq:latest
         ports:
