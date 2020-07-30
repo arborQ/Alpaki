@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Dreamer.CreateDreamer;
+using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
+using FluentAssertions;
 using GraphQL;
 using Xunit;
 
@@ -26,6 +28,17 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             public string FirstName { get; set; }
 
             public string LastName { get; set; }
+
+            public RequiredStep[] RequiredSteps { get; set; }
+
+            public class RequiredStep
+            {
+                public long DreamStepId { get; set; }
+
+                public string StepDescription { get; set; }
+
+                public string StepState { get; set; }
+            }
         }
     }
     public class DreamersControllerTests : IntegrationTestsClass
@@ -41,7 +54,8 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
         public async Task DreamersController_POST_CreateDreamer()
         {
             // Arrange
-            var category = new DreamCategory { CategoryName = "test" };
+            var stepCount = 12;
+            var category = _fixture.DreamCategoryBuilder(stepCount).Create();
             await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
@@ -51,7 +65,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             var count = 20;
             var random = new Random();
             var requests = _fixture
-                .Build<CreateDreamerRequestFake>()
+                .Build<CreateDreamerRequest>()
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.Gender, GenderEnum.Female)
                 .With(d => d.CategoryId, category.DreamCategoryId)
@@ -66,6 +80,10 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                         gender
                         firstName
                         lastName
+                        requiredSteps {
+                         stepDescription
+                         stepState
+                        }
                       }
                     }                    
                 ";
@@ -80,6 +98,10 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
 
             // Assert
             Assert.Equal(count, graphResponse.Dreams.Length);
+            Assert.All(graphResponse.Dreams, d =>
+            {
+                d.RequiredSteps.Should().HaveCount(stepCount);
+            });
             foreach (var response in responses)
             {
                 response.EnsureSuccessStatusCode(); // Status Code 200-299
