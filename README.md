@@ -33,7 +33,7 @@ $ [ADMIN]: admin user was created with token: [TOKEN]
 ```
 
 GraphQL playground available:
-https://localhost:5001/ui/playground
+http://localhost:5000/ui/playground
 
 with endpoint
-https://localhost:5001/graphql
+http://localhost:5000/graphql
