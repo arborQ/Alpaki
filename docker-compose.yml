@@ -20,7 +20,7 @@ services:
         expose: 
             - 1433
         volumes:
-            - alpakisql:/var/opt/mssql
+            - sql:/var/opt/mssql
         environment:
             ACCEPT_EULA: "Y"
             SA_PASSWORD: "D.`(>q8'5d,ngL>H"
@@ -32,7 +32,7 @@ services:
             ACCEPT_EULA: Y
         restart: unless-stopped
         volumes:
-            - alpakiseq:/data
+            - seq:/data
 volumes:
-    alpakisql:
-    alpakiseq:
+    sql:
+    seq:
