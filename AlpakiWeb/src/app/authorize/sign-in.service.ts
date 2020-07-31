@@ -15,7 +15,7 @@ export class SignInService {
 
   signIn(login: string, password: string): Observable<boolean> {
     return this.http
-      .post('/api/login', { login, password })
+      .post('/api/authorize', { login, password })
       .pipe(map((response: ISignInModel) => {
         this.currentUserService.setCurrentUser(response.login, response.token);
         return true;

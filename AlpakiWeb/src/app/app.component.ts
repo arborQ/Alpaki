@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { of } from 'rxjs';
+import { CurrentUserService } from 'src/current-user.service';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,10 @@ import { of } from 'rxjs';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
+  constructor(private currentUserService: CurrentUserService) {}
   title = 'AlpakiWeb';
-  $isAuthorized = of(false);
+  $isAuthorized = this.currentUserService.$isAuthorized;
   onSignOut() {
-
+    this.currentUserService.clearCurrentUser();
   }
 }
