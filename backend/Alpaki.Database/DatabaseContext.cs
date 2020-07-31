@@ -3,6 +3,7 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
+using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -12,12 +13,14 @@ namespace Alpaki.Database
     {
         private readonly ILogger<DatabaseContext> _logger;
         private readonly IJwtGenerator _jwtGenerator;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options, ILogger<DatabaseContext> logger, IJwtGenerator jwtGenerator)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, ILogger<DatabaseContext> logger, IJwtGenerator jwtGenerator, IPasswordHasher passwordHasher)
             : base(options)
         {
             _logger = logger;
             _jwtGenerator = jwtGenerator;
+            _passwordHasher = passwordHasher;
         }
 
         private void SeedData(ModelBuilder modelBuilder)
@@ -29,9 +32,13 @@ namespace Alpaki.Database
                    CategoryName = name,
                }));
 
-            var adminUser = new User { FirstName = "admin", LastName = "admin", Email = "admin@admin.pl", UserId = 1, Role = UserRoleEnum.Admin };
+            var adminPassword = "test123!";
+            var adminLogin = "admin@admin.pl";
+
+            var adminUser = new User { FirstName = "admin", LastName = "admin", Email = adminLogin, UserId = 1, Role = UserRoleEnum.Admin, PasswordHash = _passwordHasher.HashPassword(adminPassword) };
             modelBuilder.Entity<User>().HasData(adminUser);
             _logger.LogInformation($"[ADMIN]: admin user was created with token: [{_jwtGenerator.Generate(adminUser)}]");
+            _logger.LogInformation($"[ADMIN]: admin user was created with login: [{adminLogin}] password: [{adminPassword}]");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
