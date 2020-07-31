@@ -15,5 +15,7 @@ namespace Alpaki.Database.Models
         public string CategoryName { get; set; }
 
         public virtual ICollection<Dream> Dreams { get; set; }
+
+        public virtual ICollection<DreamCategoryDefaultStep> DefaultSteps { get; set; }
     }
 }

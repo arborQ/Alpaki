@@ -9,6 +9,7 @@ namespace Alpaki.WebApi.GraphQL
         {
             Field(c => c.DreamCategoryId);
             Field(c => c.CategoryName);
+            Field<ListGraphType<DefaultStepType>>(nameof(DreamCategory.DefaultSteps));
         }
     }
 }

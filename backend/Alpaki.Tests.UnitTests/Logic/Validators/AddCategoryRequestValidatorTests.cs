@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Alpaki.Database;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Handlers.AddCategory;
+using Alpaki.Tests.Common.Builders;
 using AutoFixture;
 using FluentAssertions;
 using MockQueryable.NSubstitute;
@@ -25,7 +26,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         {
             _fixture = new Fixture();
             _databaseContext = Substitute.For<IDatabaseContext>();
-            _existingCategories = _fixture.Build<DreamCategory>().Without(c => c.Dreams).CreateMany(10).ToList();
+            _existingCategories = _fixture.DreamCategoryBuilder().CreateMany(10).ToList();
             var queryMock = _existingCategories
                 .AsQueryable()
                 .BuildMockDbSet();
@@ -41,7 +42,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         public async Task AddCategoryRequestValidator_SuccessIfNameIsOK(string categoryName)
         {
             // Arrange
-            var request = new AddCategoryRequest { CategoryName = categoryName };
+            var request = new AddCategoryRequest { CategoryName = categoryName, DefaultSteps = new AddCategoryRequest.CategoryDefaultStep[10] };
 
             // Act
             var result = await _sut.ValidateAsync(request, default);
@@ -55,7 +56,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task AddCategoryRequestValidator_FailsIfNameIsEmpty(string categoryName)
+        public async Task AddCategoryRequestValidator_FailsIfNameOrStepsIsEmpty(string categoryName)
         {
             // Arrange
             var request = new AddCategoryRequest { CategoryName = categoryName };
@@ -66,6 +67,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
             // Assert
             result.IsValid.Should().BeFalse();
             result.Errors.Should().Contain(e => e.PropertyName == nameof(AddCategoryRequest.CategoryName));
+            result.Errors.Should().Contain(e => e.PropertyName == nameof(AddCategoryRequest.DefaultSteps));
         }
 
         [Fact]

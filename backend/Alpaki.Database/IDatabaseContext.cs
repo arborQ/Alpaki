@@ -20,6 +20,8 @@ namespace Alpaki.Database
 
         DbSet<AssignedDreams> AssignedDreams { get; }
 
+        public DbSet<DreamCategoryDefaultStep> DreamCategoryDefaultSteps { get; }
+
         void EnsureCreated();
 
         void Migrate();

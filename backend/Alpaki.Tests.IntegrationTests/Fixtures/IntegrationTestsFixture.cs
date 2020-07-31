@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
@@ -8,11 +7,11 @@ using Alpaki.WebApi;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using Xunit;
+using Respawn;
 
 namespace Alpaki.Tests.IntegrationTests.Fixtures
 {
-    public class IntegrationTestsFixture : IAsyncLifetime
+    public class IntegrationTestsFixture
     {
         public TestServer TestServer { get; }
 
@@ -22,6 +21,10 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
 
         public IConfiguration Configuration { get; }
 
+        public string DatabaseConnectionString { get; private set; }
+
+        public readonly static Checkpoint Checkpoint = new Checkpoint { TablesToIgnore = new[] { "__EFMigrationsHistory" } };
+
         public IntegrationTestsFixture()
         {
             Configuration = new IntegrationTestsConfigurationFixture().Configuration;
@@ -30,6 +33,7 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
                 .UseStartup<Startup>();
 
             TestServer = new TestServer(builder);
+            DatabaseConnectionString = Configuration.GetValue<string>("DefaultConnectionString");
             DatabaseContext = TestServer.Services.GetService(typeof(IDatabaseContext)) as IDatabaseContext;
             ServerClient = TestServer.CreateClient();
         }
@@ -52,18 +56,5 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
             ServerClient.DefaultRequestHeaders.Clear();
             ServerClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         }
-
-        public async Task InitializeAsync()
-        {
-            var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
-            await new Respawn.Checkpoint().Reset(connectionString);
-        }
-
-        public async Task DisposeAsync()
-        {
-            var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
-            await new Respawn.Checkpoint().Reset(connectionString);
-        }
     }
-
 }

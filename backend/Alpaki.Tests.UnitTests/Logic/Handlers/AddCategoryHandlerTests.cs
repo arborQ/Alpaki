@@ -39,6 +39,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
             await databaseContextMock.Received(1).SaveChangesAsync(default);
             await categoriesDbMock.Received(1).AddAsync(Arg.Any<DreamCategory>());
             await categoriesDbMock.Received(1).AddAsync(Arg.Is<DreamCategory>(ad => ad.CategoryName == request.CategoryName));
+            await categoriesDbMock.Received(1).AddAsync(Arg.Is<DreamCategory>(ad => ad.DefaultSteps.Count == request.DefaultSteps.Length));
         }
     }
 }
