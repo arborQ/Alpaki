@@ -9,6 +9,7 @@ import { HttpErrorInterceptor } from 'src/http-error.interceptor';
 import { AuthorizeRequestsInterceptor } from 'src/authorize-requests.interceptor';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MatListModule } from '@angular/material/list';
     HttpClientModule,
     MatSidenavModule,
     MatListModule,
-    CommonModule
+    CommonModule,
+    GraphQLModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
