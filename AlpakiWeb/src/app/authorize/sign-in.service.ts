@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { CurrentUserService } from '../current-user.service';
+import { CurrentUserService } from '../../current-user.service';
 import { ISignInModel } from './sign-in/sign-in.models';
 
 @Injectable({

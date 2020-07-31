@@ -9,12 +9,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SelectUserComponent } from '../select-user/select-user.component';
 
 @NgModule({
   declarations: [
     SignInComponent,
-    RegisterComponent
+    RegisterComponent,
+    SelectUserComponent
   ],
   imports: [
     CommonModule,
@@ -22,6 +25,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
     AuthorizeRoutingModule,
     MatCardModule,
     MatProgressSpinnerModule

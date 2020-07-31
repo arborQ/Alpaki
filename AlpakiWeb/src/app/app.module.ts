@@ -8,6 +8,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from 'src/http-error.interceptor';
 import { AuthorizeRequestsInterceptor } from 'src/authorize-requests.interceptor';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     BrowserAnimationsModule,
     HttpClientModule,
     MatSidenavModule,
+    MatListModule,
     CommonModule
   ],
   providers: [

@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'authorize', loadChildren: () => import('../authorize/authorize.module').then(a => a.AuthorizeModule)
+    path: 'authorize', loadChildren: () => import('./authorize/authorize.module').then(a => a.AuthorizeModule)
   }
 ];
 
