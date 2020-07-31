@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { of } from 'rxjs';
 import { CurrentUserService } from 'src/current-user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,11 @@ import { CurrentUserService } from 'src/current-user.service';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  constructor(private currentUserService: CurrentUserService) {}
+  constructor(private currentUserService: CurrentUserService, private router: Router) { }
   title = 'AlpakiWeb';
   $isAuthorized = this.currentUserService.$isAuthorized;
   onSignOut() {
     this.currentUserService.clearCurrentUser();
+    this.router.navigate(['/authorize/sign-in']);
   }
 }

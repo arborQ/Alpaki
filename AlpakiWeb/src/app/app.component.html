@@ -1,11 +1,11 @@
 <mat-sidenav-container class="example-container">
   <mat-sidenav mode="side" opened>
     <mat-nav-list>
-      <a *ngIf="!($isAuthorized | async)" mat-list-item routerLink="/authorize/sign-in" routerLinkActive="active"> Sign In </a>
-      <a *ngIf="!($isAuthorized | async)" mat-list-item routerLink="/authorize/register"> Register </a>
-      <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/brands/list"> Car brands </a>
-      <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/users/list"> Users </a>
-      <a *ngIf="$isAuthorized | async" mat-list-item (click)="onSignOut()"> Sign out </a>
+      <a *ngIf="!($isAuthorized | async)" mat-list-item routerLink="/authorize/sign-in" routerLinkActive="active"> Zaloguj się </a>
+      <a *ngIf="!($isAuthorized | async)" mat-list-item routerLink="/authorize/register"> Rejestracja </a>
+      <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/dreams/list"> Marzenia </a>
+      <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/users/list"> Użytkownicy </a>
+      <a *ngIf="$isAuthorized | async" mat-list-item (click)="onSignOut()"> Wyloguj </a>
      </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

@@ -11,13 +11,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { SelectUserComponent } from '../select-user/select-user.component';
 
 @NgModule({
   declarations: [
     SignInComponent,
     RegisterComponent,
-    SelectUserComponent
   ],
   imports: [
     CommonModule,

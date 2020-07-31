@@ -31,7 +31,7 @@ export class SignInComponent implements OnInit {
       .signIn(login, password)
       .toPromise()
       .then(() => {
-        this.router.navigateByUrl('/brands/list');
+        this.router.navigateByUrl('/dreams/list');
       })
       .finally(() => {
         this.loginForm.enable();

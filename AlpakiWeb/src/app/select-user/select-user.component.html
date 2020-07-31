@@ -1,6 +1,0 @@
-<mat-form-field appearance="fill">
-    <mat-label>Select an option</mat-label>
-    <mat-select [value]="selected" (selectionChange)="change($event)" [compareWith]="compareOptions">
-        <mat-option *ngFor="let option of options | async" [value]="option">{{ option.name }}</mat-option>
-    </mat-select>
-</mat-form-field>

@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "schema": "apollo-codegen introspect-schema http://localhost:4200/graphql --output schema.json && apollo-codegen generate **/*.graphql --schema schema.json --target typescript --output operation-result-types.ts"
   },
   "private": true,
   "dependencies": {
