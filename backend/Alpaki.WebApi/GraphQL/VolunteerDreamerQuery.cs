@@ -43,5 +43,10 @@ namespace Alpaki.WebApi.GraphQL
         {
             return new List<Invitation>().AsQueryable();
         }
+
+        protected override IQueryable<DreamCategory> QueryDreamCategories()
+        {
+            return new List<DreamCategory>().AsQueryable();
+        }
     }
 }

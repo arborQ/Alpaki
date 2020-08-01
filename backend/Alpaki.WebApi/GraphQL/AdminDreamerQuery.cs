@@ -8,28 +8,37 @@ namespace Alpaki.WebApi.GraphQL
 {
     public class AdminDreamerQuery : DreamerQuery
     {
-        private readonly IDatabaseContext _databaseContext;
-        private readonly IDatabaseContext _userDatabaseContext;
+        private readonly IDatabaseContext _dreamsDatabaseContext;
+        private readonly IDatabaseContext _usersDatabaseContext;
+        private readonly IDatabaseContext _invitationsDatabaseContext;
+        private readonly IDatabaseContext _categoriesDatabaseContext;
 
-        public AdminDreamerQuery(IDatabaseContext databaseContext, IDatabaseContext userDatabaseContext)
+        public AdminDreamerQuery(IDatabaseContext dreamsDatabaseContext, IDatabaseContext usersDatabaseContext, IDatabaseContext invitationsDatabaseContext, IDatabaseContext categoriesDatabaseContext)
         {
-            _databaseContext = databaseContext;
-            _userDatabaseContext = userDatabaseContext;
+            _dreamsDatabaseContext = dreamsDatabaseContext;
+            _usersDatabaseContext = usersDatabaseContext;
+            _invitationsDatabaseContext = invitationsDatabaseContext;
+            _categoriesDatabaseContext = categoriesDatabaseContext;
         }
 
         protected override IQueryable<Dream> QueryDreams()
         {
-            return _databaseContext.Dreams;
+            return _dreamsDatabaseContext.Dreams;
         }
 
         protected override IQueryable<User> QueryUsers()
         {
-            return _userDatabaseContext.Users;
+            return _usersDatabaseContext.Users;
         }
 
         protected override IQueryable<Invitation> QueryInvitations()
         {
-            return _databaseContext.Invitations.Where(x=>x.Status == InvitationStateEnum.Pending);
+            return _invitationsDatabaseContext.Invitations.Where(x=>x.Status == InvitationStateEnum.Pending);
+        }
+
+        protected override IQueryable<DreamCategory> QueryDreamCategories()
+        {
+            return _categoriesDatabaseContext.DreamCategories;
         }
     }
 }

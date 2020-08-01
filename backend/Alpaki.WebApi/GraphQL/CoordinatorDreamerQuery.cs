@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Alpaki.CrossCutting.Enums;
-using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
@@ -9,20 +8,22 @@ namespace Alpaki.WebApi.GraphQL
 {
     public class CoordinatorDreamerQuery : DreamerQuery
     {
-        private readonly IDatabaseContext _databaseContext;
-        private readonly IDatabaseContext _userDatabaseContext;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IDatabaseContext _dreamsDatabaseContext;
+        private readonly IDatabaseContext _usersDatabaseContext;
+        private readonly IDatabaseContext _invitationsDatabaseContext;
+        private readonly IDatabaseContext _categoriesDatabaseContext;
 
-        public CoordinatorDreamerQuery(IDatabaseContext databaseContext, IDatabaseContext userDatabaseContext, ICurrentUserService currentUserService)
+        public CoordinatorDreamerQuery(IDatabaseContext dreamsDatabaseContext, IDatabaseContext usersDatabaseContext, IDatabaseContext invitationsDatabaseContext, IDatabaseContext categoriesDatabaseContext)
         {
-            _databaseContext = databaseContext;
-            _userDatabaseContext = userDatabaseContext;
-            _currentUserService = currentUserService;
+            _dreamsDatabaseContext = dreamsDatabaseContext;
+            _usersDatabaseContext = usersDatabaseContext;
+            _invitationsDatabaseContext = invitationsDatabaseContext;
+            _categoriesDatabaseContext = categoriesDatabaseContext;
         }
 
         protected override IQueryable<Dream> QueryDreams()
         {
-            return _databaseContext.Dreams
+            return _dreamsDatabaseContext.Dreams
                 .Where(d => d.Volunteers.Any(v =>
                     d.DreamState != DreamStateEnum.Done &&
                     d.DreamState != DreamStateEnum.Terminated
@@ -31,12 +32,17 @@ namespace Alpaki.WebApi.GraphQL
 
         protected override IQueryable<User> QueryUsers()
         {
-            return _userDatabaseContext.Users.Where(u => u.Role == UserRoleEnum.Volunteer); ;
+            return _usersDatabaseContext.Users.Where(u => u.Role == UserRoleEnum.Volunteer); ;
         }
 
         protected override IQueryable<Invitation> QueryInvitations()
         {
-            return _databaseContext.Invitations.Where(x => x.Status == InvitationStateEnum.Pending);
+            return _invitationsDatabaseContext.Invitations.Where(x => x.Status == InvitationStateEnum.Pending);
+        }
+
+        protected override IQueryable<DreamCategory> QueryDreamCategories()
+        {
+            return _categoriesDatabaseContext.DreamCategories;
         }
     }
 }

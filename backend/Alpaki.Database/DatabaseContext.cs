@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
@@ -63,6 +64,11 @@ namespace Alpaki.Database
         public void Migrate()
         {
             Database.Migrate();
+        }
+
+        public Task ReloadAsync<T>(T entity) where T : class
+        {
+            return Entry(entity).ReloadAsync();
         }
 
         public DbSet<User> Users { get; set; }
