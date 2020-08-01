@@ -8,6 +8,7 @@ import { DreamCardComponent } from './dream-card/dream-card.component';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatListModule } from '@angular/material/list';
 import { DreamDetailsComponent } from './dream-details/dream-details.component';
 
 @NgModule({
@@ -17,7 +18,8 @@ import { DreamDetailsComponent } from './dream-details/dream-details.component';
     CommonModule,
     DreamsRoutingModule,
     MatCardModule,
-    MatChipsModule
+    MatChipsModule,
+    MatListModule
   ]
 })
 export class DreamsModule { }

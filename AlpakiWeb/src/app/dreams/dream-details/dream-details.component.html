@@ -6,13 +6,19 @@
             <mat-card-title>{{ dream.firstName }} {{ dream.lastName }}</mat-card-title>
             <mat-card-subtitle>{{ dream.age}} lat</mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image src="/assets/person_{{ dream.gender === 'FEMALE' ? 'female': 'male' }}.png"
-            alt="Photo of a Shiba Inu">
         <mat-card-content>
             <mat-chip-list>
                 <mat-chip color="primary" selected>{{ dream.dreamCategory.categoryName}}</mat-chip>
             </mat-chip-list>
-            <a [routerLink]="['/dreams/details']" [queryParams]="{dreamId: dream.dreamId}"></a>
+            <mat-selection-list #steps>
+                <div mat-subheader>Kroki do spełnienia marzenia</div>
+                <mat-list-option *ngFor="let step of steps$ | async">
+                  {{step}}
+                </mat-list-option>
+              </mat-selection-list>
+              <!-- <pre>
+                  {{ steps.selectedOptions.selected.length }}
+              </pre> -->
         </mat-card-content>
     </mat-card>
 </div>

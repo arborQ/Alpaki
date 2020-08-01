@@ -10,6 +10,6 @@
         <mat-chip-list>
             <mat-chip color="primary" selected>{{ dream.dreamCategory.categoryName}}</mat-chip>
         </mat-chip-list>
-        <a [routerLink]="['/dreams/details']" [queryParams]="{dreamId: dream.dreamId}"></a>
+        <a [routerLink]="['/dreams/details', dream.dreamId]"></a>
     </mat-card-content>
 </mat-card>

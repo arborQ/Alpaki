@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { DreamsService } from '../dreams-service';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-dream-details',
@@ -8,9 +10,16 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./dream-details.component.less']
 })
 export class DreamDetailsComponent {
-  constructor(private dreamService: DreamsService) {}
-  dreamResponse$ = this.dreamService.getDream(5);
+  constructor(private dreamService: DreamsService, private activatedRoute: ActivatedRoute) { }
+  dreamId: number | null = null;
+  dreamResponse$ = this.activatedRoute.paramMap.pipe(
+    switchMap(params => {
+      this.dreamId = +params.get('dreamId');
 
+      return this.dreamService.getDream(this.dreamId);
+    })
+  )
+  steps$ = of([ 'Zdobyć kasę', "Wydać kasę" ]);
   dream$ = this.dreamResponse$.pipe(map(response => response.data.dreams[0]));
   isLoading$ = this.dreamResponse$.pipe(map(response => response.loading));
 }
