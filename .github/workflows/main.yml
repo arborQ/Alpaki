@@ -23,13 +23,15 @@ jobs:
       run: dotnet test backend/Alpaki.sln
   front:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: AlpakiWeb
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js 12.8
       uses: actions/setup-node@v1
       with:
         node-version: 12.8
-      working-directory: AlpakiWeb
     - name: Install dependencies
       run: yarn install
     - name: Lint
