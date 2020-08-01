@@ -73,7 +73,11 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
             response.EnsureSuccessStatusCode();
 
             var dbCategory = await IntegrationTestsFixture.DatabaseContext.DreamCategories.Include(c => c.DefaultSteps).SingleAsync(c => c.CategoryName == categoryName);
-            await Task.WhenAll(dbCategory.DefaultSteps.ToList().Select(s => IntegrationTestsFixture.DatabaseContext.ReloadAsync(s)));
+
+            foreach(var step in dbCategory.DefaultSteps.ToList())
+            {
+                await IntegrationTestsFixture.DatabaseContext.ReloadAsync(step);
+            }
 
             dbCategory.Should().NotBeNull();
             dbCategory.DefaultSteps.Should().HaveCount(stepCount);
