@@ -17,6 +17,8 @@ namespace Alpaki.WebApi.GraphQL
 
         protected abstract IQueryable<Invitation> QueryInvitations();
 
+        protected abstract IQueryable<DreamCategory> QueryDreamCategories();
+
         public DreamerQuery()
         {
             Name = "DreamQuery";
@@ -121,6 +123,11 @@ namespace Alpaki.WebApi.GraphQL
                 }
 
                 return dreamerQuery.ToListAsync();
+            });
+
+            Field<ListGraphType<DreamCategoryType>>("categories", resolve: context =>
+            {
+                return QueryDreamCategories().Include(c => c.DefaultSteps).Include(c => c.Dreams);
             });
 
             Field<ListGraphType<InvitationType>>(

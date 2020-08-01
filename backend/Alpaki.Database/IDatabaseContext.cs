@@ -29,5 +29,7 @@ namespace Alpaki.Database
         EntityEntry<TEntity> Update<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+        Task ReloadAsync<T>(T entity) where T : class;
     }
 }
