@@ -18,8 +18,8 @@ export class DreamDetailsComponent {
 
       return this.dreamService.getDream(this.dreamId);
     })
-  )
-  steps$ = of([ 'Zdobyć kasę', "Wydać kasę" ]);
+  );
+  steps$ = of([ 'Zdobyć kasę', 'Wydać kasę' ]);
   dream$ = this.dreamResponse$.pipe(map(response => response.data.dreams[0]));
   isLoading$ = this.dreamResponse$.pipe(map(response => response.loading));
 }

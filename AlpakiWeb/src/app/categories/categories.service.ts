@@ -34,8 +34,8 @@ export class CategoriesService {
         query: gql`
         query DreamerQuery {
           categories {
-            dreamCategoryId 
-            categoryName 
+            dreamCategoryId
+            categoryName
             dreamCount
             defaultSteps {
               dreamCategoryDefaultStepId

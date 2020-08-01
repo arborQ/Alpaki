@@ -9,18 +9,22 @@ import { TranslationWidth } from '@angular/common';
   styleUrls: ['./category-form.component.less']
 })
 export class CategoryFormComponent implements OnInit {
-  categoryForm: FormGroup;
 
   constructor() {
 
   }
+  get stepsFormData(): FormArray { return this.categoryForm.controls.defaultSteps as FormArray; }
+  categoryForm: FormGroup;
+
+  @Input() category: ICategory;
+  @Output() saveForm: EventEmitter<any> = new EventEmitter();
 
   private createStepFormGroup(step?: ICategoryStep): FormGroup {
     return new FormGroup({
       stepDescription: new FormControl(step?.stepDescription || '', Validators.required),
       isSponsorRelated: new FormControl(step?.isSponsorRelated || false),
       dreamCategoryDefaultStepId: new FormControl(step?.dreamCategoryDefaultStepId || 0, Validators.required)
-    }, [Validators.required, Validators.minLength(1)])
+    }, [Validators.required, Validators.minLength(1)]);
   }
 
   ngOnInit(): void {
@@ -32,10 +36,6 @@ export class CategoryFormComponent implements OnInit {
     });
   }
 
-  @Input() category: ICategory;
-  @Output() saveForm: EventEmitter<any> = new EventEmitter();
-  get stepsFormData(): FormArray { return <FormArray>this.categoryForm.controls.defaultSteps; }
-
   removeStep(index: number) {
     this.stepsFormData.removeAt(index);
   }
@@ -44,7 +44,7 @@ export class CategoryFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.categoryForm.getRawValue())
+    console.log(this.categoryForm.getRawValue());
     this.saveForm.emit();
   }
 }

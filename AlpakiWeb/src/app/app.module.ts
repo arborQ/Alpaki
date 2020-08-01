@@ -37,14 +37,14 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
   ],
   providers: [
     {
-      provide: APOLLO_OPTIONS, useFactory: 
+      provide: APOLLO_OPTIONS, useFactory:
       (httpLink: HttpLink) => {
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
-            uri: "/graphql"
+            uri: '/graphql'
           })
-        }
+        };
       },
       deps: [HttpLink]
     },

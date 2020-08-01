@@ -10,19 +10,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnDestroy {
-  mobileQuery: MediaQueryList;
-  private _mobileQueryListener: () => void;
-  constructor(private currentUserService: CurrentUserService, private router: Router, media: MediaMatcher, changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    private currentUserService: CurrentUserService,
+    private router: Router,
+    media: MediaMatcher,
+    changeDetectorRef: ChangeDetectorRef
+  ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addEventListener('change', this.mobileQueryListener);
   }
-
-  ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
-  }
+  mobileQuery: MediaQueryList;
+  private mobileQueryListener: () => void;
 
   $isAuthorized = this.currentUserService.$isAuthorized;
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
+  }
 
   onSignOut() {
     this.currentUserService.clearCurrentUser();

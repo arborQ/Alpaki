@@ -9,9 +9,9 @@ import { of } from 'rxjs';
 export class RegisterComponent implements OnInit {
 
   constructor() { }
+  options = of([{ id: 1, name: 'option 1' }, { id: 2, name: 'option 2' }, { id: 3, name: 'option 3' }]);
+  selected = { id: 2, name: 'option 2' };
 
   ngOnInit(): void {
   }
-  options = of([{ id: 1, name: 'option 1' }, { id: 2, name: 'option 2' }, { id: 3, name: 'option 3' }])
-  selected = { id: 2, name: 'option 2' };
 }

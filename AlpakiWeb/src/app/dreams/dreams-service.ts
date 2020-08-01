@@ -37,7 +37,7 @@ export class DreamsService {
         gender
         age
         lastName
-        dreamState 
+        dreamState
         dreamCategory {
           categoryName
         }
@@ -52,7 +52,7 @@ export class DreamsService {
       .valueChanges;
   }
 
-  getDream(dreamId: number) : Observable<ApolloQueryResult<IDreamQueryResponse>> {
+  getDream(dreamId: number): Observable<ApolloQueryResult<IDreamQueryResponse>> {
     return this.apollo
       .watchQuery<IDreamQueryResponse>({
         query: gql`
@@ -63,7 +63,7 @@ export class DreamsService {
             gender
             age
             lastName
-            dreamState 
+            dreamState
             dreamCategory {
               categoryName
             }
