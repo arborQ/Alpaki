@@ -1,0 +1,32 @@
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <p>
+        <mat-form-field>
+            <mat-label>Nazwa kategori</mat-label>
+            <input matInput formControlName="categoryName">
+        </mat-form-field>
+    </p>
+    <mat-list formArrayName="defaultSteps">
+        <div mat-subheader>
+            Kroki do spełnienia marzenia
+            <button mat-icon-button color="primary" aria-label="Dodaj krok" (click)="addStep()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+        <mat-list-item *ngFor="let step of stepsFormData.controls; index as i">
+            <ng-container [formGroupName]="i">
+                <p>
+                    <mat-form-field>
+                        <mat-label>Nazwa kroku</mat-label>
+                        <input matInput formControlName="stepDescription">
+                    </mat-form-field>
+                    <button mat-icon-button color="primary" aria-label="Dodaj krok" (click)="removeStep(i)">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                </p>
+            </ng-container>
+        </mat-list-item>
+    </mat-list>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!categoryForm.valid">
+        Zapisz
+    </button>
+</form>
