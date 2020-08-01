@@ -1,6 +1,11 @@
 <mat-card class="dream-card">
     <mat-card-header>
-        <div mat-card-avatar class="dream-header-image {{ dream.gender === 'FEMALE' ? 'female': 'male' }}"></div>
+        <div 
+            mat-card-avatar 
+            class="dream-header-image"
+            [class.female]="dream.gender === 'FEMALE'"
+            [class.male]="dream.gender !== 'FEMALE'"
+        ></div>
         <mat-card-title>{{ dream.firstName }} {{ dream.lastName }}</mat-card-title>
         <mat-card-subtitle>{{ dream.age}} lat</mat-card-subtitle>
     </mat-card-header>

@@ -1,17 +1,31 @@
+<!-- <mat-toolbar color="primary" class="example-toolbar">
+  <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+  <h1 class="example-app-name">Responsive App</h1>
+</mat-toolbar> -->
 <mat-sidenav-container class="example-container">
-  <mat-sidenav mode="side" opened>
+  <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+    [opened]="!mobileQuery.matches">
     <mat-nav-list>
-      <a *ngIf="!($isAuthorized | async)" mat-list-item routerLink="/authorize/sign-in" routerLinkActive="active"> Zaloguj się </a>
+      <a *ngIf="!($isAuthorized | async)" mat-list-item routerLink="/authorize/sign-in" routerLinkActive="active">
+        Zaloguj się </a>
       <a *ngIf="!($isAuthorized | async)" mat-list-item routerLink="/authorize/register"> Rejestracja </a>
       <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/dreams/list"> Marzenia </a>
-      <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/users/list"> Użytkownicy </a>
+      <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/categories/list"> Kategorie </a>
+      <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/authorize/profile"> Profil </a>
       <a *ngIf="$isAuthorized | async" mat-list-item (click)="onSignOut()"> Wyloguj </a>
-     </mat-nav-list>
+    </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="app-logo">
-      <a [routerLink]="($isAuthorized | async) ? '/dreams' :'/authorize/sign-in'"></a>
+    <div class="header">
+      <button *ngIf="mobileQuery.matches" mat-icon-button color="primary" (click)="snav.toggle()" aria-label="Toggle menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div class="app-logo">
+        <a [routerLink]="($isAuthorized | async) ? '/dreams' :'/authorize/sign-in'"></a>
+      </div>
     </div>
-    <router-outlet></router-outlet>
+    <div class="router-outlet">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

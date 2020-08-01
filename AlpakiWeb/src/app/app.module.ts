@@ -9,6 +9,9 @@ import { HttpErrorInterceptor } from 'src/http-error.interceptor';
 import { AuthorizeRequestsInterceptor } from 'src/authorize-requests.interceptor';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatButtonModule } from '@angular/material/button';
 
 import { GraphQLModule } from './graphql.module';
 import { APOLLO_OPTIONS } from 'apollo-angular';
@@ -27,7 +30,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
     MatSidenavModule,
     MatListModule,
     CommonModule,
-    GraphQLModule
+    GraphQLModule,
+    LayoutModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [
     {
