@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Alpaki.Logic.Handlers.AddCategory;
+using Alpaki.Logic.Handlers.UpdateCategory;
 using Alpaki.WebApi.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,12 @@ namespace Alpaki.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(AddCategoryResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
-        public Task<AddCategoryResponse> UpdateUserData(AddCategoryRequest updateUserDataRequest) => _mediator.Send(updateUserDataRequest);
+        public Task<AddCategoryResponse> CreateCategory(AddCategoryRequest createCategoryRequest) => _mediator.Send(createCategoryRequest);
+
+        [CoordinatorAccess]
+        [HttpPatch]
+        [ProducesResponseType(typeof(UpdateCategoryResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        public Task<UpdateCategoryResponse> UpadteCategory(UpdateCategoryRequest updateCategoryRequest) => _mediator.Send(updateCategoryRequest);
     }
 }
