@@ -5,28 +5,32 @@
             <input matInput formControlName="categoryName">
         </mat-form-field>
     </p>
-    <mat-list formArrayName="defaultSteps">
-        <div mat-subheader>
-            Kroki do spełnienia marzenia
-            <button mat-icon-button color="primary" aria-label="Dodaj krok" (click)="addStep()">
-                <mat-icon>add</mat-icon>
-            </button>
-        </div>
-        <mat-list-item *ngFor="let step of stepsFormData.controls; index as i">
+    <mat-vertical-stepper formArrayName="defaultSteps">
+        <mat-step *ngFor="let step of stepsFormData.controls; index as i">
+            <ng-template matStepLabel>
+                {{ step.value.stepDescription }}
+                <button mat-button color="primary" type="button" aria-label="Dodaj krok" (click)="removeStep(i)">
+                    Usuń krok
+                </button>
+            </ng-template>
             <ng-container [formGroupName]="i">
                 <p>
                     <mat-form-field>
                         <mat-label>Nazwa kroku</mat-label>
                         <input matInput formControlName="stepDescription">
                     </mat-form-field>
-                    <button mat-icon-button color="primary" aria-label="Dodaj krok" (click)="removeStep(i)">
-                        <mat-icon>remove</mat-icon>
-                    </button>
                 </p>
+                <p>
+                    <mat-slide-toggle formControlName="isSponsorRelated">Związany ze sponsorem</mat-slide-toggle>
+                </p>
+                
             </ng-container>
-        </mat-list-item>
-    </mat-list>
+        </mat-step>
+    </mat-vertical-stepper>
     <button mat-raised-button color="primary" type="submit" [disabled]="!categoryForm.valid">
         Zapisz
+    </button>
+    <button mat-raised-button color="link" type="button" (click)="addStep()">
+        Dodaj krok
     </button>
 </form>

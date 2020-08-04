@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CategoryStepComponent } from './category-step/category-step.component';
 import { MatListModule } from '@angular/material/list';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [CategoryListComponent, CategoryFormComponent, CategoryStepComponent],
@@ -26,6 +28,8 @@ import { MatListModule } from '@angular/material/list';
     MatInputModule,
     MatButtonModule,
     MatListModule,
+    MatStepperModule,
+    MatSlideToggleModule
   ],
   providers: [CategoriesService]
 })

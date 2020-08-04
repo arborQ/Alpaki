@@ -29,6 +29,7 @@ export class CategoryFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.categoryForm = new FormGroup({
+      categoryId: new FormControl(this.category?.dreamCategoryId || 0),
       categoryName: new FormControl(this.category?.categoryName || '', Validators.required),
       defaultSteps: new FormArray(
         (this.category?.defaultSteps || []).map(s => this.createStepFormGroup(s))
@@ -44,7 +45,7 @@ export class CategoryFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.categoryForm.getRawValue());
-    this.saveForm.emit();
+    var category = this.categoryForm.getRawValue();
+    this.saveForm.emit({ category });
   }
 }

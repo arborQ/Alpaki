@@ -16,7 +16,7 @@ export class AuthorizeRequestsInterceptor implements HttpInterceptor {
     const authorizeToken = localStorage.getItem('authorize');
 
     if (authorizeToken) {
-      request = request.clone({ headers: request.headers.set('authorization', authorizeToken) });
+      request = request.clone({ headers: request.headers.set('Authorization', `Bearer ${authorizeToken}`) });
     }
 
     return next.handle(request);

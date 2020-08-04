@@ -67,7 +67,7 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
 
             foreach(var step in request.DefaultSteps)
             {
-                var dbStep = dbCategory.DefaultSteps.SingleOrDefault(s => s.StepDescription == step.StepName);
+                var dbStep = dbCategory.DefaultSteps.SingleOrDefault(s => s.StepDescription == step.StepDescription);
                 dbStep.Should().NotBeNull();
             }
         }

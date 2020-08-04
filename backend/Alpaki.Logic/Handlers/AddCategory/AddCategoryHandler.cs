@@ -28,7 +28,7 @@ namespace Alpaki.Logic.Handlers.AddCategory
                     DefaultSteps = request.DefaultSteps.Select(ds => new DreamCategoryDefaultStep
                     {
                         IsSponsorRelated = ds.IsSponsorRelated,
-                        StepDescription = ds.StepName
+                        StepDescription = ds.StepDescription
                     }).ToList()
                 };
 

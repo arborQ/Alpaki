@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { Observable } from 'rxjs';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
+import { HttpClient } from '@angular/common/http';
 
 export interface ICategoryStep {
   dreamCategoryDefaultStepId: number;
@@ -25,27 +26,38 @@ export interface ICategoriesResponse {
   providedIn: 'root'
 })
 export class CategoriesService {
-
-  constructor(private apollo: Apollo) { }
-
-  getCategories(): Observable<ApolloQueryResult<ICategoriesResponse>> {
-    return this.apollo
-      .watchQuery<ICategoriesResponse>({
-        query: gql`
-        query DreamerQuery {
-          categories {
-            dreamCategoryId
-            categoryName
-            dreamCount
-            defaultSteps {
-              dreamCategoryDefaultStepId
-              stepDescription
-              isSponsorRelated
-            }
+  categoriesQuery = this.apollo
+    .watchQuery<ICategoriesResponse>({
+      query: gql`
+      query DreamerQuery {
+        categories {
+          dreamCategoryId
+          categoryName
+          dreamCount
+          defaultSteps {
+            dreamCategoryDefaultStepId
+            stepDescription
+            isSponsorRelated
           }
         }
-        `,
-      })
-      .valueChanges;
+      }
+      `,
+    });
+  constructor(private apollo: Apollo, private http: HttpClient) { }
+
+  getCategories(): Observable<ApolloQueryResult<ICategoriesResponse>> {
+    return this.categoriesQuery.valueChanges;
+  }
+
+  updateCategory(category: ICategory) {
+    return this.http.patch<{}>('/api/categories', category).toPromise().then(() => {
+      this.categoriesQuery.refetch();
+    });
+  }
+
+  addCategory(category: ICategory) {
+    return this.http.post<{ categoryId: number }>('/api/categories', category).toPromise().then(() => {
+      this.categoriesQuery.refetch();
+    });
   }
 }

@@ -23,12 +23,12 @@ namespace Alpaki.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(AddCategoryResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
-        public Task<AddCategoryResponse> CreateCategory(AddCategoryRequest createCategoryRequest) => _mediator.Send(createCategoryRequest);
+        public Task<AddCategoryResponse> CreateCategory([FromBody]AddCategoryRequest createCategoryRequest) => _mediator.Send(createCategoryRequest);
 
         [CoordinatorAccess]
         [HttpPatch]
         [ProducesResponseType(typeof(UpdateCategoryResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
-        public Task<UpdateCategoryResponse> UpadteCategory(UpdateCategoryRequest updateCategoryRequest) => _mediator.Send(updateCategoryRequest);
+        public Task<UpdateCategoryResponse> UpadteCategory([FromBody]UpdateCategoryRequest updateCategoryRequest) => _mediator.Send(updateCategoryRequest);
     }
 }
