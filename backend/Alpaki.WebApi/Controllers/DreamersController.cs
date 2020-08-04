@@ -3,6 +3,7 @@ using Alpaki.WebApi.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Alpaki.Logic.Handlers.UpdateDreamer;
 
 namespace Alpaki.WebApi.Controllers
 {
@@ -20,5 +21,10 @@ namespace Alpaki.WebApi.Controllers
         [HttpPost]
         [VolunteerAccess]
         public Task<CreateDreamerResponse> CreateDream([FromBody] CreateDreamerRequest request) => _mediator.Send(request);
+
+        [HttpPut]
+        [VolunteerAccess]
+        public async Task<UpdateDreamerResponse> UpdateDream([FromBody] UpdateDreamerRequest request)
+            => await _mediator.Send(request);
     }
 }
