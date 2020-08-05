@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Logic.Handlers.UpdateDreamer
 {
-    public class UpdateDreamerValidator : AbstractValidator<UpdateDreamerRequest>
+    public class UpdateDreamerRequestValidator : AbstractValidator<UpdateDreamerRequest>
     {
         private readonly IDatabaseContext _dbContext;
 
-        public UpdateDreamerValidator(IDatabaseContext dbContext)
+        public UpdateDreamerRequestValidator(IDatabaseContext dbContext)
         {
             RuleFor(x => x.DreamId).NotNull();
             RuleFor(x => x.FirstName).NotEmpty().When(x => x.FirstName is {}).WithMessage("Imię nie może składać się wyłącznie z białych znaków.");
@@ -20,7 +20,7 @@ namespace Alpaki.Logic.Handlers.UpdateDreamer
                 .WithMessage("Podana płeć nie istnieje.");
             RuleFor(x => x.DreamUrl).NotEmpty().When(x => x.DreamUrl is {});
             RuleFor(x => x.Tags).NotEmpty().When(x => x.Tags is {});
-            RuleFor(x => x.DreamCategoryId).MustAsync(DreamCategoryExists).WithMessage("Kategoria o Id=[{r.CategoryId}] nie istnieje");
+            RuleFor(x => x.DreamCategoryId).MustAsync(DreamCategoryExists).WithMessage(r=>$"Kategoria o Id=[{r.DreamCategoryId}] nie istnieje");
             _dbContext = dbContext;
         }
 

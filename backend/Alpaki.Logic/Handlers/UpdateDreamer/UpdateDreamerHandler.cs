@@ -21,19 +21,39 @@ namespace Alpaki.Logic.Handlers.UpdateDreamer
                 throw new DreamNotFoundException(request.DreamId);
 
             if (request.FirstName is {})
+            {
                 dream.FirstName = request.FirstName;
+            }
+
             if (request.LastName is {})
+            {
                 dream.LastName = request.LastName;
+            }
+
             if (request.Age.HasValue)
+            {
                 dream.Age = request.Age.Value;
+            }
+
             if (request.Gender.HasValue)
+            {
                 dream.Gender = request.Gender.Value;
+            }
+
             if (request.DreamUrl is {})
+            {
                 dream.DreamUrl = request.DreamUrl;
+            }
+
             if (request.Tags is {})
+            {
                 dream.Tags = request.Tags;
-            if (request.DreamCategoryId.HasValue) 
+            }
+
+            if (request.DreamCategoryId.HasValue)
+            {
                 dream.DreamCategoryId = request.DreamCategoryId.Value;
+            }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -25,6 +25,7 @@ namespace Alpaki.WebApi.GraphQL
             Field(d => d.LastName);
             Field(d => d.Tags);
             Field(d => d.DreamComeTrueDate);
+            Field(d => d.DreamUrl);
             Field<GenderEnumType>(nameof(Dream.Gender));
             Field<DreamCategoryType>(nameof(Dream.DreamCategory));
             Field<DreamStateEnumType>(nameof(Dream.DreamState));
