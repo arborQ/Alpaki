@@ -9,6 +9,18 @@ namespace Alpaki.Tests.IntegrationTests
     {
         public static (T fake, StringContent json) WithJsonContent<T>(this T request) => (request, new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json"));
 
+        public static StringContent AsJsonContent<T>(this T request) => new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+
         public static async Task<T> ReadAs<T>(this HttpResponseMessage response) => JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+
+        public static async Task<T> AsResponse<T>(this Task<HttpResponseMessage> responseTask)
+        {
+            var response = await responseTask;
+
+            response.EnsureSuccessStatusCode();
+
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
             var request = _fixture.Build<UpdateCategoryRequest>()
                 .With(c => c.CategoryId, category.DreamCategoryId)
-                .With(c => c.DefaultSteps, () => _fixture.CreateMany<UpdateCategoryRequest.CategoryDefaultStep>(2).ToArray()).Create();
+                .With(c => c.DefaultSteps, () => _fixture.CreateMany<UpdateCategoryRequest.UpdateCategoryDefaultStep>(2).ToArray()).Create();
 
             // Act
 
@@ -63,7 +63,7 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
             var request = _fixture.Build<UpdateCategoryRequest>()
                 .With(c => c.CategoryName, categoryName)
                 .With(c => c.CategoryId, category.DreamCategoryId)
-                .With(c => c.DefaultSteps, () => _fixture.Build<UpdateCategoryRequest.CategoryDefaultStep>().With(c => c.CategoryDefaultStepId, 0).CreateMany(stepCount).ToArray()).Create();
+                .With(c => c.DefaultSteps, () => _fixture.Build<UpdateCategoryRequest.UpdateCategoryDefaultStep>().With(c => c.CategoryDefaultStepId, 0).CreateMany(stepCount).ToArray()).Create();
 
             // Act
 

@@ -50,7 +50,7 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
             IntegrationTestsFixture.SetUserCoordinatorContext();
             var request = _fixture.Build<AddCategoryRequest>()
                 .With(c => c.CategoryName, categoryName)
-                .With(c => c.DefaultSteps, () => _fixture.CreateMany<AddCategoryRequest.CategoryDefaultStep>(stepCount).ToArray()).Create();
+                .With(c => c.DefaultSteps, () => _fixture.CreateMany<AddCategoryRequest.AddCategoryDefaultStep>(stepCount).ToArray()).Create();
 
             // Act
 
