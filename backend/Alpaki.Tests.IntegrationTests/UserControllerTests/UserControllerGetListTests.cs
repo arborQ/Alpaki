@@ -13,12 +13,10 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
     public class UserControllerGetListTests : IntegrationTestsClass
     {
         private readonly Fixture _fixture;
-        private readonly GraphQLClient _graphQLClient;
 
         public UserControllerGetListTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
             _fixture = new Fixture();
-            _graphQLClient = new GraphQLClient(Client);
         }
 
 

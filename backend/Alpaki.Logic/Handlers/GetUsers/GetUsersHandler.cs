@@ -1,11 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
-using Alpaki.Database;
-using Alpaki.Database.Models;
 using Alpaki.Logic.Extensions;
 using FluentValidation;
 using MediatR;
@@ -16,10 +12,10 @@ namespace Alpaki.Logic.Handlers.GetUsers
 {
     public class GetUsersHandler : IRequestHandler<GetUsersRequest, GetUsersResponse>
     {
-        private readonly IDatabaseContext _databaseContext;
+        private readonly IUserScopedDatabaseReadContext _databaseContext;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetUsersHandler(IDatabaseContext databaseContext, ICurrentUserService currentUserService)
+        public GetUsersHandler(IUserScopedDatabaseReadContext databaseContext, ICurrentUserService currentUserService)
         {
             _databaseContext = databaseContext;
             _currentUserService = currentUserService;
@@ -27,7 +23,7 @@ namespace Alpaki.Logic.Handlers.GetUsers
 
         public async Task<GetUsersResponse> Handle(GetUsersRequest request, CancellationToken cancellationToken)
         {
-            var query = ResolveUserQuery();
+            var query = _databaseContext.Users;
 
             if (!string.IsNullOrEmpty(request.Search))
             {
@@ -49,19 +45,6 @@ namespace Alpaki.Logic.Handlers.GetUsers
             var userList = await query.Select(UserListItem.UserToUserListItemMapper).ToListAsync();
 
             return new GetUsersResponse { Users = userList };
-        }
-
-        private IQueryable<User> ResolveUserQuery()
-        {
-            if (!_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Coordinator))
-            {
-                var currentUserId = _currentUserService.CurrentUserId;
-                var dreamIds = _databaseContext.AssignedDreams.Where(ad => ad.VolunteerId == currentUserId).Select(ad => ad.DreamId);
-
-                return _databaseContext.Users.Where(u => u.UserId == currentUserId || u.AssignedDreams.Any(ad => dreamIds.Contains(ad.DreamId)));
-            }
-
-            return _databaseContext.Users;
         }
     }
 }

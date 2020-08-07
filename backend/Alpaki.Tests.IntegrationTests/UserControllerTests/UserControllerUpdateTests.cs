@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
-using Alpaki.Logic.Services;
-using Alpaki.Tests.IntegrationTests.DreamersControllerTests;
 using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
@@ -20,12 +16,10 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
     public class UserControllerUpdateTests : IntegrationTestsClass
     {
         private readonly Fixture _fixture;
-        private readonly GraphQLClient _graphQLClient;
 
         public UserControllerUpdateTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
             _fixture = new Fixture();
-            _graphQLClient = new GraphQLClient(Client);
         }
 
         [Fact]

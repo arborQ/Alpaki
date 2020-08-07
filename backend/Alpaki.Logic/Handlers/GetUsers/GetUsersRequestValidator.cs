@@ -1,5 +1,4 @@
-﻿using Alpaki.CrossCutting.Requests;
-using Alpaki.Logic.Validators;
+﻿using Alpaki.Logic.Validators;
 using FluentValidation;
 
 namespace Alpaki.Logic.Handlers.GetUsers

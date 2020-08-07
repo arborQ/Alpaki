@@ -15,12 +15,10 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
 {
     public class VolunteerQueryTests : IntegrationTestsClass
     {
-        private readonly GraphQLClient _graphQLClient;
         private readonly Fixture _fixture;
 
         public VolunteerQueryTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
-            _graphQLClient = new GraphQLClient(Client);
             _fixture = new Fixture();
         }
 
@@ -55,13 +53,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
             IntegrationTestsFixture.SetUserContext(volunteerUser);
 
             // Act
-            var response = await _graphQLClient.Query<DreamerResponse>(@"
-                    query DreamerQuery {
-                      dreams {
-                        dreamId
-                      }
-                    }                    
-                ");
+            var response = await Client.GetDreams();
 
             // Assert
             Assert.Equal(volunteerDreamCount, response.Dreams.Count());

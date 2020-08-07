@@ -30,13 +30,11 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
     public class InviteAVolunteerTests : IntegrationTestsClass
     {
         private readonly HttpClient _client;
-        private readonly GraphQLClient _graphQL;
         private readonly Fixture _fixture;
 
         public InviteAVolunteerTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
             _client = integrationTestsFixture.ServerClient;
-            _graphQL = new GraphQLClient(_client);
             _fixture = new Fixture();
         }
 

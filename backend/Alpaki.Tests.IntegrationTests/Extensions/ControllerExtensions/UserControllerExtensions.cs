@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Alpaki.Logic.Handlers.GetDreams;
 using Alpaki.Logic.Handlers.GetUsers;
 
 namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
@@ -16,4 +17,5 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
             return client.GetAsync($"/api/user?dreamId={dreamId}").AsResponse<GetUsersResponse>();
         }
     }
+
 }
