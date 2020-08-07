@@ -1,16 +1,14 @@
-import { CurrentUserService } from './current-user.service';
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { CurrentUserService } from 'src/current-user.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class IsAnonymousGuard implements CanActivate {
+export class IsAuthorizedGuard implements CanActivate {
   constructor(private currentUserService: CurrentUserService) {}
-
   canActivate(): Observable<boolean> {
-    return this.currentUserService.$isAuthorized.pipe(map(isAuthorized => !isAuthorized));
+    return this.currentUserService.$isAuthorized;
   }
 }
