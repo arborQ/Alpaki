@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Tests.Common.Builders;
-using Alpaki.Tests.IntegrationTests.DreamersControllerTests;
+using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
@@ -12,12 +12,10 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
 {
     public class AdminQueryTests : IntegrationTestsClass
     {
-        private readonly GraphQLClient _graphQLClient;
         private readonly Fixture _fixture;
 
         public AdminQueryTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
-            _graphQLClient = new GraphQLClient(Client);
             _fixture = new Fixture();
         }
 
@@ -48,84 +46,31 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
             IntegrationTestsFixture.SetUserAdminContext();
 
             // Act
-            var allDreamsTask = _graphQLClient.Query<DreamerResponse>(@"
-                    query DreamerQuery {
-                      dreams {
-                        dreamId
-                      }
-                    } 
-                ");
 
-            var ageFilterDreamsTask = _graphQLClient.Query<DreamerResponse>(@$"
-                    query DreamerQuery {{
-                      dreams(ageFrom:{ageFrom}  ageTo:{ageTo}) {{
-                        dreamId
-                      }}
-                    }}
-                ");
+            var allDreamsTask = Client.GetDreams();
 
-            var ageFromFilterDreamsTask = _graphQLClient.Query<DreamerResponse>(@$"
-                    query DreamerQuery {{
-                      dreams(ageFrom:{ageFrom}) {{
-                        dreamId
-                      }}
-                    }}
-                ");
+            var ageFilterDreamsTask = Client.GetDreams(ageFrom: ageFrom, ageTo: ageTo);
 
-            var ageToFilterDreamsTask = _graphQLClient.Query<DreamerResponse>(@$"
-                    query DreamerQuery {{
-                      dreams(ageTo:{ageTo}) {{
-                        dreamId
-                      }}
-                    }}
-                ");
+            var ageFromFilterDreamsTask = Client.GetDreams(ageFrom: ageFrom);
 
-            var genderMaleFilterDreamsTask = _graphQLClient.Query<DreamerResponse>(@"
-                    query DreamerQuery {
-                      dreams(gender:male) {
-                        dreamId
-                      }
-                    }
-                ");
+            var ageToFilterDreamsTask = Client.GetDreams(ageTo: ageTo);
 
-            var genderFemaleFilterDreamsTask = _graphQLClient.Query<DreamerResponse>(@"
-                    query DreamerQuery {
-                      dreams(gender:female) {
-                        dreamId
-                      }
-                    }
-                ");
+            var genderMaleFilterDreamsTask = Client.GetDreams(gender:GenderEnum.Male);
 
-            var doneStatusFilterDreamsTask = _graphQLClient.Query<DreamerResponse>(@"
-                    query DreamerQuery {
-                      dreams(status:done) {
-                        dreamId
-                      }
-                    }
-                ");
+            var genderFemaleFilterDreamsTask = Client.GetDreams(gender: GenderEnum.Female);
 
-            var categoriesFilterDreamsTask = _graphQLClient.Query<DreamerResponse>(@$"
-                    query DreamerQuery {{
-                      dreams(categories:[{ categoryA.DreamCategoryId }]) {{
-                        dreamId
-                      }}
-                    }}
-                ");
+            var doneStatusFilterDreamsTask = Client.GetDreams(status: DreamStateEnum.Done);
 
-            var allCategoriesFilterDreamsTask = _graphQLClient.Query<DreamerResponse>(@$"
-                    query DreamerQuery {{
-                      dreams(categories:[{ categoryA.DreamCategoryId }, { categoryB.DreamCategoryId }]) {{
-                        dreamId
-                      }}
-                    }}
-                ");
+            var categoriesFilterDreamsTask = Client.GetDreams(categories: new[] { categoryA.DreamCategoryId });
 
+            var allCategoriesFilterDreamsTask = Client.GetDreams(categories: new[] { categoryA.DreamCategoryId, categoryB.DreamCategoryId });
+ 
             await Task.WhenAll(
                 allDreamsTask,
                 ageFilterDreamsTask,
-                ageFromFilterDreamsTask, 
-                ageToFilterDreamsTask, 
-                genderMaleFilterDreamsTask, 
+                ageFromFilterDreamsTask,
+                ageToFilterDreamsTask,
+                genderMaleFilterDreamsTask,
                 genderFemaleFilterDreamsTask,
                 doneStatusFilterDreamsTask,
                 categoriesFilterDreamsTask,

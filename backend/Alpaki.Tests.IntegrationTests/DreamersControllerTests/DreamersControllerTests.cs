@@ -5,6 +5,7 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Dreamer.CreateDreamer;
 using Alpaki.Tests.Common.Builders;
+using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using FluentAssertions;
@@ -13,34 +14,6 @@ using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
 {
-    public class DreamerResponse
-    {
-        public DreamItem[] Dreams { get; set; }
-
-        public class DreamItem
-        {
-            public long DreamId { get; set; }
-
-            public long Age { get; set; }
-
-            public GenderEnum Gender { get; set; }
-
-            public string FirstName { get; set; }
-
-            public string LastName { get; set; }
-
-            public RequiredStep[] RequiredSteps { get; set; }
-
-            public class RequiredStep
-            {
-                public long DreamStepId { get; set; }
-
-                public string StepDescription { get; set; }
-
-                public string StepState { get; set; }
-            }
-        }
-    }
     public class DreamersControllerTests : IntegrationTestsClass
     {
         private readonly Fixture _fixture;
@@ -60,7 +33,6 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
             IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Admin });
-            var graphQL = new GraphQLClient(Client);
 
             var count = 20;
             var random = new Random();
@@ -72,36 +44,13 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 .CreateMany(count)
                 .Select(dreamer => dreamer.WithJsonContent().json);
 
-            var query = @"
-                    query DreamerQuery {
-                      dreams {
-                        dreamId
-                        age
-                        gender
-                        firstName
-                        lastName
-                        requiredSteps {
-                         stepDescription
-                         stepState
-                        }
-                      }
-                    }                    
-                ";
-            var dreamersRequest = new GraphQLRequest
-            {
-                Query = query
-            };
-
             // Act
             var responses = await Task.WhenAll(requests.Select(r => Client.PostAsync($"/api/dreamers", r)));
-            var graphResponse = await graphQL.Query<DreamerResponse>(query);
+            var graphResponse = await Client.GetDreams();
 
             // Assert
-            Assert.Equal(count, graphResponse.Dreams.Length);
-            Assert.All(graphResponse.Dreams, d =>
-            {
-                d.RequiredSteps.Should().HaveCount(stepCount);
-            });
+            Assert.Equal(count, graphResponse.Dreams.Count);
+
             foreach (var response in responses)
             {
                 response.EnsureSuccessStatusCode(); // Status Code 200-299
