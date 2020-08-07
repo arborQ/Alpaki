@@ -12,6 +12,8 @@ namespace Alpaki.Logic.Handlers.GetUsers
             Asc = true;
         }
 
+        public long? DreamId { get; set; }
+
         public string Search { get; set; }
 
         public int? Page { get; set; }

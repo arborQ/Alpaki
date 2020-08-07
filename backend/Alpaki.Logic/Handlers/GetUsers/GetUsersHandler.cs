@@ -34,6 +34,11 @@ namespace Alpaki.Logic.Handlers.GetUsers
                 query = query.Where(u => u.FirstName.Contains(request.Search) || u.LastName.Contains(request.Search) || u.Email.Contains(request.Search));
             }
 
+            if (request.DreamId.HasValue)
+            {
+                query = query.Where(u => u.AssignedDreams.Any(ad => ad.DreamId == request.DreamId.Value));
+            }
+
             if (request.Page.HasValue)
             {
                 query = query.Paged(request.Page.Value);

@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
+using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using FluentAssertions;
@@ -32,7 +33,7 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
         private readonly GraphQLClient _graphQL;
         private readonly Fixture _fixture;
 
-        public InviteAVolunteerTests(IntegrationTestsFixture integrationTestsFixture):base(integrationTestsFixture)
+        public InviteAVolunteerTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
             _client = integrationTestsFixture.ServerClient;
             _graphQL = new GraphQLClient(_client);
@@ -42,8 +43,9 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
         [Fact]
         public async Task returns_correct_successful_response()
         {
+            // Arrange
             IntegrationTestsFixture.SetUserAdminContext();
-            var (fake,request )= _fixture
+            var (fake, request) = _fixture
                 .Build<InviteAVolunteerFake>()
                 .With(
                     x => x.Email,
@@ -52,26 +54,19 @@ namespace Alpaki.Tests.IntegrationTests.InvitationsTest
                 .Create()
                 .WithJsonContent();
 
-            var query = @"
-query {
-  invitations {
-    invitationId
-    email
-    code
-    status
-  }
-}
-";
+            // Act
             var response = await _client.PostAsync("/api/invitations", request);
             response.EnsureSuccessStatusCode();
             var body = await response.ReadAs<InviteAVolunteerResponse>();
             body.Should().NotBeNull();
             body.InvitationId.Should().NotBe(0);
             body.InvitationCode.Should().NotBeNullOrWhiteSpace();
-            
-            var gqlResponse = await _graphQL.Query<InvitationResponse>(query);
-            gqlResponse.Should().NotBeNull();
-            gqlResponse.Invitations.Should().SatisfyRespectively(
+
+            var responseObject = await _client.GetInvitations();
+
+            // Assert
+            responseObject.Should().NotBeNull();
+            responseObject.Invitations.Should().SatisfyRespectively(
                 i =>
                 {
                     i.Email.ToLowerInvariant().Should().BeEquivalentTo(fake.Email.ToLowerInvariant());
