@@ -19,5 +19,15 @@ namespace Alpaki.Logic.Extensions
                                           source.Expression, Expression.Quote(orderByExpression));
             return source.Provider.CreateQuery<TEntity>(resultExpression);
         }
+
+        public static IQueryable<TEntity> Paged<TEntity>(this IQueryable<TEntity> source, int? pageNumber, int pageSize = 10)
+        {
+            if (!pageNumber.HasValue)
+            {
+                return source;
+            }
+
+            return source.Skip((pageNumber.Value - 1) * pageSize).Take(pageSize);
+        }
     }
 }

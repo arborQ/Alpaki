@@ -42,7 +42,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         public async Task AddCategoryRequestValidator_SuccessIfNameIsOK(string categoryName)
         {
             // Arrange
-            var request = new AddCategoryRequest { CategoryName = categoryName, DefaultSteps = new AddCategoryRequest.CategoryDefaultStep[10] };
+            var request = new AddCategoryRequest { CategoryName = categoryName, DefaultSteps = new AddCategoryRequest.AddCategoryDefaultStep[10] };
 
             // Act
             var result = await _sut.ValidateAsync(request, default);

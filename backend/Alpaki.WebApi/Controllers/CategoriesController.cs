@@ -1,9 +1,11 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Alpaki.Logic.Handlers.AddCategory;
+using Alpaki.Logic.Handlers.GetCategories;
 using Alpaki.Logic.Handlers.UpdateCategory;
 using Alpaki.WebApi.Policies;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Alpaki.WebApi.Controllers
@@ -30,5 +32,11 @@ namespace Alpaki.WebApi.Controllers
         [ProducesResponseType(typeof(UpdateCategoryResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public Task<UpdateCategoryResponse> UpadteCategory(UpdateCategoryRequest updateCategoryRequest) => _mediator.Send(updateCategoryRequest);
+
+        [Authorize]
+        [HttpGet]
+        [ProducesResponseType(typeof(GetCategoriesResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
+        public Task<GetCategoriesResponse> GetCategories(GetCategoriesRequest getCategoriesRequest) => _mediator.Send(getCategoriesRequest);
     }
 }

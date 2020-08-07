@@ -6,14 +6,14 @@ namespace Alpaki.Logic.Handlers.AddCategory
     {
         public AddCategoryRequest()
         {
-            DefaultSteps = new CategoryDefaultStep[0];
+            DefaultSteps = new AddCategoryDefaultStep[0];
         }
 
         public string CategoryName { get; set; }
 
-        public CategoryDefaultStep[] DefaultSteps { get; set; }
+        public AddCategoryDefaultStep[] DefaultSteps { get; set; }
 
-        public class CategoryDefaultStep
+        public class AddCategoryDefaultStep
         {
             public int Order { get; set; }
 
