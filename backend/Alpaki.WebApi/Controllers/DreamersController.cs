@@ -28,7 +28,7 @@ namespace Alpaki.WebApi.Controllers
         [ProducesResponseType(typeof(GetDreamResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
-        public Task<GetDreamResponse> GetDreams([FromQuery] GetDreamRequest request) => _mediator.Send(request);
+        public Task<GetDreamsResponse> GetDreams([FromQuery] GetDreamsRequest request) => _mediator.Send(request);
 
         [VolunteerAccess]
         [HttpGet("{dreamId}")]

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Tests.Common.Builders;
-using Alpaki.Tests.IntegrationTests.DreamersControllerTests;
 using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;

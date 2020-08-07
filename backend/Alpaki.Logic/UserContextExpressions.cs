@@ -47,9 +47,14 @@ namespace Alpaki.Logic
             {
                 var users = _databaseContext.Users.AsNoTracking();
 
-                if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Coordinator))
+                if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Admin))
                 {
                     return users;
+                }
+
+                if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Coordinator))
+                {
+                    return users.Where(u => u.Role == UserRoleEnum.Volunteer);
                 }
 
                 var currentUserId = _currentUserService.CurrentUserId;

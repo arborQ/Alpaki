@@ -22,20 +22,23 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
 
             if (gender.HasValue)
             {
-                queryString.Add("gender", gender.Value.ToString());
+                queryString.Add("gender", ((int)gender.Value).ToString());
             }
 
             if (status.HasValue)
             {
-                queryString.Add("status", status.Value.ToString());
+                queryString.Add("status", ((int)status.Value).ToString());
             }
 
             if (categories != null)
             {
-                queryString.Add("categories", string.Join(",", categories));
+                foreach(var category in categories)
+                {
+                    queryString.Add("categories", category.ToString());
+                }
             }
 
-            return client.GetAsync($"/api/dreams?{queryString}").AsResponse<GetDreamsResponse>();
+            return client.GetAsync($"/api/dreamers?{queryString}").AsResponse<GetDreamsResponse>();
         }
     }
 }
