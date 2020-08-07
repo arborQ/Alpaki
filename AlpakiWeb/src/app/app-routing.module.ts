@@ -18,6 +18,11 @@ const routes: Routes = [
     path: 'categories',
     loadChildren: () => import('./categories/categories.module').then(a => a.CategoriesModule),
     canActivate: [IsAuthorizedGuard]
+  },
+  {
+    path: 'users',
+    loadChildren: () => import('./users/users-routing.module').then(a => a.UsersRoutingModule),
+    canActivate: [IsAuthorizedGuard]
   }
 ];
 

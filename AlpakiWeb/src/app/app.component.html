@@ -11,6 +11,7 @@
       <a *ngIf="($isAuthorized | async) === false" mat-list-item routerLink="/authorize/register"> Rejestracja </a>
       <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/dreams/list"> Marzenia </a>
       <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/categories/list"> Kategorie </a>
+      <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/users/list"> Użytkownicy </a>
       <a *ngIf="$isAuthorized | async" mat-list-item routerLink="/authorize/profile"> Profil </a>
       <a *ngIf="$isAuthorized | async" mat-list-item (click)="onSignOut()"> Wyloguj </a>
     </mat-nav-list>

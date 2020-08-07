@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { Observable, Subject, ReplaySubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 import { HttpClient } from '@angular/common/http';
