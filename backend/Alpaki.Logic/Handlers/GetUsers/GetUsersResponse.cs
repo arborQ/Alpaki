@@ -19,7 +19,19 @@ namespace Alpaki.Logic.Handlers.GetUsers
 
             public string Email { get; set; }
 
-            internal static Expression<Func<User, UserListItem>> UserToUserListItemMapper = user => new UserListItem { UserId = user.UserId, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+            public string Brand { get; set; }
+
+            public string PhoneNumber { get; set; }
+
+            internal static Expression<Func<User, UserListItem>> UserToUserListItemMapper = user => new UserListItem
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Brand = user.Brand,
+                PhoneNumber = user.PhoneNumber
+            };
         }
     }
 }

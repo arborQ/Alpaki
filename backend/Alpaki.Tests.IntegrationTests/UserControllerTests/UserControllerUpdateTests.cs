@@ -8,33 +8,15 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Services;
 using Alpaki.Tests.IntegrationTests.DreamersControllerTests;
+using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
+using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
 using Newtonsoft.Json;
 using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.UserControllerTests
 {
-    public class UserResponse
-    {
-        public UserItem[] Users { get; set; }
-
-        public class UserItem
-        {
-            public long UserId { get; set; }
-
-            public string FirstName { get; set; }
-
-            public string LastName { get; set; }
-
-            public string Email { get; set; }
-
-            public string Brand { get; set; }
-
-            public string PhoneNumber { get; set; }
-        }
-    }
-
     public class UserControllerUpdateTests : IntegrationTestsClass
     {
         private readonly Fixture _fixture;
@@ -73,31 +55,19 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
         [InlineData("Longer First Name", "Longer last name", "testtest@test.com", "new brand name", "123456643")]
         public async Task UserControllerUpdate_UpdateUser_AndCanQuery(string firstName, string lastName, string email, string brand, string phoneNumber)
         {
-            var user = new User { FirstName = "FirstName", LastName = "LastName", Brand = "Brand", Email = "Email", PhoneNumber = "PhoneNumber", Role = UserRoleEnum.Volunteer };
+            var user = _fixture.VolunteerBuilder().Create();
 
             await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
             IntegrationTestsFixture.SetUserContext(user);
 
-            var json = JsonConvert.SerializeObject(new { firstName, lastName, email, brand, phoneNumber });
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = new { firstName, lastName, email, brand, phoneNumber }.AsJsonContent();
 
             // Act
             var response  = await Client.PatchAsync("/api/User/me", data);
             response.EnsureSuccessStatusCode();
-            var myData = await _graphQLClient.Query<UserResponse>(@"
-                    query DreamerQuery {
-                      users {
-                        userId,
-                        firstName,
-                        lastName,
-                        email,
-                        brand,
-                        phoneNumber
-                      }
-                    }   
-            ");
+            var myData = await Client.GetUsers();
 
             Assert.Single(myData.Users);
             Assert.Equal(user.UserId, myData.Users.First().UserId);
@@ -132,18 +102,7 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
             // Act
             var response = await Client.PatchAsync("/api/User/me", data);
             response.EnsureSuccessStatusCode();
-            var myData = await _graphQLClient.Query<UserResponse>(@"
-                    query DreamerQuery {
-                      users {
-                        userId,
-                        firstName,
-                        lastName,
-                        email,
-                        brand,
-                        phoneNumber
-                      }
-                    }   
-            ");
+            var myData = await Client.GetUsers();
 
             Assert.Single(myData.Users);
             Assert.Equal(user.UserId, myData.Users.First().UserId);

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Alpaki.Database.Models;
 using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.DreamersControllerTests;
+using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using Alpaki.Tests.IntegrationTests.UserControllerTests;
@@ -92,18 +93,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
             IntegrationTestsFixture.SetUserContext(volunteerUsers.First());
 
             // Act
-            var response = await _graphQLClient.Query<UserResponse>(@"
-                      query DreamerQuery {
-                          users {
-                            userId,
-                            firstName,
-                            lastName,
-                            email,
-                            brand,
-                            phoneNumber
-                          }
-                        }  
-                ");
+            var response = await Client.GetUsers();
 
             //Assert
             response.Users.Should().HaveCount(dreamUsersCount);
@@ -137,44 +127,9 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
             IntegrationTestsFixture.SetUserContext(volunteerUsers.First());
 
             // Act
-            var response1 = await _graphQLClient.Query<UserResponse>(@$"
-                      query DreamerQuery {{
-                          users(dreamId:{dreams.First().DreamId}) {{
-                            userId,
-                            firstName,
-                            lastName,
-                            email,
-                            brand,
-                            phoneNumber
-                          }}
-                        }}  
-                ");
-
-            var response2 = await _graphQLClient.Query<UserResponse>(@$"
-                      query DreamerQuery {{
-                          users(dreamId:{dreams.Last().DreamId}) {{
-                            userId,
-                            firstName,
-                            lastName,
-                            email,
-                            brand,
-                            phoneNumber
-                          }}
-                        }}  
-                ");
-
-            var response3 = await _graphQLClient.Query<UserResponse>(@$"
-                      query DreamerQuery {{
-                          users {{
-                            userId,
-                            firstName,
-                            lastName,
-                            email,
-                            brand,
-                            phoneNumber
-                          }}
-                        }}  
-                ");
+            var response1 = await Client.GetUsers(dreams.First().DreamId);
+            var response2 = await Client.GetUsers(dreams.Last().DreamId);
+            var response3 = await Client.GetUsers();
 
             //Assert
             response1.Users.Should().HaveCount(dreamUsersCount);
