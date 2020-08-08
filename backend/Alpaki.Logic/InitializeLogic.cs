@@ -25,6 +25,8 @@ namespace Alpaki.Logic
             services.AddScoped<IInvitationRepository, InvitationRepository>();
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddTransient<IUserScopedDatabaseReadContext, UserScopedDatabaseReadContext>();
+
             return services;
         }
     }

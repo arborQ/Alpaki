@@ -14,12 +14,10 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
     public class UserControllerDeleteTests : IntegrationTestsClass
     {
         private readonly Fixture _fixture;
-        private readonly GraphQLClient _graphQLClient;
 
         public UserControllerDeleteTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
             _fixture = new Fixture();
-            _graphQLClient = new GraphQLClient(Client);
         }
 
         private Task<HttpResponseMessage> DeleteUserAction(long userId)

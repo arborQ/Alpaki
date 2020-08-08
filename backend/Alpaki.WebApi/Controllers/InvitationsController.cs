@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
+using Alpaki.Logic.Handlers.GetInvitations;
 using Alpaki.WebApi.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +21,17 @@ namespace Alpaki.WebApi.Controllers
 
         [HttpPost]
         [VolunteerAccess]
-        public async Task<InviteAVolunteerResponse> Post([FromBody]InviteAVolunteerRequest request) 
-            => await _mediator.Send(request);
+        [ProducesResponseType(typeof(InviteAVolunteerResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
+        public Task<InviteAVolunteerResponse> SendInvitation([FromBody]InviteAVolunteerRequest request) => _mediator.Send(request);
+
+
+        [HttpGet]
+        [CoordinatorAccess]
+        [ProducesResponseType(typeof(GetInvitationsResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
+        public Task<GetInvitationsResponse> GetPendingInvitations([FromQuery]GetInvitationsRequest request) => _mediator.Send(request);
     }
 }

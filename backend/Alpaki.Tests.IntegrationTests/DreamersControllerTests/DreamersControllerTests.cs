@@ -6,6 +6,7 @@ using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Dreamer.CreateDreamer;
 using Alpaki.Logic.Handlers.UpdateDreamer;
 using Alpaki.Tests.Common.Builders;
+using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using FluentAssertions;
@@ -14,45 +15,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
-{
-    public class DreamerResponse
-    {
-        public DreamItem[] Dreams { get; set; }
-
-        public class DreamItem
-        {
-            public long DreamId { get; set; }
-
-            public long Age { get; set; }
-
-            public GenderEnum Gender { get; set; }
-
-            public string FirstName { get; set; }
-
-            public string LastName { get; set; }
-            
-            public string DreamUrl { get; set; }
-            
-            public string Tags { get; set; }
-            
-            public DreamCategoryItem DreamCategory { get; set; }            
-            public RequiredStep[] RequiredSteps { get; set; }
-
-            public class RequiredStep
-            {
-                public long DreamStepId { get; set; }
-
-                public string StepDescription { get; set; }
-
-                public string StepState { get; set; }
-            }
-
-            public class DreamCategoryItem
-            {
-                public long DreamCategoryId { get; set; }
-            }
-        }
-    }
+{ 
     public class DreamersControllerTests : IntegrationTestsClass
     {
         private readonly ITestOutputHelper _testOutputHelper;
@@ -74,7 +37,6 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
             IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Admin });
-            var graphQL = new GraphQLClient(Client);
 
             var count = 20;
             var random = new Random();
@@ -86,36 +48,13 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 .CreateMany(count)
                 .Select(dreamer => dreamer.WithJsonContent().json);
 
-            var query = @"
-                    query DreamerQuery {
-                      dreams {
-                        dreamId
-                        age
-                        gender
-                        firstName
-                        lastName
-                        requiredSteps {
-                         stepDescription
-                         stepState
-                        }
-                      }
-                    }                    
-                ";
-            var dreamersRequest = new GraphQLRequest
-            {
-                Query = query
-            };
-
             // Act
             var responses = await Task.WhenAll(requests.Select(r => Client.PostAsync($"/api/dreamers", r)));
-            var graphResponse = await graphQL.Query<DreamerResponse>(query);
+            var graphResponse = await Client.GetDreams();
 
             // Assert
-            Assert.Equal(count, graphResponse.Dreams.Length);
-            Assert.All(graphResponse.Dreams, d =>
-            {
-                d.RequiredSteps.Should().HaveCount(stepCount);
-            });
+            Assert.Equal(count, graphResponse.Dreams.Count);
+
             foreach (var response in responses)
             {
                 response.EnsureSuccessStatusCode(); // Status Code 200-299
@@ -184,12 +123,12 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 ";
             
             IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Admin});
-            var graphQL = new GraphQLClient(Client);
-            var graphResponse = await graphQL.Query<DreamerResponse>(query);
+            var queryResponse = await Client.GetDreams();
             
-            graphResponse.Should().NotBeNull();
-            graphResponse.Dreams.Length.Should().Be(1);
-            graphResponse.Dreams.Should().SatisfyRespectively(x =>
+            
+            queryResponse.Should().NotBeNull();
+            queryResponse.Dreams.Count.Should().Be(1);
+            queryResponse.Dreams.Should().SatisfyRespectively(x =>
             {
                 x.DreamId.Should().Be(dream.DreamId);
                 x.FirstName.Should().Be(request.FirstName);
@@ -198,7 +137,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 x.Gender.Should().Be(request.Gender);
                 x.DreamUrl.Should().Be(request.DreamUrl);
                 x.Tags.Should().Be(request.Tags);
-                x.DreamCategory.DreamCategoryId.Should().Be(request.DreamCategoryId);
+                x.DreamCategoryId.Should().Be(request.DreamCategoryId);
             });
         }
     }
