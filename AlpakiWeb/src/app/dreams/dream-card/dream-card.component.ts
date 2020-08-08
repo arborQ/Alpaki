@@ -7,6 +7,5 @@ import { IDream } from '../dreams-service';
   styleUrls: ['./dream-card.component.less']
 })
 export class DreamCardComponent {
-
   @Input() dream: IDream;
 }

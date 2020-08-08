@@ -32,7 +32,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
                 .BuildMockDbSet();
             _databaseContext.DreamCategories.Returns(queryMock);
 
-            _sut = new AddCategoryRequestValidator(_databaseContext);
+            _sut = new AddCategoryRequestValidator(_databaseContext, new CategoryDefaultStepValidator());
         }
 
         [Theory]

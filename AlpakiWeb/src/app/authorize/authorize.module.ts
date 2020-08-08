@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './profile/profile.component';
+import { ProfileService } from './profile/profile.service';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ProfileComponent } from './profile/profile.component';
     AuthorizeRoutingModule,
     MatCardModule,
     MatProgressSpinnerModule
-  ]
+  ],
+  providers: [ProfileService]
 })
 export class AuthorizeModule { }

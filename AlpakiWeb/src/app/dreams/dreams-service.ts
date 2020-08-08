@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
-import { ApolloQueryResult } from 'apollo-client';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 export interface IDreamQueryResponse {
   dreams: IDream[];
@@ -18,7 +17,7 @@ export interface IDream {
   age: number;
   lastName: string;
   dreamState: string;
-  gender: string;
+  gender: number;
   dreamCategory: IDreamCategory;
 }
 
@@ -27,50 +26,13 @@ export interface IDream {
 })
 export class DreamsService {
 
-  constructor(private apollo: Apollo) { }
+  constructor(private http: HttpClient) { }
 
-  private getAllDreamsQuery = gql`
-    query DreamerQuery {
-      dreams {
-        dreamId
-        firstName
-        gender
-        age
-        lastName
-        dreamState
-        dreamCategory {
-          categoryName
-        }
-      }
-    }
-    `;
-  getDreams(): Observable<ApolloQueryResult<IDreamQueryResponse>> {
-    return this.apollo
-      .watchQuery<IDreamQueryResponse>({
-        query: this.getAllDreamsQuery,
-      })
-      .valueChanges;
+  getDreams(): Observable<IDreamQueryResponse> {
+    return this.http.get<IDreamQueryResponse>('/api/dreamers?page=2');
   }
 
-  getDream(dreamId: number): Observable<ApolloQueryResult<IDreamQueryResponse>> {
-    return this.apollo
-      .watchQuery<IDreamQueryResponse>({
-        query: gql`
-        query DreamerQuery {
-          dreams(dreamId: ${dreamId}) {
-            dreamId
-            firstName
-            gender
-            age
-            lastName
-            dreamState
-            dreamCategory {
-              categoryName
-            }
-          }
-        }
-        `,
-      })
-      .valueChanges;
+  getDream(dreamId: number): Observable<IDreamQueryResponse> {
+    return this.http.get<IDreamQueryResponse>(`/api/dreamers/${dreamId}`);
   }
 }

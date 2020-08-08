@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DreamsService } from '../dreams-service';
 import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-dream-list',
@@ -13,6 +14,6 @@ export class DreamListComponent {
 
   dreamResponse$ = this.dreamsService.getDreams();
 
-  dreams$ = this.dreamResponse$.pipe(map(response => response.data.dreams));
-  isLoading$ = this.dreamResponse$.pipe(map(response => response.loading));
+  dreams$ = this.dreamResponse$.pipe(map(response => response.dreams));
+  isLoading$ = of(false);
 }

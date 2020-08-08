@@ -20,6 +20,6 @@ export class DreamDetailsComponent {
     })
   );
   steps$ = of([ 'Zdobyć kasę', 'Wydać kasę' ]);
-  dream$ = this.dreamResponse$.pipe(map(response => response.data.dreams[0]));
-  isLoading$ = this.dreamResponse$.pipe(map(response => response.loading));
+  dream$ = this.dreamResponse$.pipe(map(response => response));
+  isLoading$ = of(false);
 }

@@ -8,19 +8,29 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Alpaki.Logic.Handlers.GetUsers;
 using Microsoft.AspNetCore.Authorization;
+using Alpaki.Logic.Handlers.GetUser;
+using Alpaki.CrossCutting.Interfaces;
 
 namespace Alpaki.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController: ControllerBase
+    public class UsersController: ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ICurrentUserService _currentUserService;
 
-        public UserController(IMediator mediator)
+        public UsersController(IMediator mediator, ICurrentUserService currentUserService)
         {
             _mediator = mediator;
+            _currentUserService = currentUserService;
         }
+
+        [VolunteerAccess]
+        [HttpGet("me")]
+        [ProducesResponseType(typeof(UpdateUserDataResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        public Task<GetUserResponse> GetCurrentUserProfile() => _mediator.Send(new GetUserRequest { UserId = _currentUserService.CurrentUserId });
 
         [VolunteerAccess]
         [HttpPatch("me")]
@@ -48,5 +58,12 @@ namespace Alpaki.WebApi.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
         public Task<GetUsersResponse> GetUsers([FromQuery] GetUsersRequest getUsersRequest) => _mediator.Send(getUsersRequest);
+
+        [VolunteerAccess]
+        [HttpGet("{userId}")]
+        [ProducesResponseType(typeof(UpdateUserDataResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
+        public Task<GetUserResponse> GetUsers([FromRoute] long userId) => _mediator.Send(new GetUserRequest { UserId = userId });
     }
 }

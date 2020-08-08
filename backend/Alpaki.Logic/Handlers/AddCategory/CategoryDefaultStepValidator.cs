@@ -3,7 +3,7 @@ using static Alpaki.Logic.Handlers.AddCategory.AddCategoryRequest;
 
 namespace Alpaki.Logic.Handlers.AddCategory
 {
-    public class CategoryDefaultStepValidator : AbstractValidator<CategoryDefaultStep>
+    public class CategoryDefaultStepValidator : AbstractValidator<AddCategoryDefaultStep>
     {
         public CategoryDefaultStepValidator()
         {
