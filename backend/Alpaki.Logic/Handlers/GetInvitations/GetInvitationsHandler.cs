@@ -22,9 +22,12 @@ namespace Alpaki.Logic.Handlers.GetInvitations
         public async Task<GetInvitationsResponse> Handle(GetInvitationsRequest request, CancellationToken cancellationToken)
         {
 
-            var invitations = await _databaseContext.Invitations
-                .Where(x => x.Status == InvitationStateEnum.Pending).Select(InvitationListItem.InvitationToInvitationListItemMapper)
-                .ToListAsync();
+            var invitations = await _databaseContext
+                .Invitations
+                .AsNoTracking()
+                .Where(x => x.Status == InvitationStateEnum.Pending)
+                .Select(InvitationListItem.InvitationToInvitationListItemMapper)
+                .ToListAsync(cancellationToken);
 
             return new GetInvitationsResponse { Invitations = invitations };
         }
