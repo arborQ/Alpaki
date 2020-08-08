@@ -13,13 +13,13 @@ namespace Alpaki.Logic.Handlers.UpdateDreamer
         public UpdateDreamerRequestValidator(IDatabaseContext dbContext)
         {
             RuleFor(x => x.DreamId).NotNull();
-            RuleFor(x => x.FirstName).NotEmpty().When(x => x.FirstName is {}).WithMessage("Imię nie może składać się wyłącznie z białych znaków.");
-            RuleFor(x => x.LastName).NotEmpty().When(x => x.LastName is {}).WithMessage("Nazwisko nie może składać się wyłącznie z białych znaków."); ;
+            RuleFor(x => x.FirstName).NotEmpty().When(x => x.FirstName is {}).WithMessage("Imię nie może być puste.");
+            RuleFor(x => x.LastName).NotEmpty().When(x => x.LastName is {}).WithMessage("Nazwisko nie może być puste."); ;
             RuleFor(d => d.Age).GreaterThan(0).LessThan(121).WithMessage("Wiek pomiędzy 1 a 120 lat");
             RuleFor(x => x.Gender).IsInEnum().NotEmpty().When(x => x.Gender is {})
                 .WithMessage("Podana płeć nie istnieje.");
-            RuleFor(x => x.DreamUrl).NotEmpty().When(x => x.DreamUrl is {});
-            RuleFor(x => x.Tags).NotEmpty().When(x => x.Tags is {});
+            RuleFor(x => x.DreamUrl).NotEmpty().When(x => x.DreamUrl is {}).WithMessage("Link do marzenia nie może być pusty.");
+            RuleFor(x => x.Tags).NotEmpty().When(x => x.Tags is {}).WithMessage("Tagi nie mogą być puste.");
             RuleFor(x => x.DreamCategoryId).MustAsync(DreamCategoryExists).WithMessage(r=>$"Kategoria o Id=[{r.DreamCategoryId}] nie istnieje");
             _dbContext = dbContext;
         }
