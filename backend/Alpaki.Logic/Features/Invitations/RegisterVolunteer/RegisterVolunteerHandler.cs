@@ -6,7 +6,7 @@ using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Invitations.Repositories;
 using MediatR;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Internal;
 using static Alpaki.Logic.Features.Invitations.Exceptions;
 
@@ -18,9 +18,9 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
         private readonly ISystemClock _clock;
         private readonly IInvitationRepository _invitationRepository;
         private readonly IVolunteerRepository _volunteerRepository;
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public RegisterVolunteerHandler(IJwtGenerator jwtGenerator, ISystemClock clock, IInvitationRepository invitationRepository, IVolunteerRepository volunteerRepository, IPasswordHasher passwordHasher)
+        public RegisterVolunteerHandler(IJwtGenerator jwtGenerator, ISystemClock clock, IInvitationRepository invitationRepository, IVolunteerRepository volunteerRepository, IPasswordHasher<User> passwordHasher)
         {
             _jwtGenerator = jwtGenerator;
             _clock = clock;
@@ -52,7 +52,7 @@ namespace Alpaki.Logic.Features.Invitations.RegisterVolunteer
             if(await _volunteerRepository.ExitsAsync(invitation.Email, cancellationToken))
                 throw new VolunteerAlreadyExistsException();
 
-            var passwordHash = _passwordHasher.HashPassword(request.Password);
+            var passwordHash = _passwordHasher.HashPassword(null, request.Password);
 
             var user = new User
             {

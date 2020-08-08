@@ -1,9 +1,9 @@
 ﻿using Alpaki.Database.Models;
 using AutoFixture;
 using AutoFixture.Dsl;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 
-namespace Alpaki.Tests.IntegrationTests.Fixtures.Builders
+namespace Alpaki.Tests.Common.Builders
 {
     public static class VolunteerFixtureBuilder
     {
@@ -34,8 +34,8 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures.Builders
 
         public static IPostprocessComposer<User> WithPassword(this IPostprocessComposer<User> postProcessComposer, string password)
         {
-            var hasher = new PasswordHasher();
-            return postProcessComposer.With(u => u.PasswordHash, hasher.HashPassword(password));
+            var hasher = new PasswordHasher<User>();
+            return postProcessComposer.With(u => u.PasswordHash, hasher.HashPassword(null,password));
         }
     }
 }

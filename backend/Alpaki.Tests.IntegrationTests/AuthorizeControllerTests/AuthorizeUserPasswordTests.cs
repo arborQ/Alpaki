@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Alpaki.Logic.Handlers.AuthorizeUserPassword;
+using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Extensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
-using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
 using FluentAssertions;
 using Xunit;
