@@ -85,7 +85,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             await IntegrationTestsFixture.DatabaseContext.Dreams.AddAsync(dream);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
             
-            IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Volunteer});
+            IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Coordinator});
             var request = new UpdateDreamerRequest
             {
                 DreamId = dream.DreamId,
@@ -104,24 +104,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             //Assert
             _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
             response.EnsureSuccessStatusCode();
-            
-            var query = @"
-                    query DreamerQuery {
-                      dreams {
-                        dreamId
-                        firstName
-                        lastName
-                        age
-                        gender
-                        dreamUrl
-                        tags
-                        dreamCategory{
-                            dreamCategoryId
-                        }                      
-                      }
-                    }                    
-                ";
-            
+
             IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Admin});
             var queryResponse = await Client.GetDreams();
             

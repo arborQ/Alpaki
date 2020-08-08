@@ -25,7 +25,7 @@ namespace Alpaki.WebApi.Controllers
         public Task<CreateDreamerResponse> CreateDream([FromBody] CreateDreamerRequest request) => _mediator.Send(request);
 
         [HttpPut]
-        [VolunteerAccess]
+        [CoordinatorAccess]
         public async Task<UpdateDreamerResponse> UpdateDream([FromBody] UpdateDreamerRequest request)
             => await _mediator.Send(request);
 
