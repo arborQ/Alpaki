@@ -1,10 +1,9 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.Database;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Alpaki.Logic.Handlers.GetCategories.GetCategoriesResponse;
 
 namespace Alpaki.Logic.Handlers.GetCategories
@@ -21,8 +20,13 @@ namespace Alpaki.Logic.Handlers.GetCategories
         public async Task<GetCategoriesResponse> Handle(GetCategoriesRequest request, CancellationToken cancellationToken)
         {
             var categories = await _databaseContext
-                .DreamCategories.Select(c => new Category { DreamCategoryId = c.DreamCategoryId, CategoryName = c.CategoryName })
-                .ToListAsync();
+                .DreamCategories
+                .AsNoTracking()
+                .Select(c => new Category { 
+                    DreamCategoryId = c.DreamCategoryId, 
+                    CategoryName = c.CategoryName 
+                })
+                .ToListAsync(cancellationToken);
 
             return new GetCategoriesResponse { Categories = categories };
         }

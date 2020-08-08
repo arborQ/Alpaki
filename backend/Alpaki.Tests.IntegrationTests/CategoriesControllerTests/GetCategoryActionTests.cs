@@ -2,13 +2,12 @@
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
-using Alpaki.Logic.Handlers.AddCategory;
+using Alpaki.Logic.Handlers.GetCategories;
 using Alpaki.Logic.Handlers.UpdateCategory;
 using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
@@ -16,7 +15,7 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
     public class GetCategoryActionTests : IntegrationTestsClass
     {
         private readonly Fixture _fixture;
-        private const string ActionUrl = "/api/Categories";
+        private const string ActionUrl = "/api/categories";
 
         public GetCategoryActionTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
         {
@@ -46,6 +45,21 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
 
             // Assert
             response.IsSuccessStatusCode.Should().Be(isPermited);
+        }
+
+        [Fact]
+        public async Task CategoriesController_GetCategories()
+        {
+            // Act
+            var categories = _fixture.DreamCategoryBuilder().CreateMany(10);
+            await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddRangeAsync(categories);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+
+            IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Volunteer });
+            var response = await Client.GetAsync(ActionUrl).AsResponse<GetCategoriesResponse>();
+
+            // Arrange
+            response.Categories.Should().HaveCount(10);
         }
     }
 }
