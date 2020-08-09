@@ -1,10 +1,9 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Database.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Logic
 {
@@ -13,6 +12,8 @@ namespace Alpaki.Logic
         public IQueryable<Dream> Dreams { get; }
 
         public IQueryable<User> Users { get; }
+
+        public IQueryable<DreamCategory> DreamCategories { get; }
     }
 
     public class UserScopedDatabaseReadContext : IUserScopedDatabaseReadContext
@@ -63,5 +64,7 @@ namespace Alpaki.Logic
                 return users.Where(u => u.UserId == currentUserId || u.AssignedDreams.Any(ad => dreamIds.Contains(ad.DreamId)));
             }
         }
+
+        public IQueryable<DreamCategory> DreamCategories => _databaseContext.DreamCategories;
     }
 }

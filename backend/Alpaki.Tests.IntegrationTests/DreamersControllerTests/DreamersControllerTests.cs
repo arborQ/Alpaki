@@ -99,12 +99,8 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             };
             
             //Act
-            var response = await Client.PutAsync("/api/dreamers", request.WithJsonContent().json);
-
-            //Assert
-            _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
-            response.EnsureSuccessStatusCode();
-
+            var _ = await Client.PutAsync("/api/dreamers", request.WithJsonContent().json).AsResponse<UpdateDreamerResponse>();
+            
             IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Admin});
             var queryResponse = await Client.GetDreams();
             
@@ -120,7 +116,8 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 x.Gender.Should().Be(request.Gender);
                 x.DreamUrl.Should().Be(request.DreamUrl);
                 x.Tags.Should().Be(request.Tags);
-                x.DreamCategoryId.Should().Be(request.DreamCategoryId);
+                x.DreamCategory.Should().NotBeNull();
+                x.DreamCategory.DreamCategoryId.Should().Be(request.DreamCategoryId);
             });
         }
     }

@@ -26,7 +26,7 @@ namespace Alpaki.Logic.Handlers.GetDreams
 
             public string Tags { get; set; }
 
-            public long DreamCategoryId { get; set; }
+            public DreamCategoryItem DreamCategory { get; set; }
 
             internal static Expression<Func<Dream, DreamListItem>> DreamToDreamListItemMapper = dream => new DreamListItem
             {
@@ -37,8 +37,18 @@ namespace Alpaki.Logic.Handlers.GetDreams
                 LastName = dream.LastName,
                 Gender = dream.Gender,
                 Tags = dream.Tags,
-                DreamCategoryId = dream.DreamCategoryId
+                DreamCategory = new DreamCategoryItem
+                {
+                    DreamCategoryId = dream.DreamCategory.DreamCategoryId,
+                    DreamCategoryName = dream.DreamCategory.CategoryName
+                }
             };
+        }
+
+        public class DreamCategoryItem
+        {
+            public long DreamCategoryId { get; set; }
+            public string DreamCategoryName { get; set; }
         }
     }
 }

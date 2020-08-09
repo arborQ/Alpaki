@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Alpaki.Database;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,11 +7,12 @@ namespace Alpaki.Logic.Handlers.UpdateDreamer
 {
     public class UpdateDreamerRequestValidator : AbstractValidator<UpdateDreamerRequest>
     {
-        private readonly IDatabaseContext _dbContext;
+        private readonly IUserScopedDatabaseReadContext _dbContext;
 
-        public UpdateDreamerRequestValidator(IDatabaseContext dbContext)
+        public UpdateDreamerRequestValidator(IUserScopedDatabaseReadContext dbContext)
         {
             RuleFor(x => x.DreamId).NotNull();
+            RuleFor(x => x.DreamId).MustAsync(DreamExists);
             RuleFor(x => x.FirstName).NotEmpty().When(x => x.FirstName is {}).WithMessage("Imię nie może być puste.");
             RuleFor(x => x.LastName).NotEmpty().When(x => x.LastName is {}).WithMessage("Nazwisko nie może być puste."); ;
             RuleFor(d => d.Age).GreaterThan(0).LessThan(121).WithMessage("Wiek pomiędzy 1 a 120 lat");
@@ -23,6 +23,9 @@ namespace Alpaki.Logic.Handlers.UpdateDreamer
             RuleFor(x => x.DreamCategoryId).MustAsync(DreamCategoryExists).WithMessage(r=>$"Kategoria o Id=[{r.DreamCategoryId}] nie istnieje");
             _dbContext = dbContext;
         }
+
+        private async Task<bool> DreamExists(long dreamId, CancellationToken cancellationToken)
+            => await _dbContext.Dreams.AnyAsync(x => x.DreamId == dreamId, cancellationToken: cancellationToken);
 
         private async Task<bool> DreamCategoryExists(long? dreamCategoryId, CancellationToken cancellationToken) 
             => await _dbContext.DreamCategories.AnyAsync(x => x.DreamCategoryId == dreamCategoryId, cancellationToken: cancellationToken);

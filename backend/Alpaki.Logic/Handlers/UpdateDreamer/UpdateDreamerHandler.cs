@@ -16,16 +16,14 @@ namespace Alpaki.Logic.Handlers.UpdateDreamer
         }
         public async Task<UpdateDreamerResponse> Handle(UpdateDreamerRequest request, CancellationToken cancellationToken)
         {
-            var dream = await _dbContext.Dreams.SingleOrDefaultAsync(x => x.DreamId == request.DreamId, cancellationToken);
-            if(dream is null)
-                throw new DreamNotFoundException(request.DreamId);
+            var dream = await _dbContext.Dreams.SingleAsync(x => x.DreamId == request.DreamId, cancellationToken);
 
-            if (request.FirstName is {})
+            if (!string.IsNullOrEmpty(dream.FirstName))
             {
                 dream.FirstName = request.FirstName;
             }
 
-            if (request.LastName is {})
+            if (!string.IsNullOrEmpty(request.LastName))
             {
                 dream.LastName = request.LastName;
             }
@@ -40,12 +38,12 @@ namespace Alpaki.Logic.Handlers.UpdateDreamer
                 dream.Gender = request.Gender.Value;
             }
 
-            if (request.DreamUrl is {})
+            if (!string.IsNullOrEmpty(request.DreamUrl))
             {
                 dream.DreamUrl = request.DreamUrl;
             }
 
-            if (request.Tags is {})
+            if (!string.IsNullOrEmpty(request.Tags))
             {
                 dream.Tags = request.Tags;
             }

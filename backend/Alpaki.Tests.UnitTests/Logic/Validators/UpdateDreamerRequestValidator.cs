@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Database.Models;
+using Alpaki.Logic;
 using Alpaki.Logic.Handlers.UpdateDreamer;
 using FluentAssertions;
 using MockQueryable.NSubstitute;
@@ -31,23 +33,40 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
 
         public UpdateDreamerRequestValidatorTests()
         {
-            _sut = new UpdateDreamerRequestValidator(_dbContext);
-            var categories = new List<DreamCategory>().AsQueryable().BuildMockDbSet();
+            var currentUserService = Substitute.For<ICurrentUserService>();
+            currentUserService.CurrentUserId.Returns(1);
+            currentUserService.CurrentUserRole.Returns(UserRoleEnum.Admin);
+
+            _sut = new UpdateDreamerRequestValidator(new UserScopedDatabaseReadContext(_dbContext, currentUserService));
+            var categories = new List<DreamCategory>
+            {
+                new DreamCategory
+                {
+                    DreamCategoryId = 1,
+                    CategoryName = "test"
+                }
+            }.AsQueryable().BuildMockDbSet();
+            var dreams = new List<Dream>
+            {
+                new Dream
+                {
+                    DreamId = 1,
+                    FirstName = "test",
+                    LastName = "test",
+                    Age = 1,
+                    Gender = GenderEnum.Male,
+                    DreamUrl = "https://mam-marzenie.pl/marzenie/1",
+                    Tags = "tag1",
+                    DreamCategoryId = 1
+                }
+            }.AsQueryable().BuildMockDbSet();
             _dbContext.DreamCategories.Returns(categories);
+            _dbContext.Dreams.Returns(dreams);
         }
 
         [Fact]
         public async Task success_when_request_is_valid()
         {
-            var categories = new List<DreamCategory>
-                {
-                    new DreamCategory
-                    {
-                        DreamCategoryId = 1,
-                        CategoryName = "test"
-                    }
-                }.AsQueryable().BuildMockDbSet();
-            _dbContext.DreamCategories.Returns(categories);
             var result = await _sut.ValidateAsync(_request);
 
             result.IsValid.Should().BeTrue();
@@ -112,8 +131,8 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         }
         
         [Theory]
-        [InlineData(1)]
         [InlineData(2)]
+        [InlineData(3)]
         
         public async Task fails_when_given_dream_category_does_not_exits(long dreamCategoryId)
         {
@@ -123,6 +142,20 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
 
             result.IsValid.Should().BeFalse();
             result.Errors.Should().Contain(e => e.PropertyName == nameof(UpdateDreamerRequest.DreamCategoryId));
+        }
+
+        [Theory]
+        [InlineData(2)]
+        [InlineData(3)]
+
+        public async Task fails_when_given_dream_does_not_exits(long dreamId)
+        {
+            _request.DreamId = dreamId;
+
+            var result = await _sut.ValidateAsync(_request);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().Contain(e => e.PropertyName == nameof(UpdateDreamerRequest.DreamId));
         }
     }
 }
