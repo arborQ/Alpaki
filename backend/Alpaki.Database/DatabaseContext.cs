@@ -4,6 +4,7 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
+using Alpaki.DomainLogic.DomainObjects;
 using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -44,6 +45,9 @@ namespace Alpaki.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DreamDomainObject>().Property<long>("DreamId").IsRequired();
+            modelBuilder.Entity<DreamDomainObject>().HasKey("DreamId");
+
             modelBuilder.Entity<DreamCategory>().HasMany(c => c.Dreams).WithOne(d => d.DreamCategory);
             modelBuilder.Entity<Dream>().HasMany(d => d.RequiredSteps).WithOne(s => s.Dream);
 
@@ -70,6 +74,8 @@ namespace Alpaki.Database
         {
             return Entry(entity).ReloadAsync();
         }
+
+        public DbSet<DreamDomainObject> DreamsObjects { get; set; }
 
         public DbSet<User> Users { get; set; }
 

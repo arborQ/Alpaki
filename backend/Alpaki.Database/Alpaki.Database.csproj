@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Alpaki.CrossCutting\Alpaki.CrossCutting.csproj" />
+    <ProjectReference Include="..\Alpaki.DomainLogic\Alpaki.DomainLogic.csproj" />
   </ItemGroup>
 
 </Project>
