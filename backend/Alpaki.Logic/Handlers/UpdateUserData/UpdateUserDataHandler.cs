@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +9,15 @@ namespace Alpaki.Logic.Handlers.UpdateUserData
     public class UpdateUserDataHandler : IRequestHandler<UpdateUserDataRequest, UpdateUserDataResponse>
     {
         private readonly IDatabaseContext _databaseContext;
-        private readonly ICurrentUserService _currentUserService;
 
-        public UpdateUserDataHandler(IDatabaseContext databaseContext, ICurrentUserService currentUserService)
+        public UpdateUserDataHandler(IDatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
-            _currentUserService = currentUserService;
         }
 
         public async Task<UpdateUserDataResponse> Handle(UpdateUserDataRequest request, CancellationToken cancellationToken)
         {
-            var user = await _databaseContext.Users.SingleAsync(u => u.UserId == _currentUserService.CurrentUserId);
+            var user = await _databaseContext.Users.SingleAsync(u => u.UserId == request.UserId);
 
             if (!string.IsNullOrEmpty(request.Email))
             {

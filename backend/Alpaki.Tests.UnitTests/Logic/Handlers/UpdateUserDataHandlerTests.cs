@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
-using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Handlers.UpdateUserData;
@@ -19,15 +18,13 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
         private readonly Fixture _fixture;
         private readonly UpdateUserDataHandler _updateUserDataHandler;
         private readonly IDatabaseContext _databaseContext;
-        private readonly ICurrentUserService _currentUserService;
 
         public UpdateUserDataHandlerTests()
         {
             _fixture = new Fixture();
             _databaseContext = Substitute.For<IDatabaseContext>();
-            _currentUserService = Substitute.For<ICurrentUserService>();
 
-            _updateUserDataHandler = new UpdateUserDataHandler(_databaseContext, _currentUserService);
+            _updateUserDataHandler = new UpdateUserDataHandler(_databaseContext);
         }
 
         [Fact]
@@ -36,7 +33,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
             // Arrange
             var userId = _fixture.Create<long>();
             var request = _fixture.Create<UpdateUserDataRequest>();
-            _currentUserService.CurrentUserId.Returns(userId);
+            request.UserId = userId;
             var usersList = new List<User> { new User { UserId = userId } }.AsQueryable().BuildMockDbSet();
             _databaseContext.Users.Returns(usersList);
 
@@ -62,9 +59,8 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
                 .With(r => r.LastName, null as string)
                 .With(r => r.Email, null as string)
                 .Create();
-            _currentUserService.CurrentUserId.Returns(userId);
             var usersList = new List<User> { new User {
-                UserId = userId,
+                UserId = request.UserId,
                 LastName = "original last name",
                 Role = UserRoleEnum.Volunteer,
                 Email = "original email"
@@ -90,10 +86,8 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
         public async Task UpdateUserDataHandler_UpdateUser_Fail_IfUserDoesNotExists()
         {
             // Arrange
-            var userId = _fixture.Create<long>();
             var request = _fixture.Create<UpdateUserDataRequest>();
 
-            _currentUserService.CurrentUserId.Returns(userId);
             var usersList = new List<User> { new User {
                 UserId = _fixture.Create<long>()
             }
@@ -102,46 +96,6 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
 
             // Act && Assert
             await Assert.ThrowsAnyAsync<Exception>(() => _updateUserDataHandler.Handle(request, default));
-
-        }
-
-        [Fact]
-        public async Task UpdateUserDataRequestValidator_DoesNotReturnError_IfPropertyIsNull()
-        {
-            // Arrange
-            var validator = new UpdateUserDataRequestValidator();
-
-            // Act
-            var result = await validator.ValidateAsync(new UpdateUserDataRequest(), default);
-
-            // Assert
-            Assert.True(result.IsValid);
-        }
-
-        [Fact]
-        public async Task UpdateUserDataRequestValidator_DoesReturnError_IfPropertyIsInvalid()
-        {
-            // Arrange
-            var validator = new UpdateUserDataRequestValidator();
-            var request = new UpdateUserDataRequest
-            {
-                FirstName = "",
-                LastName = "",
-                Brand = "",
-                Email = "not email",
-                PhoneNumber = ""
-            };
-
-            // Act
-            var result = await validator.ValidateAsync(request, default);
-
-            // Assert
-            Assert.False(result.IsValid);
-            Assert.Contains(result.Errors, e => e.PropertyName == nameof(User.FirstName));
-            Assert.Contains(result.Errors, e => e.PropertyName == nameof(User.LastName));
-            Assert.Contains(result.Errors, e => e.PropertyName == nameof(User.Brand));
-            Assert.Contains(result.Errors, e => e.PropertyName == nameof(User.Email));
-            Assert.Contains(result.Errors, e => e.PropertyName == nameof(User.PhoneNumber));
-        }
+        }        
     }
 }
