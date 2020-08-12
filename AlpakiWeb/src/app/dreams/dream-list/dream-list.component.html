@@ -3,7 +3,7 @@
     <div class="dream-list">
         <ng-container *ngFor="let dream of dreams$ | async">
             <div class="dream-list-item">
-                <app-dream-card [dream]="dream"></app-dream-card>
+                <app-dream-card [dream]="dream" [remove]="removeDream"></app-dream-card>
             </div>
         </ng-container>
     </div>

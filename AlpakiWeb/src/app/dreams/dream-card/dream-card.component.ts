@@ -8,4 +8,6 @@ import { IDream } from '../dreams-service';
 })
 export class DreamCardComponent {
   @Input() dream: IDream;
+
+  @Input() remove: (dreamId: number) => void;
 }

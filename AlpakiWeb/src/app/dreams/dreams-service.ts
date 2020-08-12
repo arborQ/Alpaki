@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
@@ -25,14 +25,33 @@ export interface IDream {
   providedIn: 'root'
 })
 export class DreamsService {
+  private dreams: BehaviorSubject<IDream[]> = new BehaviorSubject<IDream[]>([]);
 
   constructor(private http: HttpClient) { }
 
-  getDreams(): Observable<IDreamQueryResponse> {
-    return this.http.get<IDreamQueryResponse>('/api/dreamers?page=2');
+  getDreams() {
+    this.http.get<IDreamQueryResponse>('/api/dreamers?page=1').subscribe(response => {
+      this.dreams.next(response.dreams);
+    });
+
+    return this.dreams;
   }
 
   getDream(dreamId: number): Observable<IDreamQueryResponse> {
     return this.http.get<IDreamQueryResponse>(`/api/dreamers/${dreamId}`);
+  }
+
+  deleteDream(dreamId: number) {
+    const beforeDelete = this.dreams.value;
+    const users = [...beforeDelete.filter(u => u.dreamId !== dreamId)];
+    this.dreams.next(users);
+
+    this.http.delete(`/api/dreamers?dreamId=${dreamId}`).toPromise().catch(() => {
+      setTimeout(() => {
+        alert('ojojoj');
+
+        this.dreams.next(beforeDelete);
+      }, 1000);
+    });
   }
 }

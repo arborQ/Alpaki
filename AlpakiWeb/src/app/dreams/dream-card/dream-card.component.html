@@ -12,8 +12,8 @@
     <img mat-card-image src="/assets/person_{{ dream.gender === 2 ? 'female': 'male' }}.png">
     <mat-card-content>
         <mat-chip-list>
-            <mat-chip color="primary" selected>{{ dream.dreamCategory?.categoryName || 'unknown'}}</mat-chip>
+            <mat-chip selected (click)="remove(dream.dreamId)">Usuń</mat-chip>
         </mat-chip-list>
-        <a [routerLink]="['/dreams/details', dream.dreamId]"></a>
+        <!-- <a [routerLink]="['/dreams/details', dream.dreamId]"></a> -->
     </mat-card-content>
 </mat-card>

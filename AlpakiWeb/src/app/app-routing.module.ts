@@ -21,7 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'users',
-    loadChildren: () => import('./users/users-routing.module').then(a => a.UsersRoutingModule),
+    loadChildren: () => import('./users/users.module').then(a => a.UsersModule),
     canActivate: [IsAuthorizedGuard]
   }
 ];

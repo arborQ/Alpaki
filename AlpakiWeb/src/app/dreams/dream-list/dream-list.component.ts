@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { DreamsService } from '../dreams-service';
-import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
@@ -12,8 +11,10 @@ export class DreamListComponent {
 
   constructor(private dreamsService: DreamsService) { }
 
-  dreamResponse$ = this.dreamsService.getDreams();
-
-  dreams$ = this.dreamResponse$.pipe(map(response => response.dreams));
+  dreams$ = this.dreamsService.getDreams();
   isLoading$ = of(false);
+
+  removeDream = (dreamId: number) => {
+    this.dreamsService.deleteDream(dreamId);
+  }
 }
