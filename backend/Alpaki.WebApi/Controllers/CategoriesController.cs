@@ -25,18 +25,18 @@ namespace Alpaki.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(AddCategoryResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
-        public Task<AddCategoryResponse> CreateCategory([FromBody]AddCategoryRequest createCategoryRequest) => _mediator.Send(createCategoryRequest);
+        public Task<AddCategoryResponse> CreateCategory([FromBody] AddCategoryRequest createCategoryRequest) => _mediator.Send(createCategoryRequest);
 
         [CoordinatorAccess]
         [HttpPatch]
         [ProducesResponseType(typeof(UpdateCategoryResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
-        public Task<UpdateCategoryResponse> UpadteCategory(UpdateCategoryRequest updateCategoryRequest) => _mediator.Send(updateCategoryRequest);
+        public Task<UpdateCategoryResponse> UpadteCategory([FromBody]UpdateCategoryRequest updateCategoryRequest) => _mediator.Send(updateCategoryRequest);
 
         [Authorize]
         [HttpGet]
         [ProducesResponseType(typeof(GetCategoriesResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
-        public Task<GetCategoriesResponse> GetCategories(GetCategoriesRequest getCategoriesRequest) => _mediator.Send(getCategoriesRequest);
+        public Task<GetCategoriesResponse> GetCategories([FromQuery]GetCategoriesRequest getCategoriesRequest) => _mediator.Send(getCategoriesRequest);
     }
 }

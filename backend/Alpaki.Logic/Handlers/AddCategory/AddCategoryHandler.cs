@@ -35,7 +35,7 @@ namespace Alpaki.Logic.Handlers.AddCategory
                 await _databaseContext.DreamCategories.AddAsync(newCategory);
                 await _databaseContext.SaveChangesAsync();
 
-                return new AddCategoryResponse { DreamCategoryId = newCategory.DreamCategoryId };
+                return new AddCategoryResponse { CategoryId = newCategory.DreamCategoryId };
             }
             catch (Exception e)
             {

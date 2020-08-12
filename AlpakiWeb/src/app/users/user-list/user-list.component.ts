@@ -19,7 +19,7 @@ export class UserListComponent {
     this.usersService.deleteUser(userId);
   }
 
-  updateUser(userId: numer): void {
-    
+  updateUser(userId: number): void {
+    this.usersService.updateUser(userId);
   }
 }

@@ -32,7 +32,9 @@ export class UsersService {
 
 
   updateUser(userId: number): void {
-    this.http.patch('/api/users', {});
+    const edited = { userId, firstName: 'EDITED' };
+    const users = [...this._users.value.map(u => u.userId !== userId ? u : { ...u, ...edited })];
+    this.http.patch('/api/users', edited);
   }
 
   deleteUser(userId: number): void {

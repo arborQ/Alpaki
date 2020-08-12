@@ -2,7 +2,7 @@
 {
     public class AddCategoryResponse
     {
-        public long DreamCategoryId { get; set; }
+        public long CategoryId { get; set; }
 
     }
 }
