@@ -33,11 +33,10 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
 
             IntegrationTestsFixture.SetUserContext(user);
 
-            var json = JsonConvert.SerializeObject(new { firstName = "new name", emailAddress = "lol@o2.pl" });
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = new { userId = user.UserId, firstName = "new name", emailAddress = "lol@o2.pl" }.AsJsonContent();
 
             // Act
-            var response = await Client.PatchAsync("/api/User/me", data);
+            var response = await Client.PatchAsync("/api/user", data);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -56,10 +55,10 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
 
             IntegrationTestsFixture.SetUserContext(user);
 
-            var data = new { firstName, lastName, email, brand, phoneNumber }.AsJsonContent();
+            var data = new { userId = user.UserId, firstName, lastName, email, brand, phoneNumber }.AsJsonContent();
 
             // Act
-            var response  = await Client.PatchAsync("/api/User/me", data);
+            var response  = await Client.PatchAsync("/api/user", data);
             response.EnsureSuccessStatusCode();
             var myData = await Client.GetUsers();
 
@@ -90,11 +89,10 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
 
             IntegrationTestsFixture.SetUserContext(user);
 
-            var json = JsonConvert.SerializeObject(new { firstName, lastName, email, brand, phoneNumber });
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = new { userId = user.UserId, firstName, lastName, email, brand, phoneNumber }.AsJsonContent();
 
             // Act
-            var response = await Client.PatchAsync("/api/User/me", data);
+            var response = await Client.PatchAsync("/api/user", data);
             response.EnsureSuccessStatusCode();
             var myData = await Client.GetUsers();
 

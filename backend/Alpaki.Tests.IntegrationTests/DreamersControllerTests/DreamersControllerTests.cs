@@ -5,9 +5,11 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Dreamer.CreateDreamer;
 using Alpaki.Logic.Handlers.UpdateDreamer;
+using Alpaki.Logic.Handlers.GetDreams;
 using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
+using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
 using FluentAssertions;
 using GraphQL;
@@ -119,6 +121,23 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 x.DreamCategory.Should().NotBeNull();
                 x.DreamCategory.DreamCategoryId.Should().Be(request.DreamCategoryId);
             });
+        }
+        public async Task DreamerScontroller_GET_ByDreamId()
+        {
+            // Arrange
+            var dreams = _fixture.DreamBuilder().WithNewCategory().CreateMany(10).ToList();
+            await IntegrationTestsFixture.DatabaseContext.Dreams.AddRangeAsync(dreams);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+            IntegrationTestsFixture.SetUserAdminContext();
+            // Act
+            var responses = await Task.WhenAll(dreams.Select(d => Client.GetAsync($"/api/dreamers/details?dreamId={d.DreamId}").AsResponse<GetDreamResponse>()));
+
+            // Assert
+            foreach (var response in responses)
+            {
+                response.FirstName.Should().NotBeNullOrEmpty();
+                response.LastName.Should().NotBeNullOrEmpty();
+            }
         }
     }
 }

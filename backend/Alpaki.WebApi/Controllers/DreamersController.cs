@@ -37,10 +37,10 @@ namespace Alpaki.WebApi.Controllers
         public Task<GetDreamsResponse> GetDreams([FromQuery] GetDreamsRequest request) => _mediator.Send(request);
 
         [VolunteerAccess]
-        [HttpGet("{dreamId}")]
+        [HttpGet("details")]
         [ProducesResponseType(typeof(GetDreamResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
-        public Task<GetDreamResponse> GetDreamDetails([FromRoute] long dreamId) => _mediator.Send(new GetDreamRequest { DreamId = dreamId });
+        public Task<GetDreamResponse> GetDreamDetails([FromQuery] GetDreamRequest request) => _mediator.Send(request);
     }
 }
