@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Alpaki.Database.Models;
 using Alpaki.Logic;
 using Alpaki.Logic.Handlers.UpdateUserData;
-using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
+using Alpaki.Tests.Common.Builders;
 using AutoFixture;
 using MockQueryable.NSubstitute;
 using NSubstitute;
