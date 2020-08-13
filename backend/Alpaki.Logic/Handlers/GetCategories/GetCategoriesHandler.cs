@@ -23,7 +23,7 @@ namespace Alpaki.Logic.Handlers.GetCategories
                 .DreamCategories
                 .AsNoTracking()
                 .Select(c => new Category { 
-                    DreamCategoryId = c.DreamCategoryId, 
+                    CategoryId = c.DreamCategoryId, 
                     CategoryName = c.CategoryName 
                 })
                 .ToListAsync(cancellationToken);

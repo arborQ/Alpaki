@@ -13,7 +13,7 @@ namespace Alpaki.Logic.Handlers.GetCategories
 
         public class Category
         {
-            public long DreamCategoryId { get; set; }
+            public long CategoryId { get; set; }
 
             public string CategoryName { get; set; }
         }

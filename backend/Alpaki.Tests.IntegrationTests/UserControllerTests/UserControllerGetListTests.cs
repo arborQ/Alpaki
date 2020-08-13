@@ -1,6 +1,8 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.Logic.Handlers.GetUser;
 using Alpaki.Logic.Handlers.GetUsers;
 using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Fixtures;
@@ -65,6 +67,30 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
 
             // Assert
             response.Users.Should().HaveCount(expectedCount);
+        }
+
+        [Fact]
+        public async Task UserController_Get_Details()
+        {
+            // Arrange
+            var users = _fixture.VolunteerBuilder().CreateMany(8);
+
+            await IntegrationTestsFixture.DatabaseContext.Users.AddRangeAsync(users);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+
+            IntegrationTestsFixture.SetUserAdminContext();
+
+            // Act
+            var responses = await Task.WhenAll(users.Select(u => Client.GetAsync($"/api/user/details?userId={u.UserId}").AsResponse<GetUserResponse>()));
+
+            // Assert
+            foreach (var user in users)
+            {
+                var resultUser = responses.SingleOrDefault(u => u.UserId == user.UserId);
+                resultUser.Should().NotBeNull();
+                resultUser.FirstName.Should().Be(user.FirstName);
+
+            }
         }
     }
 }
