@@ -23,6 +23,8 @@ namespace Alpaki.Logic.Handlers.GetUsers
 
             public string PhoneNumber { get; set; }
 
+            public string ProfileImageUrl { get; set; }
+
             internal static Expression<Func<User, UserListItem>> UserToUserListItemMapper = user => new UserListItem
             {
                 UserId = user.UserId,
@@ -30,7 +32,8 @@ namespace Alpaki.Logic.Handlers.GetUsers
                 LastName = user.LastName,
                 Email = user.Email,
                 Brand = user.Brand,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                ProfileImageUrl = $"/api/images/{user.ProfileImageId}.png"
             };
         }
     }

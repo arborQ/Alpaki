@@ -44,6 +44,11 @@ namespace Alpaki.Logic.Handlers.UpdateUserData
                 user.PhoneNumber = request.PhoneNumber;
             }
 
+            if (request.ProfileImageId.HasValue)
+            {
+                user.ProfileImageId = request.ProfileImageId.Value;
+            }
+
             await _databaseContext.SaveChangesAsync();
 
             return new UpdateUserDataResponse();

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace Alpaki.Logic.Handlers.UpdateUserData
 {
@@ -15,5 +16,7 @@ namespace Alpaki.Logic.Handlers.UpdateUserData
         public string Brand { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public Guid? ProfileImageId { get; set; }
     }
 }

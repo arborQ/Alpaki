@@ -18,6 +18,8 @@ namespace Alpaki.Logic.Handlers.GetUser
 
         public string PhoneNumber { get; set; }
 
+        public string ProfileImageUrl { get; set; }
+
         internal static Expression<Func<User, GetUserResponse>> UserToGetUserResponseMapper = user => new GetUserResponse
         {
             UserId = user.UserId,
@@ -25,7 +27,8 @@ namespace Alpaki.Logic.Handlers.GetUser
             LastName = user.LastName,
             Email = user.Email,
             Brand = user.Brand,
-            PhoneNumber = user.PhoneNumber
+            PhoneNumber = user.PhoneNumber,
+            ProfileImageUrl = $"/api/images/{user.ProfileImageId}.png"
         };
     }
 }
