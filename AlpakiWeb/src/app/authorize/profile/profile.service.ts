@@ -14,10 +14,10 @@ export class ProfileService {
   constructor(private http: HttpClient) { }
 
   currentUserProfile() {
-    return this.http.get<ICurrentUserProfile>('/api/users/me');
+    return this.http.get<ICurrentUserProfile>('/api/user/me');
   }
 
   updateCurrentUserProfile(newProfile: ICurrentUserProfile) {
-    return this.http.patch('/api/users/me', newProfile);
+    return this.http.patch('/api/user/me', newProfile);
   }
 }

@@ -10,7 +10,7 @@ namespace Alpaki.Logic.Validators
     {
         public PagedRequestValidator()
         {
-            RuleFor(r => r.Page).GreaterThan(0).When(r => r.Page.HasValue).WithMessage("Numer strony nie może być mniejszy niż 1");
+            RuleFor(r => r.Page).GreaterThanOrEqualTo(0).When(r => r.Page.HasValue).WithMessage("Numer strony nie może być mniejszy niż 0");
         }
     }
 }

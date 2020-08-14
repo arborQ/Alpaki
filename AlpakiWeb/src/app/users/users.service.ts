@@ -10,41 +10,51 @@ export interface IUser {
   email: string;
 }
 
+export interface IGetUsersRequest {
+  page: number;
+  asc: boolean;
+  sortBy: keyof (IUser);
+}
+
 export interface IGetUsersResponse {
   users: IUser[];
+  totalCount: number;
+  loading: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  private _users: BehaviorSubject<IUser[]> = new BehaviorSubject<IUser[]>([]);
+  private userResponseSubject: BehaviorSubject<IGetUsersResponse>
+    = new BehaviorSubject<IGetUsersResponse>({ users: [], totalCount: 0, loading: true });
   constructor(private http: HttpClient) { }
 
 
-  users() {
-    this.http.get<IGetUsersResponse>('/api/users').subscribe(users => {
-      this._users.next(users.users);
+  users({ page = 0, asc = true, sortBy = 'email' }: Partial<IGetUsersRequest>) {
+    this.http.get<IGetUsersResponse>(`/api/user?page=${page}&asc=${asc}&orderBy=${sortBy}`)
+    .subscribe(response => {
+      this.userResponseSubject.next(response);
     });
 
-    return this._users;
+    return this.userResponseSubject.asObservable();
   }
 
 
   updateUser(userId: number): void {
-    const edited = { userId, firstName: 'EDITED' };
-    const users = [...this._users.value.map(u => u.userId !== userId ? u : { ...u, ...edited })];
-    this.http.patch('/api/users', edited);
+    // const edited = { userId, firstName: 'EDITED' };
+    // const users = [...this._users.value.map(u => u.userId !== userId ? u : { ...u, ...edited })];
+    // this.http.patch('/api/user', edited);
   }
 
   deleteUser(userId: number): void {
-    const beforeDeleteUsers = this._users.value;
-    const users = [...beforeDeleteUsers.filter(u => u.userId !== userId)];
-    this._users.next(users);
+    // const beforeDeleteUsers = this._users.value;
+    // const users = [...beforeDeleteUsers.filter(u => u.userId !== userId)];
+    // this._users.next(users);
 
-    this.http.delete(`/api/users?userId=${userId}`).toPromise().catch(() => {
-      alert('ojojoj');
-      this._users.next(beforeDeleteUsers);
-    });
+    // this.http.delete(`/api/user?userId=${userId}`).toPromise().catch(() => {
+    //   alert('ojojoj');
+    //   this._users.next(beforeDeleteUsers);
+    // });
   }
 }

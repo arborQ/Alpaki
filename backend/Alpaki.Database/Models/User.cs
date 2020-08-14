@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Alpaki.CrossCutting.Enums;
@@ -33,5 +34,10 @@ namespace Alpaki.Database.Models
         public UserRoleEnum Role { get; set; }
 
         public ICollection<AssignedDreams> AssignedDreams { get; set; }
+
+        [ForeignKey(nameof(ProfileImage))]
+        public Guid? ProfileImageId { get; set; }
+
+        public Image ProfileImage { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
@@ -29,16 +29,28 @@ export class DreamsService {
 
   constructor(private http: HttpClient) { }
 
-  getDreams() {
-    this.http.get<IDreamQueryResponse>('/api/dreamers?page=1').subscribe(response => {
-      this.dreams.next(response.dreams);
-    });
+updateState(dreams: IDream[]) {
+  this.dreams.next(dreams);
+}
 
-    return this.dreams;
+  getDreams() {
+    this.http.get<IDreamQueryResponse>('/api/dreamers?page=1')
+      .subscribe(response => {
+        this.dreams.next(response.dreams);
+      });
+
+    return this.dreams.asObservable();
   }
 
-  getDream(dreamId: number): Observable<IDreamQueryResponse> {
-    return this.http.get<IDreamQueryResponse>(`/api/dreamers/${dreamId}`);
+  getDream(dreamId: number): Observable<IDream> {
+    const [existingDream] = this.dreams.value.filter(d => d.dreamId === dreamId);
+
+    if (existingDream) {
+      return this.dreams.pipe(map(dreams =>  dreams.filter(d => d.dreamId === dreamId)[0]));
+    }
+
+    return this.http
+      .get<IDream>(`/api/dreamers/details?dreamId=${dreamId}`);
   }
 
   deleteDream(dreamId: number) {
