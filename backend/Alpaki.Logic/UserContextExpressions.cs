@@ -14,6 +14,8 @@ namespace Alpaki.Logic
         public IQueryable<User> Users { get; }
 
         public IQueryable<DreamCategory> DreamCategories { get; }
+      
+        public IQueryable<Image> Images { get; }
     }
 
     public class UserScopedDatabaseReadContext : IUserScopedDatabaseReadContext
@@ -41,6 +43,8 @@ namespace Alpaki.Logic
                 return dreams.Where(d => d.Volunteers.Any(v => v.VolunteerId == _currentUserService.CurrentUserId));
             }
         }
+        
+        public IQueryable<Image> Images => _databaseContext.Images.AsNoTracking();
 
         public IQueryable<User> Users
         {

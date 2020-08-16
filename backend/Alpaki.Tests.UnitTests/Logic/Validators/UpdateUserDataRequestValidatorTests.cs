@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Alpaki.Database;
 using Alpaki.Database.Models;
 using Alpaki.Logic;
 using Alpaki.Logic.Handlers.UpdateUserData;
@@ -17,13 +18,15 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         private readonly Fixture _fixture;
         private readonly UpdateUserDataRequestValidator _sut;
         private readonly IUserScopedDatabaseReadContext _databaseContext;
+        private readonly IDatabaseContext _fullDatabaseContext;
 
         public UpdateUserDataRequestValidatorTests()
         {
             _fixture = new Fixture();
             _databaseContext = Substitute.For<IUserScopedDatabaseReadContext>();
+            _fullDatabaseContext = Substitute.For<IDatabaseContext>();
 
-            _sut = new UpdateUserDataRequestValidator(_databaseContext);
+            _sut = new UpdateUserDataRequestValidator(_databaseContext, _fullDatabaseContext);
         }
 
         [Fact]

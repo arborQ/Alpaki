@@ -20,13 +20,15 @@ namespace Alpaki.Database
 
         DbSet<AssignedDreams> AssignedDreams { get; }
 
+        DbSet<Image> Images { get; set; }
+
         public DbSet<DreamCategoryDefaultStep> DreamCategoryDefaultSteps { get; }
 
         void EnsureCreated();
 
         void Migrate();
 
-        EntityEntry<TEntity> Update<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
+        EntityEntry<TEntity> Update<TEntity>([NotNull] TEntity entity) where TEntity : class;
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
