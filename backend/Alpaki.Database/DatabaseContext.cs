@@ -84,5 +84,7 @@ namespace Alpaki.Database
         public DbSet<AssignedDreams> AssignedDreams { get; set; }
 
         public DbSet<Invitation> Invitations { get; set; }
+
+        public DbSet<Image> Images { get; set; }
     }
 }

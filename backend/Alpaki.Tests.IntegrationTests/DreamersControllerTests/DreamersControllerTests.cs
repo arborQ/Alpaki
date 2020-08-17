@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Dreamer.CreateDreamer;
+using Alpaki.Logic.Handlers.UpdateDreamer;
 using Alpaki.Logic.Handlers.GetDreams;
 using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
@@ -13,15 +14,18 @@ using AutoFixture;
 using FluentAssertions;
 using GraphQL;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
-{
+{ 
     public class DreamersControllerTests : IntegrationTestsClass
     {
+        private readonly ITestOutputHelper _testOutputHelper;
         private readonly Fixture _fixture;
 
-        public DreamersControllerTests(IntegrationTestsFixture integrationTestsFixture) : base(integrationTestsFixture)
+        public DreamersControllerTests(IntegrationTestsFixture integrationTestsFixture, ITestOutputHelper testOutputHelper) : base(integrationTestsFixture)
         {
+            _testOutputHelper = testOutputHelper;
             _fixture = new Fixture();
         }
 
@@ -62,6 +66,62 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
         }
 
         [Fact]
+        public async Task DreamersController_PUT_UpdateDreamer()
+        {
+            //Arrange
+            var category = _fixture.DreamCategoryBuilder(10).Create();
+            var category2 = _fixture.DreamCategoryBuilder(15).Create();
+            await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category);
+            await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category2);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+            var dream = new Dream
+            {
+                FirstName = "T",
+                LastName = "T",
+                Age = 2,
+                Gender = GenderEnum.Female,
+                DreamUrl = "https://mam-marzenie.pl/marzenie/1",
+                Tags = "tag1",
+                DreamCategoryId = category.DreamCategoryId
+            };
+            await IntegrationTestsFixture.DatabaseContext.Dreams.AddAsync(dream);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+            
+            IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Coordinator});
+            var request = new UpdateDreamerRequest
+            {
+                DreamId = dream.DreamId,
+                FirstName = "Test",
+                LastName = "Test",
+                Age = 3,
+                Gender = GenderEnum.Male,
+                DreamUrl = "https://mam-marzenie.pl/marzenie/2",
+                Tags = "tag1, tag2",
+                DreamCategoryId = category2.DreamCategoryId
+            };
+            
+            //Act
+            var _ = await Client.PutAsync("/api/dreamers", request.WithJsonContent().json).AsResponse<UpdateDreamerResponse>();
+            
+            IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Admin});
+            var queryResponse = await Client.GetDreams();
+            
+            
+            queryResponse.Should().NotBeNull();
+            queryResponse.Dreams.Count.Should().Be(1);
+            queryResponse.Dreams.Should().SatisfyRespectively(x =>
+            {
+                x.DreamId.Should().Be(dream.DreamId);
+                x.FirstName.Should().Be(request.FirstName);
+                x.LastName.Should().Be(request.LastName);
+                x.Age.Should().Be(request.Age);
+                x.Gender.Should().Be(request.Gender);
+                x.DreamUrl.Should().Be(request.DreamUrl);
+                x.Tags.Should().Be(request.Tags);
+                x.DreamCategory.Should().NotBeNull();
+                x.DreamCategory.DreamCategoryId.Should().Be(request.DreamCategoryId);
+            });
+        }
         public async Task DreamerScontroller_GET_ByDreamId()
         {
             // Arrange
