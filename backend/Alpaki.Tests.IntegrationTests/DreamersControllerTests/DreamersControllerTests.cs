@@ -16,6 +16,7 @@ using Xunit.Abstractions;
 using Alpaki.Logic.Handlers.AddDream;
 using Alpaki.Logic.Handlers.UpdateDream;
 using System.Net.Sockets;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
 {
@@ -174,6 +175,33 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             }
 
             users.Users.Count.Should().Be(volounteerCount);
+        }
+
+        [Fact]
+        public async Task DreamController_CantAssingImage_IfInUse()
+        {
+            // Arrange
+            var image = _fixture.ImageBuilder().Create();
+            var dream = _fixture
+                .DreamBuilder()
+                .WithNewCategory()
+                .Create();
+
+            var user = _fixture.VolunteerBuilder().With(d => d.ProfileImage, image).Create();
+
+            await IntegrationTestsFixture.DatabaseContext.Dreams.AddAsync(dream);
+            await IntegrationTestsFixture.DatabaseContext.Users.AddAsync(user);
+            await IntegrationTestsFixture.DatabaseContext.Images.AddAsync(image);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+
+            IntegrationTestsFixture.SetUserAdminContext();
+
+            // Act
+
+            var response = await Client.PutAsync("/api/dreams", new UpdateDreamRequest { DreamId = dream.DreamId, DreamImageId = image.ImageId }.AsJsonContent()).AsValidationResponse();
+
+            // Assert
+            Assert.Contains(response.Errors.Keys, a => a == nameof(UpdateDreamRequest.DreamImageId));
         }
 
         [Fact]
