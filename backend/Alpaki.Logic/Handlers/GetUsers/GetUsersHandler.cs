@@ -27,7 +27,7 @@ namespace Alpaki.Logic.Handlers.GetUsers
 
             if (!string.IsNullOrEmpty(request.Search))
             {
-                query = query.Where(u => u.FirstName.Contains(request.Search) || u.LastName.Contains(request.Search) || u.Email.Contains(request.Search));
+                query = query.Where(u => u.FirstName.Contains(request.Search) || u.LastName.Contains(request.Search) || u.Email.Contains(request.Search) || u.Brand.Contains(request.Search));
             }
 
             if (request.DreamId.HasValue)
