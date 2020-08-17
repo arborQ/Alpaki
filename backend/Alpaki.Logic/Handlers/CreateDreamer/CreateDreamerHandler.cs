@@ -23,11 +23,9 @@ namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
 
             var newDream = new Database.Models.Dream
             {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                DisplayName = request.DisplayName,
                 Age = request.Age,
                 DreamUrl = request.DreamUrl,
-                Gender = request.Gender,
                 DreamCategoryId = request.CategoryId,
                 Tags = request.Tags,
                 DreamState = DreamStateEnum.Created,

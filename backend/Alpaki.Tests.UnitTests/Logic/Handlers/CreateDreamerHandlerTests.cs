@@ -41,11 +41,9 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
             // Assert
             await _databaseContext.Received(1).SaveChangesAsync(default);
             await dreamsDbMock.Received(1).AddAsync(Arg.Any<Dream>());
-            await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.FirstName == request.FirstName));
-            await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.LastName == request.LastName));
+            await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.DisplayName == request.DisplayName));
             await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.Age == request.Age));
             await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.DreamCategoryId == request.CategoryId));
-            await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.Gender == request.Gender));
             await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.DreamUrl == request.DreamUrl));
             await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.RequiredSteps.Count == steps.Count()));
         }

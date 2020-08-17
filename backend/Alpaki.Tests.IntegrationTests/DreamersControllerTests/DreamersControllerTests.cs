@@ -41,7 +41,6 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             var requests = _fixture
                 .Build<CreateDreamerRequest>()
                 .With(d => d.Age, random.Next(1, 119))
-                .With(d => d.Gender, GenderEnum.Female)
                 .With(d => d.CategoryId, category.DreamCategoryId)
                 .CreateMany(count)
                 .Select(dreamer => dreamer.WithJsonContent().json);
@@ -75,8 +74,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             // Assert
             foreach (var response in responses)
             {
-                response.FirstName.Should().NotBeNullOrEmpty();
-                response.LastName.Should().NotBeNullOrEmpty();
+                response.DisplayName.Should().NotBeNullOrEmpty();
             }
         }
     }
