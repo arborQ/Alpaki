@@ -19,6 +19,6 @@ namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
 
         public Guid? DreamImageId { get; set; }
 
-        public long[] VolonteerIds { get; set; }
+        public long[] VolunteerIds { get; set; }
     }
 }
