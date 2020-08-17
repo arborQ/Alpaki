@@ -1,32 +1,32 @@
-﻿using Alpaki.Logic.Features.Dreamer.CreateDreamer;
-using Alpaki.Logic.Handlers.GetDreams;
+﻿using Alpaki.Logic.Handlers.GetDreams;
 using Alpaki.WebApi.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
-using Alpaki.Logic.Handlers.UpdateDreamer;
+using Alpaki.Logic.Handlers.AddDream;
+using Alpaki.Logic.Handlers.UpdateDream;
 
 namespace Alpaki.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DreamersController : ControllerBase
+    public class DreamsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public DreamersController(IMediator mediator)
+        public DreamsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpPost]
         [VolunteerAccess]
-        public Task<CreateDreamerResponse> CreateDream([FromBody] CreateDreamerRequest request) => _mediator.Send(request);
+        public Task<AddDreamResponse> CreateDream([FromBody] AddDreamRequest request) => _mediator.Send(request);
 
         [HttpPut]
         [CoordinatorAccess]
-        public async Task<UpdateDreamerResponse> UpdateDream([FromBody] UpdateDreamerRequest request)
+        public async Task<UpdateDreamResponse> UpdateDream([FromBody] UpdateDreamRequest request)
             => await _mediator.Send(request);
 
         [VolunteerAccess]

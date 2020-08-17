@@ -19,6 +19,8 @@ namespace Alpaki.Logic.Handlers.GetDreams
 
             public string DreamUrl { get; set; }
 
+            public string DreamImageUrl { get; set; }
+
             public string Tags { get; set; }
 
             public DreamCategoryItem DreamCategory { get; set; }

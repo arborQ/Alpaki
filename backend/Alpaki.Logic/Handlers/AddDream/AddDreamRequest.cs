@@ -1,9 +1,9 @@
 ﻿using System;
 using MediatR;
 
-namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
+namespace Alpaki.Logic.Handlers.AddDream
 {
-    public class CreateDreamerRequest : IRequest<CreateDreamerResponse>
+    public class AddDreamRequest : IRequest<AddDreamResponse>
     {
         public string DisplayName { get; set; }
 

@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
+namespace Alpaki.Logic.Handlers.AddDream
 {
-    public class CreateDreamerRequestValidator : AbstractValidator<CreateDreamerRequest>
+    public class AddDreamRequestValidator : AbstractValidator<AddDreamRequest>
     {
-        public CreateDreamerRequestValidator()
+        public AddDreamRequestValidator()
         {
             RuleFor(d => d.DisplayName).NotEmpty().WithMessage("Nazwa jest wymagana");
             RuleFor(d => d.Age).GreaterThan(0).LessThan(121).WithMessage("Wiek pomiędzy 1 a 120 lat");

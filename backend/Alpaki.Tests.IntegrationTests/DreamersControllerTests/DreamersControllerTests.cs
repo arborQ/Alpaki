@@ -3,8 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
-using Alpaki.Logic.Features.Dreamer.CreateDreamer;
-using Alpaki.Logic.Handlers.UpdateDreamer;
 using Alpaki.Logic.Handlers.GetDreams;
 using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
@@ -15,9 +13,11 @@ using FluentAssertions;
 using GraphQL;
 using Xunit;
 using Xunit.Abstractions;
+using Alpaki.Logic.Handlers.AddDream;
+using Alpaki.Logic.Handlers.UpdateDream;
 
 namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
-{ 
+{
     public class DreamersControllerTests : IntegrationTestsClass
     {
         private readonly ITestOutputHelper _testOutputHelper;
@@ -43,14 +43,14 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             var count = 20;
             var random = new Random();
             var requests = _fixture
-                .Build<CreateDreamerRequest>()
+                .Build<AddDreamRequest>()
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.CategoryId, category.DreamCategoryId)
                 .CreateMany(count)
                 .Select(dreamer => dreamer.WithJsonContent().json);
 
             // Act
-            var responses = await Task.WhenAll(requests.Select(r => Client.PostAsync($"/api/dreamers", r)));
+            var responses = await Task.WhenAll(requests.Select(r => Client.PostAsync($"/api/dreams", r)));
             var graphResponse = await Client.GetDreams();
 
             // Assert
@@ -75,10 +75,8 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
             var dream = new Dream
             {
-                FirstName = "T",
-                LastName = "T",
+                DisplayName = "T",
                 Age = 2,
-                Gender = GenderEnum.Female,
                 DreamUrl = "https://mam-marzenie.pl/marzenie/1",
                 Tags = "tag1",
                 DreamCategoryId = category.DreamCategoryId
@@ -87,20 +85,18 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
             
             IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Coordinator});
-            var request = new UpdateDreamerRequest
+            var request = new UpdateDreamRequest
             {
                 DreamId = dream.DreamId,
-                FirstName = "Test",
-                LastName = "Test",
+                DisplayName = "Test",
                 Age = 3,
-                Gender = GenderEnum.Male,
                 DreamUrl = "https://mam-marzenie.pl/marzenie/2",
                 Tags = "tag1, tag2",
                 DreamCategoryId = category2.DreamCategoryId
             };
             
             //Act
-            var _ = await Client.PutAsync("/api/dreamers", request.WithJsonContent().json).AsResponse<UpdateDreamerResponse>();
+            var _ = await Client.PutAsync("/api/dreams", request.WithJsonContent().json).AsResponse<UpdateDreamResponse>();
             
             IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Admin});
             var queryResponse = await Client.GetDreams();
@@ -111,10 +107,8 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             queryResponse.Dreams.Should().SatisfyRespectively(x =>
             {
                 x.DreamId.Should().Be(dream.DreamId);
-                x.FirstName.Should().Be(request.FirstName);
-                x.LastName.Should().Be(request.LastName);
+                x.DisplayName.Should().Be(request.DisplayName);
                 x.Age.Should().Be(request.Age);
-                x.Gender.Should().Be(request.Gender);
                 x.DreamUrl.Should().Be(request.DreamUrl);
                 x.Tags.Should().Be(request.Tags);
                 x.DreamCategory.Should().NotBeNull();
@@ -129,7 +123,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
             IntegrationTestsFixture.SetUserAdminContext();
             // Act
-            var responses = await Task.WhenAll(dreams.Select(d => Client.GetAsync($"/api/dreamers/details?dreamId={d.DreamId}").AsResponse<GetDreamResponse>()));
+            var responses = await Task.WhenAll(dreams.Select(d => Client.GetAsync($"/api/dreams/details?dreamId={d.DreamId}").AsResponse<GetDreamResponse>()));
 
             // Assert
             foreach (var response in responses)

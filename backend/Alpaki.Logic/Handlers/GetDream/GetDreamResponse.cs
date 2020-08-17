@@ -16,13 +16,16 @@ namespace Alpaki.Logic.Handlers.GetDreams
 
         public string Tags { get; set; }
 
+        public string DreamImageUrl { get; set; }
+
+
         internal static Expression<Func<Dream, GetDreamResponse>> DreamToDreamListItemMapper = dream => new GetDreamResponse
         {
             DreamId = dream.DreamId,
             Age = dream.Age,
             DreamUrl = dream.DreamUrl,
             DisplayName = dream.DisplayName,
-            Tags = dream.Tags
+            Tags = dream.Tags,
         };
     }
 }

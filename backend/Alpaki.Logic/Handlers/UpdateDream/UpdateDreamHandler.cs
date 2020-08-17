@@ -4,38 +4,28 @@ using Alpaki.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Alpaki.Logic.Handlers.UpdateDreamer
+namespace Alpaki.Logic.Handlers.UpdateDream
 {
-    public class UpdateDreamerHandler : IRequestHandler<UpdateDreamerRequest, UpdateDreamerResponse>
+    public class UpdateDreamHandler : IRequestHandler<UpdateDreamRequest, UpdateDreamResponse>
     {
         private readonly IDatabaseContext _dbContext;
 
-        public UpdateDreamerHandler(IDatabaseContext dbContext)
+        public UpdateDreamHandler(IDatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public async Task<UpdateDreamerResponse> Handle(UpdateDreamerRequest request, CancellationToken cancellationToken)
+        public async Task<UpdateDreamResponse> Handle(UpdateDreamRequest request, CancellationToken cancellationToken)
         {
             var dream = await _dbContext.Dreams.SingleAsync(x => x.DreamId == request.DreamId, cancellationToken);
 
-            if (!string.IsNullOrEmpty(dream.FirstName))
+            if (!string.IsNullOrEmpty(dream.DisplayName))
             {
-                dream.FirstName = request.FirstName;
-            }
-
-            if (!string.IsNullOrEmpty(request.LastName))
-            {
-                dream.LastName = request.LastName;
+                dream.DisplayName = request.DisplayName;
             }
 
             if (request.Age.HasValue)
             {
                 dream.Age = request.Age.Value;
-            }
-
-            if (request.Gender.HasValue)
-            {
-                dream.Gender = request.Gender.Value;
             }
 
             if (!string.IsNullOrEmpty(request.DreamUrl))
@@ -55,7 +45,7 @@ namespace Alpaki.Logic.Handlers.UpdateDreamer
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return new UpdateDreamerResponse();
+            return new UpdateDreamResponse();
         }
     }
 }

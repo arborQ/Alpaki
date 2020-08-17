@@ -33,7 +33,7 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
                 }
             }
 
-            return client.GetAsync($"/api/dreamers?{queryString}").AsResponse<GetDreamsResponse>();
+            return client.GetAsync($"/api/dreams?{queryString}").AsResponse<GetDreamsResponse>();
         }
     }
 }
