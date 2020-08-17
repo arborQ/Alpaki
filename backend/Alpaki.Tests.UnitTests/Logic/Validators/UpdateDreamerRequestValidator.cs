@@ -23,7 +23,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
             Age = 1,
             DreamUrl = "https://mam-marzenie.pl/marzenie/1",
             Tags = "tag1",
-            DreamCategoryId = 1
+            CategoryId = 1
         };
 
         private readonly IDatabaseContext _dbContext = Substitute.For<IDatabaseContext>();
@@ -118,12 +118,12 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         
         public async Task fails_when_given_dream_category_does_not_exits(long dreamCategoryId)
         {
-            _request.DreamCategoryId = dreamCategoryId;
+            _request.CategoryId = dreamCategoryId;
 
             var result = await _sut.ValidateAsync(_request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().Contain(e => e.PropertyName == nameof(UpdateDreamRequest.DreamCategoryId));
+            result.Errors.Should().Contain(e => e.PropertyName == nameof(UpdateDreamRequest.CategoryId));
         }
 
         [Theory]

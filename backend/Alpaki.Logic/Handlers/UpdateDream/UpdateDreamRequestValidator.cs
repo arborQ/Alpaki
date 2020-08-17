@@ -18,7 +18,7 @@ namespace Alpaki.Logic.Handlers.UpdateDream
 
             RuleFor(x => x.DreamUrl).NotEmpty().When(x => x.DreamUrl != null).WithMessage("Link do marzenia nie może być pusty.");
             RuleFor(x => x.Tags).NotEmpty().When(x => x.Tags != null).WithMessage("Tagi nie mogą być puste.");
-            RuleFor(x => x.DreamCategoryId).MustAsync(DreamCategoryExists).WithMessage(r => $"Kategoria o Id=[{r.DreamCategoryId}] nie istnieje");
+            RuleFor(x => x.CategoryId).MustAsync(DreamCategoryExists).WithMessage(r => $"Kategoria o Id=[{r.CategoryId}] nie istnieje");
             _dbContext = dbContext;
         }
 

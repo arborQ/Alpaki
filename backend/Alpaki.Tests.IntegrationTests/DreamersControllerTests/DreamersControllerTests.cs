@@ -15,6 +15,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Alpaki.Logic.Handlers.AddDream;
 using Alpaki.Logic.Handlers.UpdateDream;
+using System.Net.Sockets;
 
 namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
 {
@@ -33,19 +34,30 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
         public async Task DreamersController_POST_CreateDreamer()
         {
             // Arrange
+            var count = 20;
             var stepCount = 12;
             var category = _fixture.DreamCategoryBuilder(stepCount).Create();
+            var images = _fixture.ImageBuilder().CreateMany(count);
+            var volonteers = _fixture.VolunteerBuilder().CreateMany(10);
+
+            await IntegrationTestsFixture.DatabaseContext.Users.AddRangeAsync(volonteers);
             await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category);
+            await IntegrationTestsFixture.DatabaseContext.Images.AddRangeAsync(images);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+
+            var imageIds = images.Select(i => i.ImageId).ToArray();
 
             IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Admin });
 
-            var count = 20;
+
+            var index = 0;
             var random = new Random();
             var requests = _fixture
                 .Build<AddDreamRequest>()
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.CategoryId, category.DreamCategoryId)
+                .With(d => d.DreamImageId, imageIds.ElementAt(index++))
+                .With(d => d.VolunteerIds, () => volonteers.OrderBy(v => new Random().Next()).Take(5).Select(v => v.UserId).ToArray())
                 .CreateMany(count)
                 .Select(dreamer => dreamer.WithJsonContent().json);
 
@@ -62,6 +74,106 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 Assert.Equal("application/json; charset=utf-8",
                     response.Content.Headers.ContentType.ToString());
             }
+        }
+
+        [Fact]
+        public async Task DreamController_AddDream_AssignVolounteersAndImages()
+        {
+            var stepCount = 12;
+            var category = _fixture.DreamCategoryBuilder(stepCount).Create();
+            var image = _fixture.ImageBuilder().Create();
+            var volonteers = _fixture.VolunteerBuilder().CreateMany(10);
+
+            await IntegrationTestsFixture.DatabaseContext.Users.AddRangeAsync(volonteers);
+            await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category);
+            await IntegrationTestsFixture.DatabaseContext.Images.AddAsync(image);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+
+            IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Admin });
+
+
+            var random = new Random();
+            var request = _fixture
+                .Build<AddDreamRequest>()
+                .With(d => d.Age, random.Next(1, 119))
+                .With(d => d.CategoryId, category.DreamCategoryId)
+                .With(d => d.DreamImageId, image.ImageId)
+                .With(d => d.VolunteerIds, () => volonteers.OrderBy(v => random.Next()).Take(5).Select(v => v.UserId).ToArray())
+                .Create();
+
+            // Act
+            var response = await Client.PostAsync($"/api/dreams", request.AsJsonContent()).AsResponse<AddDreamResponse>();
+            var graphResponse = await Client.GetDreams(dreamId: response.DreamId);
+            var users = await Client.GetUsers(response.DreamId);
+
+            // Assert
+            var dream = graphResponse.Dreams.Single();
+            dream.DreamId.Should().Be(response.DreamId);
+            dream.DreamImageUrl.Should().Contain(image.ImageId.ToString());
+            dream.DreamImageUrl.Should().Be($"/api/images/{image.ImageId}.png");
+            users.Users.Count.Should().Be(5);
+        }
+
+        [Theory]
+        [InlineData(true, 5)]
+        [InlineData(true, 8)]
+        [InlineData(false, 2)]
+        public async Task DreamController_UpdateDream_AssignVolounteersAndImages(bool addImage, int volounteerCount)
+        {
+            var stepCount = 12;
+            var category = _fixture.DreamCategoryBuilder(stepCount).Create();
+            var image = _fixture.ImageBuilder().Create();
+            var volonteers = _fixture.VolunteerBuilder().CreateMany(10);
+            var dreamBuilder = _fixture
+                .DreamBuilder()
+                .WithCategory(category);
+
+            if (addImage)
+            {
+                dreamBuilder.WithImage();
+            }
+
+            var dream = dreamBuilder.Create();
+
+            await IntegrationTestsFixture.DatabaseContext.Dreams.AddAsync(dream);
+            await IntegrationTestsFixture.DatabaseContext.Users.AddRangeAsync(volonteers);
+            await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category);
+            await IntegrationTestsFixture.DatabaseContext.Images.AddAsync(image);
+            await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
+
+            IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Admin });
+
+
+            var random = new Random();
+            var request = _fixture
+                .Build<UpdateDreamRequest>()
+                .With(d => d.DreamId, dream.DreamId)
+                .With(d => d.Age, random.Next(1, 119))
+                .With(d => d.CategoryId, category.DreamCategoryId)
+                .With(d => d.DreamImageId, addImage ? image.ImageId : (Guid?)null)
+                .With(d => d.VolunteerIds, () => volonteers.OrderBy(v => random.Next()).Take(volounteerCount).Select(v => v.UserId).ToArray())
+                .Create();
+
+            // Act
+            await Client.PutAsync($"/api/dreams", request.AsJsonContent()).AsResponse<UpdateDreamResponse>();
+            var graphResponse = await Client.GetDreams(dreamId: dream.DreamId);
+            var users = await Client.GetUsers(dream.DreamId);
+
+            // Assert
+            var apiDream = graphResponse.Dreams.Single();
+            apiDream.DreamId.Should().Be(dream.DreamId);
+
+            if (addImage)
+            {
+                apiDream.DreamImageUrl.Should().Contain(image.ImageId.ToString());
+                apiDream.DreamImageUrl.Should().Be($"/api/images/{image.ImageId}.png");
+            }
+            else
+            {
+                apiDream.DreamImageUrl.Should().BeNull();
+            }
+
+            users.Users.Count.Should().Be(volounteerCount);
         }
 
         [Fact]
@@ -83,8 +195,8 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             };
             await IntegrationTestsFixture.DatabaseContext.Dreams.AddAsync(dream);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
-            
-            IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Coordinator});
+
+            IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Coordinator });
             var request = new UpdateDreamRequest
             {
                 DreamId = dream.DreamId,
@@ -92,16 +204,16 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 Age = 3,
                 DreamUrl = "https://mam-marzenie.pl/marzenie/2",
                 Tags = "tag1, tag2",
-                DreamCategoryId = category2.DreamCategoryId
+                CategoryId = category2.DreamCategoryId
             };
-            
+
             //Act
             var _ = await Client.PutAsync("/api/dreams", request.WithJsonContent().json).AsResponse<UpdateDreamResponse>();
-            
-            IntegrationTestsFixture.SetUserContext(new User{Role = UserRoleEnum.Admin});
+
+            IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Admin });
             var queryResponse = await Client.GetDreams();
-            
-            
+
+
             queryResponse.Should().NotBeNull();
             queryResponse.Dreams.Count.Should().Be(1);
             queryResponse.Dreams.Should().SatisfyRespectively(x =>
@@ -112,7 +224,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 x.DreamUrl.Should().Be(request.DreamUrl);
                 x.Tags.Should().Be(request.Tags);
                 x.DreamCategory.Should().NotBeNull();
-                x.DreamCategory.DreamCategoryId.Should().Be(request.DreamCategoryId);
+                x.DreamCategory.DreamCategoryId.Should().Be(request.CategoryId);
             });
         }
         public async Task DreamerScontroller_GET_ByDreamId()

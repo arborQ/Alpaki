@@ -7,9 +7,15 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
 {
     static class DreamsControllerExtensions
     {
-        public static Task<GetDreamsResponse> GetDreams(this HttpClient client, int? ageFrom = null, int? ageTo = null, DreamStateEnum? status = null, long[] categories = null)
+        public static Task<GetDreamsResponse> GetDreams(this HttpClient client, long? dreamId = null, int? ageFrom = null, int? ageTo = null, DreamStateEnum? status = null, long[] categories = null)
         {
             var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+
+            if (dreamId.HasValue)
+            {
+                queryString.Add("dreamId", dreamId.Value.ToString());
+            }
+
             if (ageFrom.HasValue)
             {
                 queryString.Add("ageFrom", ageFrom.Value.ToString());

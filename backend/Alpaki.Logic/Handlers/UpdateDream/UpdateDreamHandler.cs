@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.Database;
 using MediatR;
@@ -38,9 +39,19 @@ namespace Alpaki.Logic.Handlers.UpdateDream
                 dream.Tags = request.Tags;
             }
 
-            if (request.DreamCategoryId.HasValue)
+            if (request.CategoryId.HasValue)
             {
-                dream.DreamCategoryId = request.DreamCategoryId.Value;
+                dream.DreamCategoryId = request.CategoryId.Value;
+            }
+
+            if (request.DreamImageId.HasValue)
+            {
+                dream.DreamImageId = request.DreamImageId.Value;
+            }
+
+            if (request.VolunteerIds != null)
+            {
+                dream.Volunteers = request.VolunteerIds.Select(v => new Database.Models.AssignedDreams { VolunteerId = v }).ToList();
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);

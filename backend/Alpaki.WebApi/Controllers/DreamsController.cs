@@ -22,10 +22,16 @@ namespace Alpaki.WebApi.Controllers
 
         [HttpPost]
         [VolunteerAccess]
+        [ProducesResponseType(typeof(AddDreamResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
         public Task<AddDreamResponse> CreateDream([FromBody] AddDreamRequest request) => _mediator.Send(request);
 
         [HttpPut]
         [CoordinatorAccess]
+        [ProducesResponseType(typeof(UpdateDreamResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
         public async Task<UpdateDreamResponse> UpdateDream([FromBody] UpdateDreamRequest request)
             => await _mediator.Send(request);
 

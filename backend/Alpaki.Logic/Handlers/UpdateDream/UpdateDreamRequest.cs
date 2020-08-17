@@ -15,7 +15,7 @@ namespace Alpaki.Logic.Handlers.UpdateDream
 
         public string Tags { get; set; }
 
-        public long? DreamCategoryId { get; set; }
+        public long? CategoryId { get; set; }
 
         public Guid? DreamImageId { get; set; }
 
