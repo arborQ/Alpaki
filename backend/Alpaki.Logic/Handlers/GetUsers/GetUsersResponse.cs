@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 
 namespace Alpaki.Logic.Handlers.GetUsers
@@ -12,6 +13,8 @@ namespace Alpaki.Logic.Handlers.GetUsers
         public class UserListItem
         {
             public long UserId { get; set; }
+
+            public UserRoleEnum UserRole { get; set; }
 
             public string FirstName { get; set; }
 
@@ -28,6 +31,7 @@ namespace Alpaki.Logic.Handlers.GetUsers
             internal static Expression<Func<User, UserListItem>> UserToUserListItemMapper = user => new UserListItem
             {
                 UserId = user.UserId,
+                UserRole = user.Role,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
