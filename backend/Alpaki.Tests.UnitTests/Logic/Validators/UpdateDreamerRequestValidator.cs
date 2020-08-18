@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
@@ -7,6 +9,7 @@ using Alpaki.Database;
 using Alpaki.Database.Models;
 using Alpaki.Logic;
 using Alpaki.Logic.Handlers.UpdateDream;
+using Alpaki.Logic.Validators;
 using FluentAssertions;
 using MockQueryable.NSubstitute;
 using NSubstitute;
@@ -27,6 +30,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         };
 
         private readonly IDatabaseContext _dbContext = Substitute.For<IDatabaseContext>();
+        private readonly IImageIdValidator _imageIdValidator = Substitute.For<IImageIdValidator>();
         private readonly UpdateDreamRequestValidator _sut;
 
         public UpdateDreamerRequestValidatorTests()
@@ -34,8 +38,8 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
             var currentUserService = Substitute.For<ICurrentUserService>();
             currentUserService.CurrentUserId.Returns(1);
             currentUserService.CurrentUserRole.Returns(UserRoleEnum.Admin);
-
-            _sut = new UpdateDreamRequestValidator(new UserScopedDatabaseReadContext(_dbContext, currentUserService));
+            _imageIdValidator.ImageIdIsAvailable(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(true);
+            _sut = new UpdateDreamRequestValidator(new UserScopedDatabaseReadContext(_dbContext, currentUserService), _imageIdValidator);
             var categories = new List<DreamCategory>
             {
                 new DreamCategory

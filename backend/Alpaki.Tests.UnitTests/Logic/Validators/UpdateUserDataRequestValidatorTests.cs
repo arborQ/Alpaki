@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.Database;
 using Alpaki.Database.Models;
 using Alpaki.Logic;
 using Alpaki.Logic.Handlers.UpdateUserData;
+using Alpaki.Logic.Validators;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
 using MockQueryable.NSubstitute;
@@ -19,14 +21,16 @@ namespace Alpaki.Tests.UnitTests.Logic.Validators
         private readonly UpdateUserDataRequestValidator _sut;
         private readonly IUserScopedDatabaseReadContext _databaseContext;
         private readonly IDatabaseContext _fullDatabaseContext;
+        private readonly IImageIdValidator _imageIdValidator = Substitute.For<IImageIdValidator>();
 
         public UpdateUserDataRequestValidatorTests()
         {
             _fixture = new Fixture();
             _databaseContext = Substitute.For<IUserScopedDatabaseReadContext>();
             _fullDatabaseContext = Substitute.For<IDatabaseContext>();
+            _imageIdValidator.ImageIdIsAvailable(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(true);
 
-            _sut = new UpdateUserDataRequestValidator(_databaseContext, _fullDatabaseContext);
+            _sut = new UpdateUserDataRequestValidator(_databaseContext, _fullDatabaseContext, _imageIdValidator);
         }
 
         [Fact]

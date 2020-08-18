@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Alpaki.Logic.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ namespace Alpaki.Logic.Handlers.UpdateDream
     {
         private readonly IUserScopedDatabaseReadContext _dbContext;
 
-        public UpdateDreamRequestValidator(IUserScopedDatabaseReadContext dbContext)
+        public UpdateDreamRequestValidator(IUserScopedDatabaseReadContext dbContext, IImageIdValidator imageValidator)
         {
             RuleFor(x => x.DreamId).NotNull();
             RuleFor(x => x.DreamId).MustAsync(DreamExists);
@@ -19,6 +20,8 @@ namespace Alpaki.Logic.Handlers.UpdateDream
             RuleFor(x => x.DreamUrl).NotEmpty().When(x => x.DreamUrl != null).WithMessage("Link do marzenia nie może być pusty.");
             RuleFor(x => x.Tags).NotEmpty().When(x => x.Tags != null).WithMessage("Tagi nie mogą być puste.");
             RuleFor(x => x.CategoryId).MustAsync(DreamCategoryExists).When(x => x.CategoryId != null).WithMessage(r => $"Kategoria o Id=[{r.CategoryId}] nie istnieje");
+            RuleFor(x => x.DreamImageId).MustAsync(imageValidator.ImageIdIsAvailable).When(a => a.DreamImageId.HasValue).WithMessage("Obraz jest już przypisany do innego elementu.");
+
             _dbContext = dbContext;
         }
 

@@ -4,6 +4,7 @@ using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
 using Alpaki.Logic.Features.Invitations.Repositories;
 using Alpaki.Logic.PipelineBehaviours;
 using Alpaki.Logic.Services;
+using Alpaki.Logic.Validators;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNet.Identity;
@@ -26,6 +27,7 @@ namespace Alpaki.Logic
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddTransient<IUserScopedDatabaseReadContext, UserScopedDatabaseReadContext>();
+            services.AddTransient<IImageIdValidator, ImageIdValidator>();
 
             return services;
         }

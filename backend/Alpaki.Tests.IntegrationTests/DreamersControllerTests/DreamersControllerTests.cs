@@ -57,7 +57,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 .Build<AddDreamRequest>()
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.CategoryId, category.DreamCategoryId)
-                .With(d => d.DreamImageId, imageIds.ElementAt(index++))
+                .With(d => d.DreamImageId, () => imageIds.ElementAt(index++))
                 .With(d => d.VolunteerIds, () => volonteers.OrderBy(v => new Random().Next()).Take(5).Select(v => v.UserId).ToArray())
                 .CreateMany(count)
                 .Select(dreamer => dreamer.WithJsonContent().json);
@@ -67,14 +67,14 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             var graphResponse = await Client.GetDreams();
 
             // Assert
-            Assert.Equal(count, graphResponse.Dreams.Count);
-
             foreach (var response in responses)
             {
                 response.EnsureSuccessStatusCode(); // Status Code 200-299
                 Assert.Equal("application/json; charset=utf-8",
                     response.Content.Headers.ContentType.ToString());
             }
+
+            Assert.Equal(count, graphResponse.Dreams.Count);
         }
 
         [Fact]
@@ -116,10 +116,10 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
         }
 
         [Theory]
-        [InlineData(true, 5)]
-        [InlineData(true, 8)]
-        [InlineData(false, 2)]
-        public async Task DreamController_UpdateDream_AssignVolounteersAndImages(bool addImage, int volounteerCount)
+        [InlineData(5)]
+        [InlineData(8)]
+        [InlineData(2)]
+        public async Task DreamController_UpdateDream_AssignVolounteersAndImages(int volounteerCount)
         {
             var stepCount = 12;
             var category = _fixture.DreamCategoryBuilder(stepCount).Create();
@@ -129,10 +129,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 .DreamBuilder()
                 .WithCategory(category);
 
-            if (addImage)
-            {
-                dreamBuilder.WithImage();
-            }
+            dreamBuilder.WithImage();
 
             var dream = dreamBuilder.Create();
 
@@ -151,7 +148,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 .With(d => d.DreamId, dream.DreamId)
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.CategoryId, category.DreamCategoryId)
-                .With(d => d.DreamImageId, addImage ? image.ImageId : (Guid?)null)
+                .With(d => d.DreamImageId, image.ImageId)
                 .With(d => d.VolunteerIds, () => volonteers.OrderBy(v => random.Next()).Take(volounteerCount).Select(v => v.UserId).ToArray())
                 .Create();
 
@@ -164,15 +161,8 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             var apiDream = graphResponse.Dreams.Single();
             apiDream.DreamId.Should().Be(dream.DreamId);
 
-            if (addImage)
-            {
-                apiDream.DreamImageUrl.Should().Contain(image.ImageId.ToString());
-                apiDream.DreamImageUrl.Should().Be($"/api/images/{image.ImageId}.png");
-            }
-            else
-            {
-                apiDream.DreamImageUrl.Should().BeNull();
-            }
+            apiDream.DreamImageUrl.Should().Contain(image.ImageId.ToString());
+            apiDream.DreamImageUrl.Should().Be($"/api/images/{image.ImageId}.png");
 
             users.Users.Count.Should().Be(volounteerCount);
         }
