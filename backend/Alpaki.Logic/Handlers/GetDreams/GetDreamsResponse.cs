@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 
 namespace Alpaki.Logic.Handlers.GetDreams
@@ -14,15 +13,13 @@ namespace Alpaki.Logic.Handlers.GetDreams
         {
             public long DreamId { get; set; }
 
-            public string FirstName { get; set; }
-
-            public string LastName { get; set; }
+            public string DisplayName { get; set; }
 
             public int Age { get; set; }
 
-            public GenderEnum Gender { get; set; }
-
             public string DreamUrl { get; set; }
+
+            public string DreamImageUrl { get; set; }
 
             public string Tags { get; set; }
 
@@ -33,10 +30,9 @@ namespace Alpaki.Logic.Handlers.GetDreams
                 DreamId = dream.DreamId,
                 Age = dream.Age,
                 DreamUrl = dream.DreamUrl,
-                FirstName = dream.FirstName,
-                LastName = dream.LastName,
-                Gender = dream.Gender,
+                DisplayName = dream.DisplayName,
                 Tags = dream.Tags,
+                DreamImageUrl = dream.DreamImageId.HasValue ? $"/api/images/{dream.DreamImageId}.png" : null,
                 DreamCategory = new DreamCategoryItem
                 {
                     DreamCategoryId = dream.DreamCategory.DreamCategoryId,

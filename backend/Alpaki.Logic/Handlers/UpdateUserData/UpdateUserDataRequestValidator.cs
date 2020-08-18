@@ -1,4 +1,5 @@
 ﻿using Alpaki.Database;
+using Alpaki.Logic.Validators;
 using FluentValidation;
 using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ namespace Alpaki.Logic.Handlers.UpdateUserData
 {
     public class UpdateUserDataRequestValidator : AbstractValidator<UpdateUserDataRequest>
     {
-        public UpdateUserDataRequestValidator(IUserScopedDatabaseReadContext userScopedDatabaseReadContext, IDatabaseContext databaseContext)
+        public UpdateUserDataRequestValidator(IUserScopedDatabaseReadContext userScopedDatabaseReadContext, IDatabaseContext databaseContext, IImageIdValidator imageValidator)
         {
             RuleFor(r => r.UserId)
                 .MustAsync((userId, cancellationToken) => userScopedDatabaseReadContext.Users.AnyAsync(u => u.UserId == userId, cancellationToken))
@@ -27,6 +28,8 @@ namespace Alpaki.Logic.Handlers.UpdateUserData
                 .MustAsync((id, cancellationToken) => databaseContext.Users.AllAsync(u => u.ProfileImageId != id, cancellationToken))
                 .When(u => u.ProfileImageId.HasValue)
                 .WithMessage(a => $"Plik o Id=[{a.ProfileImageId}] jest już przypisany do innego konta");
+
+            RuleFor(u => u.ProfileImageId).MustAsync(imageValidator.ImageIdIsAvailable).When(a => a.ProfileImageId.HasValue).WithMessage("Obraz jest już przypisany do innego elementu.");
         }
     }
 }

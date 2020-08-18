@@ -6,36 +6,36 @@ using Alpaki.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
+namespace Alpaki.Logic.Handlers.AddDream
 {
-    public class CreateDreamerHandler : IRequestHandler<CreateDreamerRequest, CreateDreamerResponse>
+    public class AddDreamHandler : IRequestHandler<AddDreamRequest, AddDreamResponse>
     {
         private readonly IDatabaseContext _databaseContext;
 
-        public CreateDreamerHandler(IDatabaseContext databaseContext)
+        public AddDreamHandler(IDatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
         }
 
-        public async Task<CreateDreamerResponse> Handle(CreateDreamerRequest request, CancellationToken cancellationToken)
+        public async Task<AddDreamResponse> Handle(AddDreamRequest request, CancellationToken cancellationToken)
         {
             var requiredSteps = await _databaseContext.DreamCategoryDefaultSteps.Where(s => s.DreamCategoryId == request.CategoryId).ToListAsync();
 
             var newDream = new Database.Models.Dream
             {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                DisplayName = request.DisplayName,
                 Age = request.Age,
                 DreamUrl = request.DreamUrl,
-                Gender = request.Gender,
                 DreamCategoryId = request.CategoryId,
                 Tags = request.Tags,
                 DreamState = DreamStateEnum.Created,
+                DreamImageId = request.DreamImageId,
+                Volunteers = request.VolunteerIds.Select(v => new Database.Models.AssignedDreams { VolunteerId = v }).ToList(),
                 RequiredSteps = requiredSteps
                     .Select(s => new Database.Models.DreamStep
                     {
                         StepDescription = s.StepDescription,
-                        StepState = !request.IsSponsorRequired && s.IsSponsorRelated? StepStateEnum.Skiped : StepStateEnum.Awaiting
+                        StepState = !request.IsSponsorRequired && s.IsSponsorRelated ? StepStateEnum.Skiped : StepStateEnum.Awaiting
                     })
                     .ToList()
             };
@@ -43,7 +43,7 @@ namespace Alpaki.Logic.Features.Dreamer.CreateDreamer
             await _databaseContext.Dreams.AddAsync(newDream);
             await _databaseContext.SaveChangesAsync();
 
-            return new CreateDreamerResponse { DreamerId = newDream.DreamId };
+            return new AddDreamResponse { DreamId = newDream.DreamId };
         }
     }
 }

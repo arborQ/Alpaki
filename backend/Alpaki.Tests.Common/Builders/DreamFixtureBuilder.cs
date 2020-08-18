@@ -18,6 +18,8 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures.Builders
                 .With(u => u.DreamState, DreamStateEnum.Created)
                 .Without(u => u.DreamCategory)
                 .Without(u => u.DreamCategoryId)
+                .Without(u => u.DreamImage)
+                .Without(u => u.DreamImageId)
                 .Without(u => u.RequiredSteps)
                 .Without(u => u.Volunteers);
         }
@@ -30,6 +32,14 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures.Builders
         public static IPostprocessComposer<Dream> WithCategory(this IPostprocessComposer<Dream> postProcessComposer, DreamCategory category)
         {
             return postProcessComposer.With(d => d.DreamCategory, category);
+        }
+
+        public static IPostprocessComposer<Dream> WithImage(this IPostprocessComposer<Dream> postProcessComposer, int imageSize = 256)
+        {
+            var fixture = new Fixture();
+            var newImage = fixture.ImageBuilder(imageSize).Create();
+
+            return postProcessComposer.With(d => d.DreamImage, newImage);
         }
     }
 }

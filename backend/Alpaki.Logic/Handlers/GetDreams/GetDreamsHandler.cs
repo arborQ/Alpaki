@@ -27,11 +27,6 @@ namespace Alpaki.Logic.Handlers.GetDreams
         {
             var dreamerQuery = _databaseContext.Dreams;
 
-            if (request.Gender.HasValue)
-            {
-                dreamerQuery = dreamerQuery.Where(d => d.Gender == request.Gender.Value);
-            }
-
             if (request.Status.HasValue)
             {
                 dreamerQuery = dreamerQuery.Where(d => d.DreamState == request.Status.Value);
@@ -54,7 +49,7 @@ namespace Alpaki.Logic.Handlers.GetDreams
 
             if (!string.IsNullOrEmpty(request.SearchName))
             {
-                dreamerQuery = dreamerQuery.Where(d => (d.FirstName + d.LastName).Contains(request.SearchName));
+                dreamerQuery = dreamerQuery.Where(d => d.DisplayName.Contains(request.SearchName));
             }
 
             dreamerQuery = dreamerQuery

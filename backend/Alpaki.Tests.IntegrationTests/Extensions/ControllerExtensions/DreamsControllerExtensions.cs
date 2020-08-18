@@ -7,9 +7,15 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
 {
     static class DreamsControllerExtensions
     {
-        public static Task<GetDreamsResponse> GetDreams(this HttpClient client, int? ageFrom = null, int? ageTo = null, GenderEnum? gender = null, DreamStateEnum? status = null, long[] categories = null)
+        public static Task<GetDreamsResponse> GetDreams(this HttpClient client, long? dreamId = null, int? ageFrom = null, int? ageTo = null, DreamStateEnum? status = null, long[] categories = null)
         {
             var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+
+            if (dreamId.HasValue)
+            {
+                queryString.Add("dreamId", dreamId.Value.ToString());
+            }
+
             if (ageFrom.HasValue)
             {
                 queryString.Add("ageFrom", ageFrom.Value.ToString());
@@ -18,11 +24,6 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
             if (ageTo.HasValue)
             {
                 queryString.Add("ageTo", ageTo.Value.ToString());
-            }
-
-            if (gender.HasValue)
-            {
-                queryString.Add("gender", ((int)gender.Value).ToString());
             }
 
             if (status.HasValue)
@@ -38,7 +39,7 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
                 }
             }
 
-            return client.GetAsync($"/api/dreamers?{queryString}").AsResponse<GetDreamsResponse>();
+            return client.GetAsync($"/api/dreams?{queryString}").AsResponse<GetDreamsResponse>();
         }
     }
 }

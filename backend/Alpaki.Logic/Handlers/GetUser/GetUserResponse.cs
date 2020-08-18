@@ -32,7 +32,7 @@ namespace Alpaki.Logic.Handlers.GetUser
             Email = user.Email,
             Brand = user.Brand,
             PhoneNumber = user.PhoneNumber,
-            ProfileImageUrl = $"/api/images/{user.ProfileImageId}.png"
+            ProfileImageUrl = user.ProfileImageId.HasValue ? $"/api/images/{user.ProfileImageId}.png" : null
         };
     }
 }

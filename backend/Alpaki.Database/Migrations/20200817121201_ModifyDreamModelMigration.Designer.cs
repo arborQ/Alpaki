@@ -4,14 +4,16 @@ using Alpaki.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpaki.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200817121201_ModifyDreamModelMigration")]
+    partial class ModifyDreamModelMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,14 +56,24 @@ namespace Alpaki.Database.Migrations
                     b.Property<DateTimeOffset>("DreamComeTrueDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("DreamImageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("DreamState")
                         .HasColumnType("int");
 
                     b.Property<string>("DreamUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
@@ -69,8 +81,6 @@ namespace Alpaki.Database.Migrations
                     b.HasKey("DreamId");
 
                     b.HasIndex("DreamCategoryId");
-
-                    b.HasIndex("DreamImageId");
 
                     b.ToTable("Dreams");
                 });
@@ -267,7 +277,7 @@ namespace Alpaki.Database.Migrations
                             Email = "admin@admin.pl",
                             FirstName = "admin",
                             LastName = "admin",
-                            PasswordHash = "ANsulF8MvjDYgyN8kMxN8a4Rljleu+uCtWbPlTpy33vZfIeSK+fYUms+nz6lfSGQUg==",
+                            PasswordHash = "AMd9eYbMgjL7k21JUNWTq3wyrxdsncGFVfvkNvb1UqHgU49qcylbiYhPJM6dwtlSfg==",
                             Role = 7
                         });
                 });
@@ -294,10 +304,6 @@ namespace Alpaki.Database.Migrations
                         .HasForeignKey("DreamCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Alpaki.Database.Models.Image", "DreamImage")
-                        .WithMany()
-                        .HasForeignKey("DreamImageId");
                 });
 
             modelBuilder.Entity("Alpaki.Database.Models.DreamCategoryDefaultStep", b =>
