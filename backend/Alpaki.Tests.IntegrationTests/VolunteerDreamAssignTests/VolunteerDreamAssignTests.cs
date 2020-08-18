@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Extensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;

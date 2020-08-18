@@ -2,8 +2,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Fixtures;
-using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
