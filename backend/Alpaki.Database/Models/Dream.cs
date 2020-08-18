@@ -12,17 +12,10 @@ namespace Alpaki.Database.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long DreamId { get; set; }
 
-        [MaxLength(250)]
-        [Required]
-        public string FirstName { get; set; }
-
-        [MaxLength(250)]
-        [Required]
-        public string LastName { get; set; }
+        [MaxLength(500)]
+        public string DisplayName { get; set; }
 
         public int Age { get; set; }
-
-        public GenderEnum Gender { get; set; }
 
         public string DreamUrl { get; set; }
 
@@ -41,5 +34,9 @@ namespace Alpaki.Database.Models
 
         public virtual ICollection<AssignedDreams> Volunteers { get; set; }
 
+        [ForeignKey(nameof(DreamImage))]
+        public Guid? DreamImageId { get; set; }
+
+        public Image DreamImage { get; set; }
     }
 }

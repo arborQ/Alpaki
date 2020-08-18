@@ -5,6 +5,7 @@ using Alpaki.Logic.Features.Invitations.Repositories;
 using Alpaki.Logic.Mails;
 using Alpaki.Logic.PipelineBehaviours;
 using Alpaki.Logic.Services;
+using Alpaki.Logic.Validators;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -27,8 +28,9 @@ namespace Alpaki.Logic
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
             services.AddSingleton(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
             services.AddTransient<IUserScopedDatabaseReadContext, UserScopedDatabaseReadContext>();
+            services.AddTransient<IImageIdValidator, ImageIdValidator>();
             services.AddMailKit();
-            
+          
             return services;
         }
     }

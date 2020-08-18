@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Alpaki.Database;
 using Alpaki.Database.Models;
-using Alpaki.Logic.Features.Dreamer.CreateDreamer;
+using Alpaki.Logic.Handlers.AddDream;
 using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
 using AutoFixture;
@@ -16,20 +16,20 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
     {
         private readonly Fixture _fixture;
         private readonly IDatabaseContext _databaseContext;
-        private readonly CreateDreamerHandler _sut;
+        private readonly AddDreamHandler _sut;
 
         public CreateDreamerHandlerTests()
         {
             _fixture = new Fixture();
             _databaseContext = Substitute.For<IDatabaseContext>();
-            _sut = new CreateDreamerHandler(_databaseContext);
+            _sut = new AddDreamHandler(_databaseContext);
         }
 
         [Fact]
         public async Task CreateDreamerHandler_Handle_AddDream()
         {
             // Arrange
-            var request = _fixture.Create<CreateDreamerRequest>();
+            var request = _fixture.Create<AddDreamRequest>();
             var dreamsDbMock = _fixture.DreamBuilder().CreateMany(10).AsQueryable().BuildMockDbSet();
             var steps = _fixture.DreamCategoryDefaultStepBuilder().With(s => s.DreamCategoryId, request.CategoryId).CreateMany(20).AsQueryable().BuildMockDbSet();
             _databaseContext.Dreams.Returns(dreamsDbMock);
@@ -41,11 +41,9 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
             // Assert
             await _databaseContext.Received(1).SaveChangesAsync(default);
             await dreamsDbMock.Received(1).AddAsync(Arg.Any<Dream>());
-            await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.FirstName == request.FirstName));
-            await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.LastName == request.LastName));
+            await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.DisplayName == request.DisplayName));
             await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.Age == request.Age));
             await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.DreamCategoryId == request.CategoryId));
-            await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.Gender == request.Gender));
             await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.DreamUrl == request.DreamUrl));
             await dreamsDbMock.Received(1).AddAsync(Arg.Is<Dream>(ad => ad.RequiredSteps.Count == steps.Count()));
         }
@@ -58,7 +56,7 @@ namespace Alpaki.Tests.UnitTests.Logic.Handlers
         public async Task CreateDreamerHandler_Handle_AddDream_WithRequiredSponsor(int sponsorStepCount, int normalStepCount)
         {
             // Arrange
-            var request = _fixture.Build<CreateDreamerRequest>().With(r => r.IsSponsorRequired, false).Create();
+            var request = _fixture.Build<AddDreamRequest>().With(r => r.IsSponsorRequired, false).Create();
             var dreamsDbMock = _fixture.DreamBuilder().CreateMany(10).AsQueryable().BuildMockDbSet();
             var stepBuilder = _fixture.DreamCategoryDefaultStepBuilder().With(s => s.DreamCategoryId, request.CategoryId);
             var normalSteps = stepBuilder.With(s => s.IsSponsorRelated, false).CreateMany(normalStepCount);

@@ -55,10 +55,6 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
 
             var ageToFilterDreamsTask = Client.GetDreams(ageTo: ageTo);
 
-            var genderMaleFilterDreamsTask = Client.GetDreams(gender:GenderEnum.Male);
-
-            var genderFemaleFilterDreamsTask = Client.GetDreams(gender: GenderEnum.Female);
-
             var doneStatusFilterDreamsTask = Client.GetDreams(status: DreamStateEnum.Done);
 
             var categoriesFilterDreamsTask = Client.GetDreams(categories: new[] { categoryA.DreamCategoryId });
@@ -70,8 +66,6 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
                 ageFilterDreamsTask,
                 ageFromFilterDreamsTask,
                 ageToFilterDreamsTask,
-                genderMaleFilterDreamsTask,
-                genderFemaleFilterDreamsTask,
                 doneStatusFilterDreamsTask,
                 categoriesFilterDreamsTask,
                 allCategoriesFilterDreamsTask
@@ -83,8 +77,6 @@ namespace Alpaki.Tests.IntegrationTests.DreamsGraphQL
             Assert.Equal(dreams.Where(d => d.Age >= ageFrom && d.Age <= ageTo).Count(), (await ageFilterDreamsTask).Dreams.Count());
             Assert.Equal(dreams.Where(d => d.Age >= ageFrom).Count(), (await ageFromFilterDreamsTask).Dreams.Count());
             Assert.Equal(dreams.Where(d => d.Age <= ageTo).Count(), (await ageToFilterDreamsTask).Dreams.Count());
-            Assert.Equal(dreams.Where(d => d.Gender == GenderEnum.Male).Count(), (await genderMaleFilterDreamsTask).Dreams.Count());
-            Assert.Equal(dreams.Where(d => d.Gender == GenderEnum.Female).Count(), (await genderFemaleFilterDreamsTask).Dreams.Count());
             Assert.Equal(dreams.Where(d => d.DreamState == DreamStateEnum.Done).Count(), (await doneStatusFilterDreamsTask).Dreams.Count());
             Assert.Equal(dreamCount / 2, (await categoriesFilterDreamsTask).Dreams.Count());
             Assert.Equal(dreamCount, (await allCategoriesFilterDreamsTask).Dreams.Count());
