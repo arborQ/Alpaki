@@ -2,6 +2,7 @@
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
 using Alpaki.Logic.Features.Invitations.Repositories;
+using Alpaki.Logic.Mails;
 using Alpaki.Logic.PipelineBehaviours;
 using Alpaki.Logic.Services;
 using FluentValidation;
@@ -26,7 +27,8 @@ namespace Alpaki.Logic
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
             services.AddSingleton(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
             services.AddTransient<IUserScopedDatabaseReadContext, UserScopedDatabaseReadContext>();
-
+            services.AddMailKit();
+            
             return services;
         }
     }
