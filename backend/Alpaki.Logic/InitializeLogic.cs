@@ -8,7 +8,7 @@ using Alpaki.Logic.Services;
 using Alpaki.Logic.Validators;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
 
@@ -26,7 +26,7 @@ namespace Alpaki.Logic
             services.AddSingleton<ISystemClock>(new SystemClock());
             services.AddScoped<IInvitationRepository, InvitationRepository>();
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
-            services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddSingleton(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
             services.AddTransient<IUserScopedDatabaseReadContext, UserScopedDatabaseReadContext>();
             services.AddTransient<IImageIdValidator, ImageIdValidator>();
             services.AddMailKit();
