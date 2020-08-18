@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 
 namespace Alpaki.Logic.Handlers.GetUser
@@ -7,7 +8,9 @@ namespace Alpaki.Logic.Handlers.GetUser
     public class GetUserResponse
     {
         public long UserId { get; set; }
-
+        
+        public UserRoleEnum UserRole { get; set; }
+        
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -25,6 +28,7 @@ namespace Alpaki.Logic.Handlers.GetUser
             UserId = user.UserId,
             FirstName = user.FirstName,
             LastName = user.LastName,
+            UserRole = user.Role,
             Email = user.Email,
             Brand = user.Brand,
             PhoneNumber = user.PhoneNumber,
