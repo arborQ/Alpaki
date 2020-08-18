@@ -53,6 +53,8 @@ namespace Alpaki.Database
                 .HasIndex(x => x.Email)
                 .IsUnique();
 
+            modelBuilder.Entity<Sponsor>();
+
             SeedData(modelBuilder);
         }
 
@@ -86,5 +88,7 @@ namespace Alpaki.Database
         public DbSet<Invitation> Invitations { get; set; }
 
         public DbSet<Image> Images { get; set; }
+        
+        public DbSet<Sponsor> Sponsors { get; set; }
     }
 }

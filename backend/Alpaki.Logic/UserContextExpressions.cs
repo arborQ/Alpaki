@@ -16,6 +16,7 @@ namespace Alpaki.Logic
         public IQueryable<DreamCategory> DreamCategories { get; }
       
         public IQueryable<Image> Images { get; }
+        public  IQueryable<Sponsor> Sponsors { get; }
     }
 
     public class UserScopedDatabaseReadContext : IUserScopedDatabaseReadContext
@@ -45,6 +46,7 @@ namespace Alpaki.Logic
         }
         
         public IQueryable<Image> Images => _databaseContext.Images.AsNoTracking();
+        public IQueryable<Sponsor> Sponsors => _databaseContext.Sponsors.AsNoTracking();
 
         public IQueryable<User> Users
         {

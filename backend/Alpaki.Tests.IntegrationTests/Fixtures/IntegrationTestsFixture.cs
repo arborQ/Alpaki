@@ -38,6 +38,12 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures
             ServerClient = TestServer.CreateClient();
         }
 
+        public void SetUserVolunteerContext()
+        {
+            SetUserContext(new User { Role = UserRoleEnum.Volunteer });
+        }
+
+        
         public void SetUserCoordinatorContext()
         {
             SetUserContext(new User { Role = UserRoleEnum.Coordinator });
