@@ -9,7 +9,7 @@ namespace Alpaki.Logic.Handlers.GetUser
     {
         public long UserId { get; set; }
         
-        public UserRoleItem UserRole { get; set; }
+        public UserRoleEnum UserRole { get; set; }
         
         public string FirstName { get; set; }
 
@@ -28,21 +28,11 @@ namespace Alpaki.Logic.Handlers.GetUser
             UserId = user.UserId,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            UserRole = new UserRoleItem
-            {
-                Id = (int)user.Role,
-                Name = user.Role.ToString()
-            },
+            UserRole = user.Role,
             Email = user.Email,
             Brand = user.Brand,
             PhoneNumber = user.PhoneNumber,
             ProfileImageUrl = $"/api/images/{user.ProfileImageId}.png"
         };
-
-        public class UserRoleItem
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-        }
     }
 }
