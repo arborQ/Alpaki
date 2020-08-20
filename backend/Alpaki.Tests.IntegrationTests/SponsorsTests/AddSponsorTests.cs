@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using FluentAssertions;
@@ -22,7 +23,9 @@ namespace Alpaki.Tests.IntegrationTests.SponsorsTests
                 Name = "H&M",
                 Mail = "contact@handm.pl",
                 ContactPerson = "Adam Kowalski",
-                PhoneNumber = "123456789"
+                PhoneNumber = "123456789",
+                Brand = "Kraków",
+                CooperationType = SponsorCooperationEnum.Permanent
             };
 
             var sponsor = await Client.AddSponsor(request);
@@ -34,11 +37,13 @@ namespace Alpaki.Tests.IntegrationTests.SponsorsTests
             sponsorsResponse.Should().NotBeNull();
             sponsorsResponse.Sponsors.Should().NotBeNull().And.SatisfyRespectively(x =>
             {
-                x.Id.Should().BePositive();
+                x.SponsorId.Should().BePositive();
                 x.Name.Should().Be(request.Name);
                 x.Mail.Should().Be(request.Mail);
                 x.ContactPerson.Should().Be(request.ContactPerson);
                 x.PhoneNumber.Should().Be(request.PhoneNumber);
+                x.Brand.Should().Be(request.Brand);
+                x.CooperationType.Should().Be(request.CooperationType);
             });
         }
 

@@ -1,9 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.Database;
-using Alpaki.Database.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Logic.Handlers.Sponsors.UpdateSponsor
 {
@@ -37,6 +35,16 @@ namespace Alpaki.Logic.Handlers.Sponsors.UpdateSponsor
             if (!string.IsNullOrWhiteSpace(request.Mail))
             {
                 sponsor.Mail = request.Mail;
+            }
+            
+            if (!string.IsNullOrWhiteSpace(request.Brand))
+            {
+                sponsor.Brand = request.Brand;
+            }
+            
+            if (request.CooperationType.HasValue)
+            {
+                sponsor.CooperationType = request.CooperationType.Value;
             }
             
             await _dbContext.SaveChangesAsync(cancellationToken);

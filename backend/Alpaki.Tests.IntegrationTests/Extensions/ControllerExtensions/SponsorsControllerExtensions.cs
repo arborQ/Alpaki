@@ -1,6 +1,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Logic.Handlers.Sponsors.GetSponsors;
+using Alpaki.Logic.Handlers.Sponsors.ResponoseDtos;
 
 namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
 {
@@ -16,12 +18,18 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
         {
             return client.GetAsync($"/api/sponsors").AsResponse<GetSponsorsResponse>();
         }
+        internal static Task<SponsorItem> GetSponsor(this HttpClient client, long sponsorId)
+        {
+            return client.GetAsync($"/api/sponsors/{sponsorId}").AsResponse<SponsorItem>();
+        }
         internal class AddSponsorRequest
         {
             public string Name { get; set; }
             public string ContactPerson { get; set; }
             public string PhoneNumber { get; set; }
             public string Mail { get; set; }
+            public string Brand { get; set; }
+            public SponsorCooperationEnum CooperationType { get; set; }
         }
     
         internal class AddSponsorResponse

@@ -21,10 +21,12 @@ namespace Alpaki.Logic.Handlers.Sponsors.AddSponsor
                 Name = request.Name,
                 ContactPerson = request.ContactPerson,
                 PhoneNumber = request.PhoneNumber,
-                Mail = request.Mail
+                Mail = request.Mail,
+                Brand = request.Brand,
+                CooperationType =  request.CooperationType
             };
 
-            _dbContext.Sponsors.Add(sponsor);
+            await _dbContext.Sponsors.AddAsync(sponsor, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return new AddSponsorResponse(sponsor.SponsorId);
         }

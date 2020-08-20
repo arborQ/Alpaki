@@ -1,11 +1,10 @@
 using Alpaki.CrossCutting.Enums;
-using MediatR;
 
-namespace Alpaki.Logic.Handlers.Sponsors.UpdateSponsor
+namespace Alpaki.Logic.Handlers.Sponsors.ResponoseDtos
 {
-    public class UpdateSponsorRequest : IRequest<UpdateSponsorResponse>
+    public class SponsorItem
     {
-        public long Id { get; set; }
+        public long SponsorId { get; set; }
         public string Name { get; set; }
         public string ContactPerson { get; set; }
         public string PhoneNumber { get; set; }

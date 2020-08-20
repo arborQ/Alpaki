@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Alpaki.CrossCutting.Enums;
 using Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using FluentAssertions;
@@ -23,7 +24,9 @@ namespace Alpaki.Tests.IntegrationTests.SponsorsTests
                 Name = "H&M",
                 Mail = "contact@handm.pl",
                 ContactPerson = "Adam Kowalski",
-                PhoneNumber = "123456789"
+                PhoneNumber = "123456789",
+                Brand = "Kraków",
+                CooperationType = SponsorCooperationEnum.Permanent
             });
             
             var request = new UpdateSponsorRequest
@@ -32,7 +35,9 @@ namespace Alpaki.Tests.IntegrationTests.SponsorsTests
                 Name = "H&M2",
                 Mail = "contact2@handm.pl",
                 ContactPerson = "Adam Kowalski2",
-                PhoneNumber = "1234567892"
+                PhoneNumber = "1234567892",
+                Brand = "Kraków",
+                CooperationType = SponsorCooperationEnum.Permanent
             };
             var response = await Client.PutAsync("/api/sponsors", request.WithJsonContent().json);
             response.EnsureSuccessStatusCode();
@@ -41,11 +46,13 @@ namespace Alpaki.Tests.IntegrationTests.SponsorsTests
             sponsorsResponse.Should().NotBeNull();
             sponsorsResponse.Sponsors.Should().NotBeNull().And.SatisfyRespectively(x =>
             {
-                x.Id.Should().BePositive();
+                x.SponsorId.Should().BePositive();
                 x.Name.Should().Be(request.Name);
                 x.Mail.Should().Be(request.Mail);
                 x.ContactPerson.Should().Be(request.ContactPerson);
                 x.PhoneNumber.Should().Be(request.PhoneNumber);
+                x.Brand.Should().Be(request.Brand);
+                x.CooperationType.Should().Be(request.CooperationType);
             });
         }
 
@@ -56,6 +63,8 @@ namespace Alpaki.Tests.IntegrationTests.SponsorsTests
             public string ContactPerson { get; set; }
             public string PhoneNumber { get; set; }
             public string Mail { get; set; }
+            public string Brand { get; set; }
+            public SponsorCooperationEnum? CooperationType { get; set; }
         }
     }
 }

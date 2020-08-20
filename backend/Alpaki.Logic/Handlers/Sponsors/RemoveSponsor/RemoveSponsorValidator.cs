@@ -12,7 +12,7 @@ namespace Alpaki.Logic.Handlers.Sponsors.RemoveSponsor
         public RemoveSponsorValidator(IUserScopedDatabaseReadContext dbContext)
         {
             _dbContext = dbContext;
-            RuleFor(x => x.Id).MustAsync(Exits).WithMessage(x=> $"Sponsor od podanym id [Id={x.Id}] nie istnieje.");
+            RuleFor(x => x.Id).MustAsync(Exits).WithMessage(x=> $"Sponsor od podanym id [SponsorId={x.Id}] nie istnieje.");
         }
 
         private async Task<bool> Exits(long id, CancellationToken cancellationToken) 

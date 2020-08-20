@@ -1,8 +1,10 @@
 using System.Net;
 using System.Threading.Tasks;
 using Alpaki.Logic.Handlers.Sponsors.AddSponsor;
+using Alpaki.Logic.Handlers.Sponsors.GetSponsor;
 using Alpaki.Logic.Handlers.Sponsors.GetSponsors;
 using Alpaki.Logic.Handlers.Sponsors.RemoveSponsor;
+using Alpaki.Logic.Handlers.Sponsors.ResponoseDtos;
 using Alpaki.Logic.Handlers.Sponsors.UpdateSponsor;
 using Alpaki.WebApi.Policies;
 using MediatR;
@@ -45,5 +47,12 @@ namespace Alpaki.WebApi.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<GetSponsorsResponse>> GetAll([FromQuery]GetSponsorsRequest request)
             => Ok(await _mediator.Send(request));
+
+        [HttpGet("{sponsorId}")]
+        [VolunteerAccess]
+        [ProducesResponseType(typeof(GetSponsorsResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int) HttpStatusCode.NotFound)]
+        public async Task<ActionResult<SponsorItem>> GetSingle(long sponsorId)
+            => Ok(await _mediator.Send(new GetSponsorRequest {SponsorId = sponsorId}));
     }
 }

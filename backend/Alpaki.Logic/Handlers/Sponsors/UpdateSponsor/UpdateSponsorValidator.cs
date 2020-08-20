@@ -16,7 +16,7 @@ namespace Alpaki.Logic.Handlers.Sponsors.UpdateSponsor
             RuleFor(x => x.Name).NotEmpty()
                 .When(x => !string.IsNullOrEmpty(x.Name))
                 .WithMessage("Nazwa sponsora nie może być pusta.");
-            RuleFor(x => x.Id).MustAsync(Exits).WithMessage(x=> $"Sponsor od podanym id [Id={x.Id}] nie istnieje.");;
+            RuleFor(x => x.Id).MustAsync(Exits).WithMessage(x=> $"Sponsor od podanym id [SponsorId={x.Id}] nie istnieje.");;
         }
 
         private async Task<bool> Exits(long id, CancellationToken cancellationToken) 
