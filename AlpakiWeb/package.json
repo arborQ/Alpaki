@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "generate": "graphql-codegen -c ./codegen.yml",
     "schema": "graphql-codegen --config codegen.yml",
-    "apollo": "apollo-codegen introspect-schema http://localhost:5000/graphql --output schema.json && apollo-codegen generate **/*.graphql --schema schema.json --target typescript --output operation-result-types.ts"
+    "apollo": "apollo-codegen"
   },
   "private": true,
   "dependencies": {

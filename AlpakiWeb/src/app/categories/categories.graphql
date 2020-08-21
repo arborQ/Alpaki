@@ -1,6 +1,7 @@
 query DreamerQuery {
   categories {
-    dreamCategoryId
+    dreamCategoryId 
+    categoryName
     defaultSteps {
       stepDescription, isSponsorRelated
     }

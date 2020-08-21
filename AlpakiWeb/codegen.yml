@@ -3,3 +3,5 @@ schema: "http://localhost:5000/graphql"
 generates:
     src/types.ts:
       - typescript
+      - typescript-operations
+      - typescript-apollo-angular
