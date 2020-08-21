@@ -6,9 +6,8 @@ using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
 using Alpaki.Logic.Features.Invitations.RegisterVolunteer;
-using Alpaki.Logic.Services;
 using FluentAssertions;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Internal;
 using NSubstitute;
 using Xunit;
@@ -34,7 +33,7 @@ namespace Alpaki.Tests.UnitTests.Invitations
         private readonly ISystemClock _fakeClock;
         private readonly FakeInvitationRepository _fakeInvitationRepository;
         private readonly FakeVolunteerRepository _fakeVolunteerRepository;
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
         public RegisterVolunteerTests()
         {
@@ -43,7 +42,7 @@ namespace Alpaki.Tests.UnitTests.Invitations
             jwtGenerator.Generate(Arg.Any<User>()).Returns("something");
             _fakeInvitationRepository = new FakeInvitationRepository();
             _fakeVolunteerRepository = new FakeVolunteerRepository();
-            _passwordHasher = Substitute.For<IPasswordHasher>();
+            _passwordHasher = Substitute.For<IPasswordHasher<User>>();
             _handler = new RegisterVolunteerHandler(jwtGenerator, _fakeClock, _fakeInvitationRepository, _fakeVolunteerRepository, _passwordHasher);
         }
 

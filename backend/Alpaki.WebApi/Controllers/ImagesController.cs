@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using Alpaki.Logic.Features.Invitations.RegisterVolunteer;
-using Alpaki.Logic.Handlers.AssignVolunteer;
-using Alpaki.WebApi.Policies;
+using Alpaki.Logic.Handlers.AddTemporaryImage;
+using Alpaki.Logic.Handlers.GetProfileImage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,17 +23,28 @@ namespace Alpaki.WebApi.Controllers
         }
 
         [HttpPost]
-        //[ProducesResponseType(typeof(RegisterVolunteerResponse), (int)HttpStatusCode.OK)]
-        //[ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(AddTemporaryImageResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [Authorize]
-        public async Task AddTemporaryFile(IFormFile formFile)
+        public async Task<AddTemporaryImageResponse> AddTemporaryFile(IFormFile formFile)
         {
-            var filePath = Path.GetTempFileName();
-
-            using (var stream = System.IO.File.Create(filePath))
+            using (var fileStream = formFile.OpenReadStream())
             {
-                await formFile.CopyToAsync(stream);
+                var bytes = new byte[formFile.Length];
+                fileStream.Read(bytes, 0, (int)formFile.Length);
+
+                return await _mediator.Send(new AddTemporaryImageRequest { ImageData = bytes });
             }
+        }
+
+        [HttpGet("{ProfileImageId:guid}.png")]
+        public async Task<IActionResult> GetProfileImage([FromRoute] GetProfileImageRequest request)
+        {
+            var imageData = await _mediator.Send(request);
+
+            return File(imageData.ImageData, "image/png");
+
+            //return Ok(Convert.ToBase64String(imageData.ImageData));
         }
     }
 }

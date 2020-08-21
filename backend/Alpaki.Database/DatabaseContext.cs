@@ -4,7 +4,7 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -14,9 +14,9 @@ namespace Alpaki.Database
     {
         private readonly ILogger<DatabaseContext> _logger;
         private readonly IJwtGenerator _jwtGenerator;
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options, ILogger<DatabaseContext> logger, IJwtGenerator jwtGenerator, IPasswordHasher passwordHasher)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, ILogger<DatabaseContext> logger, IJwtGenerator jwtGenerator, IPasswordHasher<User> passwordHasher)
             : base(options)
         {
             _logger = logger;
@@ -36,7 +36,7 @@ namespace Alpaki.Database
             var adminPassword = "test123!";
             var adminLogin = "admin@admin.pl";
 
-            var adminUser = new User { FirstName = "admin", LastName = "admin", Email = adminLogin, UserId = 1, Role = UserRoleEnum.Admin, PasswordHash = _passwordHasher.HashPassword(adminPassword) };
+            var adminUser = new User { FirstName = "admin", LastName = "admin", Email = adminLogin, UserId = 1, Role = UserRoleEnum.Admin, PasswordHash = _passwordHasher.HashPassword(null, adminPassword) };
             modelBuilder.Entity<User>().HasData(adminUser);
             _logger.LogInformation($"[ADMIN]: admin user was created with token: [{_jwtGenerator.Generate(adminUser)}]");
             _logger.LogInformation($"[ADMIN]: admin user was created with login: [{adminLogin}] password: [{adminPassword}]");
@@ -84,5 +84,7 @@ namespace Alpaki.Database
         public DbSet<AssignedDreams> AssignedDreams { get; set; }
 
         public DbSet<Invitation> Invitations { get; set; }
+
+        public DbSet<Image> Images { get; set; }
     }
 }

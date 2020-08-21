@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Alpaki.Database;
 using Alpaki.Logic.Handlers.AuthorizeUserPassword;
-using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
+using Alpaki.Tests.Common.Builders;
 using AutoFixture;
 using FluentAssertions;
 using MockQueryable.NSubstitute;

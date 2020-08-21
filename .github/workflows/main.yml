@@ -19,6 +19,8 @@ jobs:
       run: dotnet build backend/Alpaki.sln
     - name: Setup test database
       run: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=test123!' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+    - name: Setup smtp server
+      run: docker run -d -p 1025:1025 -p 8025:8025 mailhog/mailhog
     - name: Test
       run: dotnet test backend/Alpaki.sln
   front:

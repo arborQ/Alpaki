@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
+using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;
 using Xunit;

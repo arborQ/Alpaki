@@ -26,7 +26,6 @@ namespace Alpaki.WebApi.GraphQL
             {
                 new QueryArgument<IdGraphType> { Name = "dreamId" },
                 new QueryArgument<StringGraphType> { Name = "searchName" },
-                new QueryArgument<GenderEnumType> { Name = "gender" },
                 new QueryArgument<DreamStateEnumType> { Name = "status" },
                 new QueryArgument<IntGraphType> { Name = "ageFrom" },
                 new QueryArgument<IntGraphType> { Name = "ageTo" },
@@ -70,7 +69,6 @@ namespace Alpaki.WebApi.GraphQL
 
             Field<ListGraphType<DreamType>>("dreams", arguments: arguments, resolve: context =>
             {
-                var gender = context.GetArgument<GenderEnum?>("gender");
                 var status = context.GetArgument<DreamStateEnum?>("status");
                 var ageFrom = context.GetArgument<int?>("ageFrom");
                 var ageTo = context.GetArgument<int?>("ageTo");
@@ -88,11 +86,6 @@ namespace Alpaki.WebApi.GraphQL
                 if (dreamerId.HasValue)
                 {
                     return dreamerQuery.Where(d => d.DreamId == dreamerId).ToListAsync();
-                }
-
-                if (gender.HasValue)
-                {
-                    dreamerQuery = dreamerQuery.Where(d => d.Gender == gender.Value);
                 }
 
                 if (status.HasValue)
@@ -119,7 +112,7 @@ namespace Alpaki.WebApi.GraphQL
 
                 if (!string.IsNullOrEmpty(searchName))
                 {
-                    dreamerQuery = dreamerQuery.Where(d => (d.FirstName + d.LastName).Contains(searchName));
+                    dreamerQuery = dreamerQuery.Where(d => d.DisplayName.Contains(searchName));
                 }
 
                 return dreamerQuery.ToListAsync();

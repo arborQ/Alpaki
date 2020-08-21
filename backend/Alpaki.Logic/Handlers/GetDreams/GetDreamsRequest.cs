@@ -14,8 +14,6 @@ namespace Alpaki.Logic.Handlers.GetDreams
 
         public string SearchName { get; set; }
 
-        public GenderEnum? Gender { get; set; }
-
         public DreamStateEnum? Status { get; set; }
 
         public int? AgeFrom { get; set; }

@@ -1,8 +1,7 @@
-﻿using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
+using Alpaki.Tests.Common.Builders;
 using Alpaki.Tests.IntegrationTests.Extensions;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using Alpaki.Tests.IntegrationTests.Fixtures.Builders;
@@ -10,7 +9,6 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Alpaki.Tests.IntegrationTests.VolunteerDreamAssignTests

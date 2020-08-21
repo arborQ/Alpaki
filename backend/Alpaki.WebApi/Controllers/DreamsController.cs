@@ -1,27 +1,39 @@
-﻿using Alpaki.Logic.Features.Dreamer.CreateDreamer;
-using Alpaki.Logic.Handlers.GetDreams;
+﻿using Alpaki.Logic.Handlers.GetDreams;
 using Alpaki.WebApi.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
+using Alpaki.Logic.Handlers.AddDream;
+using Alpaki.Logic.Handlers.UpdateDream;
 
 namespace Alpaki.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DreamersController : ControllerBase
+    public class DreamsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public DreamersController(IMediator mediator)
+        public DreamsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpPost]
         [VolunteerAccess]
-        public Task<CreateDreamerResponse> CreateDream([FromBody] CreateDreamerRequest request) => _mediator.Send(request);
+        [ProducesResponseType(typeof(AddDreamResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
+        public Task<AddDreamResponse> CreateDream([FromBody] AddDreamRequest request) => _mediator.Send(request);
+
+        [HttpPut]
+        [CoordinatorAccess]
+        [ProducesResponseType(typeof(UpdateDreamResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
+        public async Task<UpdateDreamResponse> UpdateDream([FromBody] UpdateDreamRequest request)
+            => await _mediator.Send(request);
 
         [VolunteerAccess]
         [HttpGet]

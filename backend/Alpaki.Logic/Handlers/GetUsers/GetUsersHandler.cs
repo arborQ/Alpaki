@@ -27,7 +27,7 @@ namespace Alpaki.Logic.Handlers.GetUsers
 
             if (!string.IsNullOrEmpty(request.Search))
             {
-                query = query.Where(u => u.FirstName.Contains(request.Search) || u.LastName.Contains(request.Search) || u.Email.Contains(request.Search));
+                query = query.Where(u => u.FirstName.Contains(request.Search) || u.LastName.Contains(request.Search) || u.Email.Contains(request.Search) || u.Brand.Contains(request.Search));
             }
 
             if (request.DreamId.HasValue)
@@ -36,17 +36,15 @@ namespace Alpaki.Logic.Handlers.GetUsers
             }
 
             query = query.OrderByProperty(request.OrderBy, request.Asc);
-            var totalCount = await query.CountAsync();
-
+            
             if (request.Page.HasValue)
             {
                 query = query.Paged(request.Page.Value);
             }
-
-
+            
             var userList = await query.Select(UserListItem.UserToUserListItemMapper).ToListAsync();
 
-            return new GetUsersResponse { Users = userList, TotalCount = totalCount };
+            return new GetUsersResponse { Users = userList };
         }
     }
 }

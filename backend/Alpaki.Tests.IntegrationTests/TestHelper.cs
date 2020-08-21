@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Alpaki.Tests.IntegrationTests
@@ -21,6 +22,13 @@ namespace Alpaki.Tests.IntegrationTests
             response.EnsureSuccessStatusCode();
 
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+        }
+
+        public static async Task<ValidationProblemDetails> AsValidationResponse(this Task<HttpResponseMessage> responseTask)
+        {
+            var response = await responseTask;
+
+            return JsonConvert.DeserializeObject<ValidationProblemDetails>(await response.Content.ReadAsStringAsync());
         }
     }
 }

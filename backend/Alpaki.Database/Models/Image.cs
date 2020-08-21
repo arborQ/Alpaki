@@ -10,7 +10,7 @@ namespace Alpaki.Database.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ImageId { get; set; }
 
-        DateTime Created { get; set; }
+        public DateTime Created { get; set; }
 
         public byte[] ImageData { get; set; }
     }
