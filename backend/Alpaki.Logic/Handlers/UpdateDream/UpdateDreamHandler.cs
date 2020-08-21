@@ -54,6 +54,11 @@ namespace Alpaki.Logic.Handlers.UpdateDream
                 dream.Volunteers = request.VolunteerIds.Select(v => new Database.Models.AssignedDreams { VolunteerId = v }).ToList();
             }
 
+            if (request.SponsorIds != null)
+            {
+                dream.Sponsors = request.SponsorIds.Select(v => new Database.Models.AssignedSponsor { SponsorId = v }).ToList();
+            }
+
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return new UpdateDreamResponse();

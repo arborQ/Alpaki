@@ -31,6 +31,7 @@ namespace Alpaki.Logic.Handlers.AddDream
                 DreamState = DreamStateEnum.Created,
                 DreamImageId = request.DreamImageId,
                 Volunteers = request.VolunteerIds.Select(v => new Database.Models.AssignedDreams { VolunteerId = v }).ToList(),
+                Sponsors = request.SponsorIds.Select(v => new Database.Models.AssignedSponsor { SponsorId = v }).ToList(),
                 RequiredSteps = requiredSteps
                     .Select(s => new Database.Models.DreamStep
                     {
