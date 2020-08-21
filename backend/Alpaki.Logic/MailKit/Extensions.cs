@@ -8,14 +8,23 @@ namespace Alpaki.Logic.Mails
     {
         public static IServiceCollection AddMailKit(this IServiceCollection services)
         {
-            services.AddSingleton<IMailService, MailService>();
-
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 var configuration = scope.ServiceProvider.GetService<IConfiguration>();
+                var mailSenderSection = configuration.GetSection("MailSender").Get<MailKitOptions>();
+
+                if (string.IsNullOrEmpty(mailSenderSection.Host))
+                {
+                    services.AddSingleton<IMailService, FakeMailService>();
+                }
+                else
+                {
+                    services.AddSingleton<IMailService, MailService>();
+                }
+
                 services.Configure<MailKitOptions>(options => configuration.GetSection("MailSender").Bind(options));
             }
-            
+
             return services;
         }
     }

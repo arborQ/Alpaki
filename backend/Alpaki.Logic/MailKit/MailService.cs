@@ -7,6 +7,7 @@ using MimeKit;
 
 namespace Alpaki.Logic.Mails
 {
+
     internal class MailService : IMailService
     {
         private readonly ILogger<MailService> _logger;

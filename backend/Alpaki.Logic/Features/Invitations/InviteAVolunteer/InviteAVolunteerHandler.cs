@@ -16,8 +16,8 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
         private readonly IVolunteerRepository _volunteerRepository;
 
         public InviteAVolunteerHandler(
-            IInvitationCodesGenerator generator, 
-            IMediator mediator, 
+            IInvitationCodesGenerator generator,
+            IMediator mediator,
             ISystemClock clock,
             IInvitationRepository invitationRepository,
             IVolunteerRepository volunteerRepository)
@@ -30,12 +30,12 @@ namespace Alpaki.Logic.Features.Invitations.InviteAVolunteer
         }
         public async Task<InviteAVolunteerResponse> Handle(InviteAVolunteerRequest request, CancellationToken cancellationToken)
         {
-            if(await _volunteerRepository.ExitsAsync(request.Email, cancellationToken))
+            if (await _volunteerRepository.ExitsAsync(request.Email, cancellationToken))
                 throw new Exceptions.VolunteerAlreadyExistsException();
 
             var existingInvitation = await _invitationRepository.GetInvitationAsync(request.Email, cancellationToken);
 
-            var invitation  = existingInvitation is null 
+            var invitation = existingInvitation is null
                 ? await CreateNew(request.Email, cancellationToken)
                 : await RefreshExisting(existingInvitation, cancellationToken);
 
