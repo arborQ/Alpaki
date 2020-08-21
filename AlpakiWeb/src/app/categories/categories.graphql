@@ -1,0 +1,8 @@
+query DreamerQuery {
+  categories {
+    dreamCategoryId
+    defaultSteps {
+      stepDescription, isSponsorRelated
+    }
+  }
+}
