@@ -11,7 +11,10 @@ namespace Alpaki.Database.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long DreamId { get; set; }
-
+        
+        [MaxLength(500)]
+        public string Title { get; set; }
+        
         [MaxLength(500)]
         public string DisplayName { get; set; }
 

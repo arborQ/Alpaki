@@ -4,14 +4,16 @@ using Alpaki.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpaki.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200822120938_AddTitleToDream")]
+    partial class AddTitleToDream
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,7 +273,7 @@ namespace Alpaki.Database.Migrations
                             Email = "admin@admin.pl",
                             FirstName = "admin",
                             LastName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAnytx/PUYqsMjlpERWEV8qX0qAPBjnHS4SWQB8RzbKjos6jEjRB+zv0wXcZ4V3+lg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENIwPZvr7ApQRDJhZF223Y6n7hsTF0vHft1A0VcwQ46dn5J3vEeP7MX8tNSjT3uv6A==",
                             Role = 7
                         });
                 });

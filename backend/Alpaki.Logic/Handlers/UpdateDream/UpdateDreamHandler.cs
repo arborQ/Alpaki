@@ -18,7 +18,12 @@ namespace Alpaki.Logic.Handlers.UpdateDream
         public async Task<UpdateDreamResponse> Handle(UpdateDreamRequest request, CancellationToken cancellationToken)
         {
             var dream = await _dbContext.Dreams.SingleAsync(x => x.DreamId == request.DreamId, cancellationToken);
-
+            
+            if (!string.IsNullOrEmpty(dream.Title))
+            {
+                dream.Title = request.Title;
+            }
+            
             if (!string.IsNullOrEmpty(dream.DisplayName))
             {
                 dream.DisplayName = request.DisplayName;
