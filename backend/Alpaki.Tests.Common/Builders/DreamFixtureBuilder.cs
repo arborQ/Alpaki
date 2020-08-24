@@ -21,6 +21,7 @@ namespace Alpaki.Tests.IntegrationTests.Fixtures.Builders
                 .Without(u => u.DreamImage)
                 .Without(u => u.DreamImageId)
                 .Without(u => u.RequiredSteps)
+                .Without(u => u.Sponsors)
                 .Without(u => u.Volunteers);
         }
 

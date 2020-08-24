@@ -58,6 +58,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.CategoryId, category.DreamCategoryId)
                 .With(d => d.DreamImageId, () => imageIds.ElementAt(index++))
+                .Without(d => d.SponsorIds)
                 .With(d => d.VolunteerIds, () => volonteers.OrderBy(v => new Random().Next()).Take(5).Select(v => v.UserId).ToArray())
                 .CreateMany(count)
                 .Select(dreamer => dreamer.WithJsonContent().json);
@@ -84,10 +85,12 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             var category = _fixture.DreamCategoryBuilder(stepCount).Create();
             var image = _fixture.ImageBuilder().Create();
             var volonteers = _fixture.VolunteerBuilder().CreateMany(10);
+            var sponsors = _fixture.SponsorBuilder().CreateMany(10);
 
             await IntegrationTestsFixture.DatabaseContext.Users.AddRangeAsync(volonteers);
             await IntegrationTestsFixture.DatabaseContext.DreamCategories.AddAsync(category);
             await IntegrationTestsFixture.DatabaseContext.Images.AddAsync(image);
+            await IntegrationTestsFixture.DatabaseContext.Sponsors.AddRangeAsync(sponsors);
             await IntegrationTestsFixture.DatabaseContext.SaveChangesAsync();
 
             IntegrationTestsFixture.SetUserContext(new User { Role = UserRoleEnum.Admin });
@@ -99,6 +102,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.CategoryId, category.DreamCategoryId)
                 .With(d => d.DreamImageId, image.ImageId)
+                .With(d => d.SponsorIds, sponsors.Select(s => s.SponsorId).ToArray())
                 .With(d => d.VolunteerIds, () => volonteers.OrderBy(v => random.Next()).Take(5).Select(v => v.UserId).ToArray())
                 .Create();
 
@@ -112,6 +116,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
             dream.DreamId.Should().Be(response.DreamId);
             dream.DreamImageUrl.Should().Contain(image.ImageId.ToString());
             dream.DreamImageUrl.Should().Be($"/api/images/{image.ImageId}.png");
+            dream.Sponsors.Count.Should().Be(10);
             users.Users.Count.Should().Be(5);
         }
 
@@ -149,6 +154,7 @@ namespace Alpaki.Tests.IntegrationTests.DreamersControllerTests
                 .With(d => d.Age, random.Next(1, 119))
                 .With(d => d.CategoryId, category.DreamCategoryId)
                 .With(d => d.DreamImageId, image.ImageId)
+                .Without(d => d.SponsorIds)
                 .With(d => d.VolunteerIds, () => volonteers.OrderBy(v => random.Next()).Take(volounteerCount).Select(v => v.UserId).ToArray())
                 .Create();
 
