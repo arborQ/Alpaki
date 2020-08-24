@@ -53,9 +53,9 @@ namespace Alpaki.Logic.Handlers.GetDreams
             }
 
             dreamerQuery = dreamerQuery
-                .Paged(request.Page)
-                .OrderByProperty(request.OrderBy, request.Asc);
-
+                .OrderByProperty(request.OrderBy, request.Asc)
+                .Paged(request.Page);
+            
             var dreamList = await dreamerQuery.Select(DreamListItem.DreamToDreamListItemMapper).ToListAsync();
 
             return new GetDreamsResponse { Dreams = dreamList };

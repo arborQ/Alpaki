@@ -6,7 +6,9 @@ namespace Alpaki.Logic.Handlers.UpdateDream
     public class UpdateDreamRequest : IRequest<UpdateDreamResponse>
     {
         public long DreamId { get; set; }
-
+        
+        public string Title { get; set; }
+        
         public string DisplayName { get; set; }
 
         public int? Age { get; set; }

@@ -35,6 +35,11 @@ namespace Alpaki.Logic.Handlers.GetUsers
                 query = query.Where(u => u.AssignedDreams.Any(ad => ad.DreamId == request.DreamId.Value));
             }
 
+            if (request.UserRole.HasValue)
+            {
+                query = query.Where(u => u.Role == request.UserRole.Value);
+            }
+            
             query = query.OrderByProperty(request.OrderBy, request.Asc);
             
             if (request.Page.HasValue)
