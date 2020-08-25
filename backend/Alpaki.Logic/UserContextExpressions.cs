@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
@@ -14,7 +15,7 @@ namespace Alpaki.Logic
         public IQueryable<User> Users { get; }
 
         public IQueryable<DreamCategory> DreamCategories { get; }
-      
+
         public IQueryable<Image> Images { get; }
     }
 
@@ -40,10 +41,15 @@ namespace Alpaki.Logic
                     return dreams;
                 }
 
+                if (!_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Volunteer))
+                {
+                    return dreams.OrderBy(r => Guid.NewGuid()).Take(10);
+                }
+
                 return dreams.Where(d => d.Volunteers.Any(v => v.VolunteerId == _currentUserService.CurrentUserId));
             }
         }
-        
+
         public IQueryable<Image> Images => _databaseContext.Images.AsNoTracking();
 
         public IQueryable<User> Users

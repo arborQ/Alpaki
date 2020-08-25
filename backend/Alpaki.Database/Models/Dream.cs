@@ -24,6 +24,9 @@ namespace Alpaki.Database.Models
 
         public string Tags { get; set; }
 
+        [MaxLength(200)]
+        public string CityName { get; set; }
+
         [ForeignKey(nameof(DreamCategory))]
         public long DreamCategoryId { get; set; }
 

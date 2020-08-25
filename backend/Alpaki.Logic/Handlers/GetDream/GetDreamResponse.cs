@@ -7,7 +7,7 @@ namespace Alpaki.Logic.Handlers.GetDreams
     public class GetDreamResponse
     {
         public long DreamId { get; set; }
-        
+
         public string Title { get; set; }
 
         public string DisplayName { get; set; }
@@ -20,14 +20,18 @@ namespace Alpaki.Logic.Handlers.GetDreams
 
         public string DreamImageUrl { get; set; }
 
+        public string CityName { get; set; }
+
+
         internal static Expression<Func<Dream, GetDreamResponse>> DreamToDreamListItemMapper = dream => new GetDreamResponse
         {
             DreamId = dream.DreamId,
-            Title =  dream.Title,
+            Title = dream.Title,
             Age = dream.Age,
             DreamUrl = dream.DreamUrl,
             DisplayName = dream.DisplayName,
-            Tags = dream.Tags, 
+            Tags = dream.Tags,
+            CityName = dream.CityName,
             DreamImageUrl = dream.DreamImageId.HasValue ? $"/api/images/{dream.DreamImageId}.png" : null,
         };
     }
