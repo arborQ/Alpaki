@@ -4,14 +4,16 @@ using Alpaki.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpaki.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200821131301_AddSponsorsMigration")]
+    partial class AddSponsorsMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,10 +82,6 @@ namespace Alpaki.Database.Migrations
 
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
 
                     b.HasKey("DreamId");
 
@@ -319,7 +317,7 @@ namespace Alpaki.Database.Migrations
                             Email = "admin@admin.pl",
                             FirstName = "admin",
                             LastName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAnytx/PUYqsMjlpERWEV8qX0qAPBjnHS4SWQB8RzbKjos6jEjRB+zv0wXcZ4V3+lg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO1iXJnF9PqFD22GWPVKffo8Wo+I94T+GZPK9KbQfPDlEdM6+ARGgaY2N33DCVofwA==",
                             Role = 7
                         });
                 });

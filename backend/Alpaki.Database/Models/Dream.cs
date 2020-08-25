@@ -37,6 +37,8 @@ namespace Alpaki.Database.Models
 
         public virtual ICollection<AssignedDreams> Volunteers { get; set; }
 
+        public virtual ICollection<AssignedSponsor> Sponsors { get; set; }
+
         [ForeignKey(nameof(DreamImage))]
         public Guid? DreamImageId { get; set; }
 
