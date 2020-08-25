@@ -1,4 +1,5 @@
-﻿using Alpaki.CrossCutting.Requests;
+﻿using Alpaki.CrossCutting.Enums;
+using Alpaki.CrossCutting.Requests;
 using MediatR;
 using static Alpaki.Logic.Handlers.GetUsers.GetUsersResponse;
 
@@ -13,6 +14,8 @@ namespace Alpaki.Logic.Handlers.GetUsers
         }
 
         public long? DreamId { get; set; }
+        
+        public UserRoleEnum? UserRole { get; set; }
 
         public string Search { get; set; }
 

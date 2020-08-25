@@ -23,6 +23,7 @@ namespace Alpaki.Logic.Handlers.AddDream
 
             var newDream = new Database.Models.Dream
             {
+                Title =  request.Title,
                 DisplayName = request.DisplayName,
                 Age = request.Age,
                 DreamUrl = request.DreamUrl,
@@ -41,8 +42,8 @@ namespace Alpaki.Logic.Handlers.AddDream
                     .ToList()
             };
 
-            await _databaseContext.Dreams.AddAsync(newDream);
-            await _databaseContext.SaveChangesAsync();
+            await _databaseContext.Dreams.AddAsync(newDream, cancellationToken);
+            await _databaseContext.SaveChangesAsync(cancellationToken);
 
             return new AddDreamResponse { DreamId = newDream.DreamId };
         }

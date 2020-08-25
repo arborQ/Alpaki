@@ -13,6 +13,8 @@ namespace Alpaki.Logic.Handlers.GetDreams
         public class DreamListItem
         {
             public long DreamId { get; set; }
+            
+            public string Title { get; set; }
 
             public string DisplayName { get; set; }
 
@@ -32,6 +34,7 @@ namespace Alpaki.Logic.Handlers.GetDreams
             internal static Expression<Func<Dream, DreamListItem>> DreamToDreamListItemMapper = dream => new DreamListItem
             {
                 DreamId = dream.DreamId,
+                Title = dream.Title,
                 Age = dream.Age,
                 DreamUrl = dream.DreamUrl,
                 DisplayName = dream.DisplayName,
