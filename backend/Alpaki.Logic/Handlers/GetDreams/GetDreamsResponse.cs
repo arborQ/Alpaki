@@ -26,6 +26,8 @@ namespace Alpaki.Logic.Handlers.GetDreams
 
             public string Tags { get; set; }
 
+            public string CityName { get; set; }
+
             public DreamCategoryItem DreamCategory { get; set; }
 
             public IReadOnlyCollection<SponsorListItem> Sponsors { get; set; }
@@ -41,6 +43,7 @@ namespace Alpaki.Logic.Handlers.GetDreams
                 Tags = dream.Tags,
                 DreamImageUrl = dream.DreamImageId.HasValue ? $"/api/images/{dream.DreamImageId}.png" : null,
                 Sponsors = dream.Sponsors.Select(s => new SponsorListItem { SponsorId = s.SponsorId, SponsorName = s.Sponsor.DisplayName }).ToList(),
+                CityName = dream.CityName,
                 DreamCategory = new DreamCategoryItem
                 {
                     DreamCategoryId = dream.DreamCategory.DreamCategoryId,

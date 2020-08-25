@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
@@ -55,6 +56,11 @@ namespace Alpaki.Logic
                 if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Coordinator))
                 {
                     return dreams;
+                }
+
+                if (!_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Volunteer))
+                {
+                    return dreams.OrderBy(r => Guid.NewGuid()).Take(10);
                 }
 
                 return dreams.Where(d => d.Volunteers.Any(v => v.VolunteerId == _currentUserService.CurrentUserId));

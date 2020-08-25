@@ -29,6 +29,8 @@ namespace Alpaki.Logic.Handlers.AddDream
 
         public long[] VolunteerIds { get; set; }
 
+        public string CityName { get; set; }
+
         public long[] SponsorIds { get; set; }
     }
 }

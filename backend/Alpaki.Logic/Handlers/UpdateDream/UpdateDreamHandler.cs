@@ -39,6 +39,11 @@ namespace Alpaki.Logic.Handlers.UpdateDream
                 dream.DreamUrl = request.DreamUrl;
             }
 
+            if (!string.IsNullOrEmpty(request.CityName))
+            {
+                dream.CityName = request.CityName;
+            }
+
             if (!string.IsNullOrEmpty(request.Tags))
             {
                 dream.Tags = request.Tags;

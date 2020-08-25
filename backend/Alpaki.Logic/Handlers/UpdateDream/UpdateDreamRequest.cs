@@ -25,5 +25,6 @@ namespace Alpaki.Logic.Handlers.UpdateDream
 
         public long[] SponsorIds { get; set; }
 
+        public string CityName { get; set; }
     }
 }
