@@ -13,12 +13,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileService } from './profile/profile.service';
+import { RemindPasswordComponent } from './remind-password/remind-password.component';
 
 @NgModule({
   declarations: [
     SignInComponent,
     RegisterComponent,
     ProfileComponent,
+    RemindPasswordComponent,
   ],
   imports: [
     CommonModule,

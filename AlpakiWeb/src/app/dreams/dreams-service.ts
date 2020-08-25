@@ -34,7 +34,7 @@ updateState(dreams: IDream[]) {
 }
 
   getDreams() {
-    this.http.get<IDreamQueryResponse>('/api/dreamers?page=1')
+    this.http.get<IDreamQueryResponse>('/api/dreams?page=1')
       .subscribe(response => {
         this.dreams.next(response.dreams);
       });
@@ -50,7 +50,7 @@ updateState(dreams: IDream[]) {
     }
 
     return this.http
-      .get<IDream>(`/api/dreamers/details?dreamId=${dreamId}`);
+      .get<IDream>(`/api/dreamers/dreams?dreamId=${dreamId}`);
   }
 
   deleteDream(dreamId: number) {
@@ -58,7 +58,7 @@ updateState(dreams: IDream[]) {
     const users = [...beforeDelete.filter(u => u.dreamId !== dreamId)];
     this.dreams.next(users);
 
-    this.http.delete(`/api/dreamers?dreamId=${dreamId}`).toPromise().catch(() => {
+    this.http.delete(`/api/dreams?dreamId=${dreamId}`).toPromise().catch(() => {
       setTimeout(() => {
         alert('ojojoj');
 
