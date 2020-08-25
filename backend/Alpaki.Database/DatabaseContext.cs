@@ -48,7 +48,7 @@ namespace Alpaki.Database
             modelBuilder.Entity<Dream>().HasMany(d => d.RequiredSteps).WithOne(s => s.Dream);
 
             modelBuilder.Entity<AssignedDreams>().HasKey(ad => new { ad.DreamId, ad.VolunteerId });
-
+            modelBuilder.Entity<AssignedSponsor>().HasKey(a => new { a.DreamId, a.SponsorId });
             modelBuilder.Entity<Invitation>()
                 .HasIndex(x => x.Email)
                 .IsUnique();
@@ -86,5 +86,9 @@ namespace Alpaki.Database
         public DbSet<Invitation> Invitations { get; set; }
 
         public DbSet<Image> Images { get; set; }
+
+        public DbSet<Sponsor> Sponsors { get; set; }
+
+        public DbSet<AssignedSponsor> AssignedSponsors { get; set; }
     }
 }

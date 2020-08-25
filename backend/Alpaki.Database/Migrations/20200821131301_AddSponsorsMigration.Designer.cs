@@ -4,14 +4,16 @@ using Alpaki.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpaki.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200821131301_AddSponsorsMigration")]
+    partial class AddSponsorsMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,10 +61,6 @@ namespace Alpaki.Database.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("CityName")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
-
                     b.Property<string>("DisplayName")
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
@@ -84,10 +82,6 @@ namespace Alpaki.Database.Migrations
 
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
 
                     b.HasKey("DreamId");
 
@@ -323,7 +317,7 @@ namespace Alpaki.Database.Migrations
                             Email = "admin@admin.pl",
                             FirstName = "admin",
                             LastName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAENRgv4EztKdLFiq9yceNlSV/Z5ZBzV6VRlqGjY6dstufg1PZGhN7DliP3bfGPlTCZA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO1iXJnF9PqFD22GWPVKffo8Wo+I94T+GZPK9KbQfPDlEdM6+ARGgaY2N33DCVofwA==",
                             Role = 7
                         });
                 });
