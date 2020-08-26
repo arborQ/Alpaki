@@ -4,14 +4,16 @@ using Alpaki.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpaki.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200825202803_DreamCityNameMigration")]
+    partial class DreamCityNameMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,21 +34,6 @@ namespace Alpaki.Database.Migrations
                     b.HasIndex("VolunteerId");
 
                     b.ToTable("AssignedDreams");
-                });
-
-            modelBuilder.Entity("Alpaki.Database.Models.AssignedSponsor", b =>
-                {
-                    b.Property<long>("DreamId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("SponsorId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("DreamId", "SponsorId");
-
-                    b.HasIndex("SponsorId");
-
-                    b.ToTable("AssignedSponsors");
                 });
 
             modelBuilder.Entity("Alpaki.Database.Models.Dream", b =>
@@ -240,39 +227,6 @@ namespace Alpaki.Database.Migrations
                     b.ToTable("Invitations");
                 });
 
-            modelBuilder.Entity("Alpaki.Database.Models.Sponsor", b =>
-                {
-                    b.Property<long>("SponsorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Brand")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("ContactPersonName")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<int>("CooperationType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.HasKey("SponsorId");
-
-                    b.ToTable("Sponsors");
-                });
-
             modelBuilder.Entity("Alpaki.Database.Models.User", b =>
                 {
                     b.Property<long>("UserId")
@@ -339,21 +293,6 @@ namespace Alpaki.Database.Migrations
                     b.HasOne("Alpaki.Database.Models.User", "Volunteer")
                         .WithMany("AssignedDreams")
                         .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Alpaki.Database.Models.AssignedSponsor", b =>
-                {
-                    b.HasOne("Alpaki.Database.Models.Dream", "Dream")
-                        .WithMany("Sponsors")
-                        .HasForeignKey("DreamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Alpaki.Database.Models.Sponsor", "Sponsor")
-                        .WithMany()
-                        .HasForeignKey("SponsorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

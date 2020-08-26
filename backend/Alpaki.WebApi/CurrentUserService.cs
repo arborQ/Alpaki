@@ -15,10 +15,34 @@ namespace Alpaki.WebApi
             _httpContext = httpContext;
         }
 
-        public long CurrentUserId =>
-            long.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Name).Value);
+        public long CurrentUserId
+        {
+            get
+            {
+                try
+                {
+                    return long.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Name).Value);
+                }
+                catch
+                {
+                    return default;
+                }
+            }
+        }
 
-        public UserRoleEnum CurrentUserRole =>
-            (UserRoleEnum) int.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Role).Value);
+        public UserRoleEnum CurrentUserRole
+        {
+            get
+            {
+                try
+                {
+                    return (UserRoleEnum)int.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Role).Value);
+                }
+                catch
+                {
+                    return UserRoleEnum.None;
+                }
+            }
+        }
     }
 }

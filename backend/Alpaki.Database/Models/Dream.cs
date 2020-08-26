@@ -24,6 +24,9 @@ namespace Alpaki.Database.Models
 
         public string Tags { get; set; }
 
+        [MaxLength(200)]
+        public string CityName { get; set; }
+
         [ForeignKey(nameof(DreamCategory))]
         public long DreamCategoryId { get; set; }
 
@@ -36,6 +39,8 @@ namespace Alpaki.Database.Models
         public virtual ICollection<DreamStep> RequiredSteps { get; set; }
 
         public virtual ICollection<AssignedDreams> Volunteers { get; set; }
+
+        public virtual ICollection<AssignedSponsor> Sponsors { get; set; }
 
         [ForeignKey(nameof(DreamImage))]
         public Guid? DreamImageId { get; set; }

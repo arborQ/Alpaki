@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Logic.Handlers.GetDreams;
@@ -33,13 +34,24 @@ namespace Alpaki.Tests.IntegrationTests.Extensions.ControllerExtensions
 
             if (categories != null)
             {
-                foreach(var category in categories)
+                foreach (var category in categories)
                 {
                     queryString.Add("categories", category.ToString());
                 }
             }
 
-            return client.GetAsync($"/api/dreams?{queryString}").AsResponse<GetDreamsResponse>();
+            var response = client.GetAsync($"/api/dreams?{queryString}");
+
+            try
+            {
+                return response.AsResponse<GetDreamsResponse>();
+            }
+            catch (Exception e)
+            {
+                var errorResponse = response.AsValidationResponse();
+
+                throw;
+            }
         }
     }
 }

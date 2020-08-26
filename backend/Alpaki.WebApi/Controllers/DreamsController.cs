@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Alpaki.Logic.Handlers.AddDream;
 using Alpaki.Logic.Handlers.UpdateDream;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Alpaki.WebApi.Controllers
 {
@@ -35,7 +36,7 @@ namespace Alpaki.WebApi.Controllers
         public async Task<UpdateDreamResponse> UpdateDream([FromBody] UpdateDreamRequest request)
             => await _mediator.Send(request);
 
-        [VolunteerAccess]
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(GetDreamResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
