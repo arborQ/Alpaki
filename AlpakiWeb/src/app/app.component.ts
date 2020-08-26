@@ -1,15 +1,16 @@
-import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { of } from 'rxjs';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CurrentUserService } from 'src/current-user.service';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy, OnInit {
   constructor(
     private currentUserService: CurrentUserService,
     private router: Router,
@@ -20,6 +21,8 @@ export class AppComponent implements OnDestroy {
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener('change', this.mobileQueryListener);
   }
+  @ViewChild(MatSidenav) snav: MatSidenav;
+
   mobileQuery: MediaQueryList;
   private mobileQueryListener: () => void;
 
@@ -27,6 +30,14 @@ export class AppComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
+  }
+
+  ngOnInit(): void {
+    this.router.events.subscribe(e => {
+      if (e instanceof NavigationStart && this.mobileQuery.matches && this.snav.opened) {
+        this.snav.toggle();
+      }
+    });
   }
 
   onSignOut() {
