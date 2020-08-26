@@ -14,7 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileService } from './profile/profile.service';
 import { RemindPasswordComponent } from './remind-password/remind-password.component';
-
+import { MatFileUploadModule } from 'mat-file-upload';
 @NgModule({
   declarations: [
     SignInComponent,
@@ -31,7 +31,8 @@ import { RemindPasswordComponent } from './remind-password/remind-password.compo
     MatSelectModule,
     AuthorizeRoutingModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatFileUploadModule
   ],
   providers: [ProfileService]
 })
