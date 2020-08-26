@@ -10,5 +10,14 @@ Zostałeś zaproszony do grona wolontariuszy.
 Aby dołączyć do grona wolontariuszy użyj poniższego kodu przy rejestracji.
 Kod: {0}";
         }
+
+        public static class PasswordReset
+        {
+            public static readonly string Subject = "Reset hasła";
+            public static readonly string Body = @"
+Twoje hasło zostało zresetowane. 
+Przejdź do strone poniżej, żeby zresetować hasło:
+{0}";
+        }
     }
 }

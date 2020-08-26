@@ -21,7 +21,7 @@ namespace Alpaki.Database
         DbSet<AssignedDreams> AssignedDreams { get; }
 
         DbSet<Image> Images { get; set; }
-
+        
         public DbSet<DreamCategoryDefaultStep> DreamCategoryDefaultSteps { get; }
 
         void EnsureCreated();

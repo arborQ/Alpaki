@@ -8,14 +8,17 @@ namespace Alpaki.WebApi
 {
     public class CurrentUserService : ICurrentUserService
     {
+        private readonly IHttpContextAccessor _httpContext;
+
         public CurrentUserService(IHttpContextAccessor httpContext)
         {
-            CurrentUserId = long.Parse(httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Name).Value);
-            CurrentUserRole = (UserRoleEnum)int.Parse(httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Role).Value);
+            _httpContext = httpContext;
         }
 
-        public long CurrentUserId { get; }
+        public long CurrentUserId =>
+            long.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Name).Value);
 
-        public UserRoleEnum CurrentUserRole { get; }
+        public UserRoleEnum CurrentUserRole =>
+            (UserRoleEnum) int.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Role).Value);
     }
 }

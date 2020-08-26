@@ -10,6 +10,8 @@ using Alpaki.Logic.Handlers.GetUsers;
 using Microsoft.AspNetCore.Authorization;
 using Alpaki.Logic.Handlers.GetUser;
 using Alpaki.CrossCutting.Interfaces;
+using Alpaki.Logic.Handlers.PasswordRecovery.ForgotPassword;
+using Alpaki.Logic.Handlers.PasswordRecovery.ResetPassword;
 
 namespace Alpaki.WebApi.Controllers
 {
@@ -19,7 +21,6 @@ namespace Alpaki.WebApi.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ICurrentUserService _currentUserService;
-
         public UserController(IMediator mediator, ICurrentUserService currentUserService)
         {
             _mediator = mediator;
@@ -65,5 +66,19 @@ namespace Alpaki.WebApi.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
         public Task<DeleteUserResponse> DeleteUser([FromQuery] DeleteUserRequest deleteUserRequest) => _mediator.Send(deleteUserRequest);
 
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ForgotPasswordResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        public async Task<ForgotPasswordResponse> ForgotPassword([FromBody] ForgotPasswordRequest request) 
+            => await _mediator.Send(request);
+        
+        [HttpPost("password-reset")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ResetPasswordResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        public async Task<ResetPasswordResponse> ResetPassword([FromBody] ResetPasswordRequest request)
+            => await _mediator.Send(request);
     }
 }

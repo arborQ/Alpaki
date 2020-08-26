@@ -106,6 +106,7 @@ namespace Alpaki.WebApi
             services.RegisterLogicServices();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddControllers();
+            services.AddRazorPages();
             services.AddHttpContextAccessor();
             services.AddSwaggerGen(c =>
             {
@@ -216,6 +217,7 @@ namespace Alpaki.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("/health");
             });
         }
