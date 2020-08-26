@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Logic.Handlers.GetProfileImage
 {
-    public class GetProfileImageRequest : IRequest<GetProfileImageResponse>
-    {
-        public Guid ProfileImageId { get; set; }
-    }
-
-    public class GetProfileImageResponse
-    {
-        public byte[] ImageData { get; set; }
-    }
-
     public class GetProfileImageHandler : IRequestHandler<GetProfileImageRequest, GetProfileImageResponse>
     {
         private readonly IUserScopedDatabaseReadContext _userScopedDatabaseReadContext;
