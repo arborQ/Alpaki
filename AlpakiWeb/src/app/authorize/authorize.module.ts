@@ -14,7 +14,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileService } from './profile/profile.service';
 import { RemindPasswordComponent } from './remind-password/remind-password.component';
-import { MatFileUploadModule } from 'mat-file-upload';
+import { MatChipsModule } from '@angular/material/chips';
+import { SharedModule } from '../shared/shared.module';
+
 @NgModule({
   declarations: [
     SignInComponent,
@@ -32,7 +34,8 @@ import { MatFileUploadModule } from 'mat-file-upload';
     AuthorizeRoutingModule,
     MatCardModule,
     MatProgressSpinnerModule,
-    MatFileUploadModule
+    MatChipsModule,
+    SharedModule
   ],
   providers: [ProfileService]
 })

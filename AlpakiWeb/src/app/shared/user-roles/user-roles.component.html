@@ -1,0 +1,6 @@
+<mat-chip-list>
+    <mat-chip color="primary" selected="false" *ngIf="isAdmin()" selected>Admin</mat-chip>
+    <mat-chip color="primary" selected="false" *ngIf="isVolounteer()" selected>Wolontariusz</mat-chip>
+    <mat-chip color="primary" selected="false" *ngIf="isCoordinator()" selected>Koordynator</mat-chip>
+    <mat-chip color="primary" selected="false" *ngIf="noRole()" selected>Brak roli</mat-chip>
+</mat-chip-list>
