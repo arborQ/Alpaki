@@ -1,0 +1,9 @@
+query Dreams {
+  dreams
+   {
+    title
+    dreamId 
+    displayName 
+    age
+  }
+}
