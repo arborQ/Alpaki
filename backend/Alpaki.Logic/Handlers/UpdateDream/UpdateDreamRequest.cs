@@ -6,7 +6,9 @@ namespace Alpaki.Logic.Handlers.UpdateDream
     public class UpdateDreamRequest : IRequest<UpdateDreamResponse>
     {
         public long DreamId { get; set; }
-
+        
+        public string Title { get; set; }
+        
         public string DisplayName { get; set; }
 
         public int? Age { get; set; }
@@ -20,5 +22,9 @@ namespace Alpaki.Logic.Handlers.UpdateDream
         public Guid? DreamImageId { get; set; }
 
         public long[] VolunteerIds { get; set; }
+
+        public long[] SponsorIds { get; set; }
+
+        public string CityName { get; set; }
     }
 }

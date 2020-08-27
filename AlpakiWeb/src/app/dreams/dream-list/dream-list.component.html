@@ -2,9 +2,7 @@
     <h2 class="mat-display-2">Najnowsze marzenia</h2>
     <div class="dream-list">
         <ng-container *ngFor="let dream of dreams$ | async">
-            <div class="dream-list-item">
-                <app-dream-card [dream]="dream" [remove]="removeDream"></app-dream-card>
-            </div>
+            <app-dream-list-item [dream]="dream"></app-dream-list-item>
         </ng-container>
     </div>
 </div>

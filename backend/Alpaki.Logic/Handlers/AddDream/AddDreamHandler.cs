@@ -23,6 +23,7 @@ namespace Alpaki.Logic.Handlers.AddDream
 
             var newDream = new Database.Models.Dream
             {
+                Title =  request.Title,
                 DisplayName = request.DisplayName,
                 Age = request.Age,
                 DreamUrl = request.DreamUrl,
@@ -30,7 +31,9 @@ namespace Alpaki.Logic.Handlers.AddDream
                 Tags = request.Tags,
                 DreamState = DreamStateEnum.Created,
                 DreamImageId = request.DreamImageId,
+                CityName = request.CityName,
                 Volunteers = request.VolunteerIds.Select(v => new Database.Models.AssignedDreams { VolunteerId = v }).ToList(),
+                Sponsors = request.SponsorIds.Select(v => new Database.Models.AssignedSponsor { SponsorId = v }).ToList(),
                 RequiredSteps = requiredSteps
                     .Select(s => new Database.Models.DreamStep
                     {
@@ -40,8 +43,8 @@ namespace Alpaki.Logic.Handlers.AddDream
                     .ToList()
             };
 
-            await _databaseContext.Dreams.AddAsync(newDream);
-            await _databaseContext.SaveChangesAsync();
+            await _databaseContext.Dreams.AddAsync(newDream, cancellationToken);
+            await _databaseContext.SaveChangesAsync(cancellationToken);
 
             return new AddDreamResponse { DreamId = newDream.DreamId };
         }

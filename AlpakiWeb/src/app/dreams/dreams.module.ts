@@ -10,9 +10,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { DreamDetailsComponent } from './dream-details/dream-details.component';
+import { DreamListItemComponent } from './dream-list-item/dream-list-item.component';
 
 @NgModule({
-  declarations: [DreamListComponent, DreamCardComponent, DreamDetailsComponent],
+  declarations: [DreamListComponent, DreamCardComponent, DreamDetailsComponent, DreamListItemComponent],
   providers: [DreamsService],
   imports: [
     CommonModule,

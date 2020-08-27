@@ -5,8 +5,16 @@ namespace Alpaki.Logic.Handlers.AddDream
 {
     public class AddDreamRequest : IRequest<AddDreamResponse>
     {
-        public string DisplayName { get; set; }
+        public AddDreamRequest()
+        {
+            VolunteerIds = new long[0];
+            SponsorIds = new long[0];
+        }
 
+        public string Title { get; set; }
+        
+        public string DisplayName { get; set; }
+        
         public int Age { get; set; }
 
         public string Tags { get; set; }
@@ -20,5 +28,9 @@ namespace Alpaki.Logic.Handlers.AddDream
         public Guid? DreamImageId { get; set; }
 
         public long[] VolunteerIds { get; set; }
+
+        public string CityName { get; set; }
+
+        public long[] SponsorIds { get; set; }
     }
 }

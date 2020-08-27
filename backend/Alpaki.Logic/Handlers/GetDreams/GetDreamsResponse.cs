@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Alpaki.Database.Models;
 
@@ -12,6 +13,8 @@ namespace Alpaki.Logic.Handlers.GetDreams
         public class DreamListItem
         {
             public long DreamId { get; set; }
+            
+            public string Title { get; set; }
 
             public string DisplayName { get; set; }
 
@@ -23,16 +26,24 @@ namespace Alpaki.Logic.Handlers.GetDreams
 
             public string Tags { get; set; }
 
+            public string CityName { get; set; }
+
             public DreamCategoryItem DreamCategory { get; set; }
+
+            public IReadOnlyCollection<SponsorListItem> Sponsors { get; set; }
+
 
             internal static Expression<Func<Dream, DreamListItem>> DreamToDreamListItemMapper = dream => new DreamListItem
             {
                 DreamId = dream.DreamId,
+                Title = dream.Title,
                 Age = dream.Age,
                 DreamUrl = dream.DreamUrl,
                 DisplayName = dream.DisplayName,
                 Tags = dream.Tags,
                 DreamImageUrl = dream.DreamImageId.HasValue ? $"/api/images/{dream.DreamImageId}.png" : null,
+                Sponsors = dream.Sponsors.Select(s => new SponsorListItem { SponsorId = s.SponsorId, SponsorName = s.Sponsor.DisplayName }).ToList(),
+                CityName = dream.CityName,
                 DreamCategory = new DreamCategoryItem
                 {
                     DreamCategoryId = dream.DreamCategory.DreamCategoryId,
@@ -45,6 +56,13 @@ namespace Alpaki.Logic.Handlers.GetDreams
         {
             public long DreamCategoryId { get; set; }
             public string DreamCategoryName { get; set; }
+        }
+
+        public class SponsorListItem
+        {
+            public long SponsorId { get; set; }
+
+            public string SponsorName { get; set; }
         }
     }
 }

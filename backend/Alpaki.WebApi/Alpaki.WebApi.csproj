@@ -33,5 +33,9 @@
     <ProjectReference Include="..\Alpaki.Logic\Alpaki.Logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
 
 </Project>

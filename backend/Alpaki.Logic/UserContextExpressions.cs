@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
@@ -14,8 +15,10 @@ namespace Alpaki.Logic
         public IQueryable<User> Users { get; }
 
         public IQueryable<DreamCategory> DreamCategories { get; }
-      
+
         public IQueryable<Image> Images { get; }
+
+        public IQueryable<Sponsor> Sponsors { get; }
     }
 
     public class UserScopedDatabaseReadContext : IUserScopedDatabaseReadContext
@@ -29,6 +32,21 @@ namespace Alpaki.Logic
             _currentUserService = currentUserService;
         }
 
+        public IQueryable<Sponsor> Sponsors
+        {
+            get
+            {
+                var sponsors = _databaseContext.Sponsors.AsNoTracking();
+
+                if (_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Coordinator))
+                {
+                    return sponsors;
+                }
+
+                return sponsors.Where(s => s.Dreams.Any(d => d.Dream.Volunteers.Any(v => v.VolunteerId == _currentUserService.CurrentUserId)));
+            }
+        }
+
         public IQueryable<Dream> Dreams
         {
             get
@@ -40,10 +58,15 @@ namespace Alpaki.Logic
                     return dreams;
                 }
 
+                if (!_currentUserService.CurrentUserRole.HasFlag(UserRoleEnum.Volunteer))
+                {
+                    return dreams.OrderBy(r => Guid.NewGuid()).Take(10);
+                }
+
                 return dreams.Where(d => d.Volunteers.Any(v => v.VolunteerId == _currentUserService.CurrentUserId));
             }
         }
-        
+
         public IQueryable<Image> Images => _databaseContext.Images.AsNoTracking();
 
         public IQueryable<User> Users

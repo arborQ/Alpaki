@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Interfaces;
-using Alpaki.Database;
 using Alpaki.Logic.Extensions;
 using FluentValidation;
 using MediatR;
@@ -15,12 +14,10 @@ namespace Alpaki.Logic.Handlers.GetDreams
     public class GetDreamsHandler : IRequestHandler<GetDreamsRequest, GetDreamsResponse>
     {
         private readonly IUserScopedDatabaseReadContext _databaseContext;
-        private readonly ICurrentUserService _currentUserService;
 
         public GetDreamsHandler(IUserScopedDatabaseReadContext databaseContext, ICurrentUserService currentUserService)
         {
             _databaseContext = databaseContext;
-            _currentUserService = currentUserService;
         }
 
         public async Task<GetDreamsResponse> Handle(GetDreamsRequest request, CancellationToken cancellationToken)
@@ -53,9 +50,9 @@ namespace Alpaki.Logic.Handlers.GetDreams
             }
 
             dreamerQuery = dreamerQuery
-                .Paged(request.Page)
-                .OrderByProperty(request.OrderBy, request.Asc);
-
+                .OrderByProperty(request.OrderBy, request.Asc)
+                .Paged(request.Page);
+            
             var dreamList = await dreamerQuery.Select(DreamListItem.DreamToDreamListItemMapper).ToListAsync();
 
             return new GetDreamsResponse { Dreams = dreamList };

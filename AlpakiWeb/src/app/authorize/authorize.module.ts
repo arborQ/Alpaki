@@ -16,6 +16,8 @@ import { ProfileService } from './profile/profile.service';
 import { RemindPasswordComponent } from './remind-password/remind-password.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { SharedModule } from '../shared/shared.module';
+import { MatIconModule } from '@angular/material/icon';
+import { ProfileEditComponent } from './profile/profile-edit/profile-edit.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { SharedModule } from '../shared/shared.module';
     RegisterComponent,
     ProfileComponent,
     RemindPasswordComponent,
+    ProfileEditComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ import { SharedModule } from '../shared/shared.module';
     MatCardModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatIconModule,
     SharedModule
   ],
   providers: [ProfileService]

@@ -8,9 +8,9 @@ namespace Alpaki.Logic.Extensions
     public static class QueryExtensionss
     {
         public static IQueryable<TEntity> OrderByProperty<TEntity>(this IQueryable<TEntity> source, string orderByProperty,
-                          bool desc)
+                          bool asc)
         {
-            string command = desc ? "OrderByDescending" : "OrderBy";
+            string command = asc ? "OrderBy" : "OrderByDescending";
             var type = typeof(TEntity);
             var property = type.GetProperty(orderByProperty, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
             var parameter = Expression.Parameter(type, "p");
