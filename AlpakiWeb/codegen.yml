@@ -3,7 +3,7 @@ hooks:
   afterAllFileWrite:
     - prettier --write
 config:
-  gqlImport: "@apollo/client#gql"
+  gqlImport: "graphql-tag"
 
 schema: "http://localhost:5000/graphql"
 documents: src/**/*.graphql

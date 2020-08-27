@@ -1,6 +1,6 @@
 import * as Types from '../../types';
 
-import { gql } from '@apollo/client';
+import gql from 'graphql-tag';
 import { Injectable } from '@angular/core';
 import * as Apollo from 'apollo-angular';
 export type DreamerQueryQueryVariables = Types.Exact<{ [key: string]: never }>;
