@@ -29,6 +29,7 @@ namespace Alpaki.WebApi.GraphQL
                 new QueryArgument<DreamStateEnumType> { Name = "status" },
                 new QueryArgument<IntGraphType> { Name = "ageFrom" },
                 new QueryArgument<IntGraphType> { Name = "ageTo" },
+                new QueryArgument<IntGraphType> { Name = "page" },
                 new QueryArgument<ListGraphType<IntGraphType>> { Name = "categories" },
                 new QueryArgument<StringGraphType> { Name = "orderBy", DefaultValue = "DreamId" },
                 new QueryArgument<BooleanGraphType> { Name = "orderAsc", DefaultValue = true }
@@ -75,10 +76,14 @@ namespace Alpaki.WebApi.GraphQL
                 var categoryIds = context.GetArgument<List<long>>("categories");
                 var orderBy = context.GetArgument<string>("orderBy");
                 var orderAsc = context.GetArgument<bool>("orderAsc");
+                var page = context.GetArgument<int?>("page");
 
                 var dreamerQuery = QueryDreams()
                     .Include(d => d.DreamCategory)
                     .Include(d => d.RequiredSteps)
+                    .Include(d => d.DreamImage)
+                    .Include(d => d.Sponsors)
+                        .ThenInclude(d => d.Sponsor)
                     .OrderByProperty(orderBy, orderAsc);
 
                 var dreamerId = context.GetArgument<int?>("dreamId");
@@ -113,6 +118,11 @@ namespace Alpaki.WebApi.GraphQL
                 if (!string.IsNullOrEmpty(searchName))
                 {
                     dreamerQuery = dreamerQuery.Where(d => d.DisplayName.Contains(searchName));
+                }
+
+                if (page.HasValue)
+                {
+                    dreamerQuery = dreamerQuery.Skip(page.Value * 10).Take(10);
                 }
 
                 return dreamerQuery.ToListAsync();
