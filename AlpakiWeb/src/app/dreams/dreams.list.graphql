@@ -1,5 +1,5 @@
-query Dreams {
-  dreams
+query Dreams($page:Int!) {
+  dreams(page:$page)
    {
     title
     dreamId 

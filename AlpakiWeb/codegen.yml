@@ -1,8 +1,22 @@
 overwrite: true
+hooks:
+  afterAllFileWrite:
+    - prettier --write
+config:
+  gqlImport: "@apollo/client#gql"
+
 schema: "http://localhost:5000/graphql"
 documents: src/**/*.graphql
+
 generates:
-    src/types.ts:
+  ./src/types.ts:
+    plugins:
       - typescript
+  ./src/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.ts
+      baseTypesPath: types.ts
+    plugins:
       - typescript-operations
       - typescript-apollo-angular

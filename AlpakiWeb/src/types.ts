@@ -1,8 +1,7 @@
-import { gql } from 'apollo-angular';
-import { Injectable } from '@angular/core';
-import * as Apollo from 'apollo-angular';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -23,16 +22,11 @@ export type Scalars = {
   Decimal: any;
 };
 
-
-
 export type AssignedSponsorType = {
   __typename?: 'AssignedSponsorType';
   sponsor?: Maybe<SponsorType>;
   sponsorId: Scalars['Int'];
 };
-
-
-
 
 export type DeamStepType = {
   __typename?: 'DeamStepType';
@@ -40,7 +34,6 @@ export type DeamStepType = {
   stepDescription: Scalars['String'];
   stepState?: Maybe<StepStateEnum>;
 };
-
 
 export type DefaultStepType = {
   __typename?: 'DefaultStepType';
@@ -65,7 +58,6 @@ export type DreamQuery = {
   users?: Maybe<Array<Maybe<UserType>>>;
 };
 
-
 export type DreamQueryDreamsArgs = {
   dreamId?: Maybe<Scalars['ID']>;
   searchName?: Maybe<Scalars['String']>;
@@ -77,7 +69,6 @@ export type DreamQueryDreamsArgs = {
   orderBy?: Maybe<Scalars['String']>;
   orderAsc?: Maybe<Scalars['Boolean']>;
 };
-
 
 export type DreamQueryUsersArgs = {
   userId?: Maybe<Scalars['ID']>;
@@ -91,7 +82,7 @@ export enum DreamStateEnum {
   Approved = 'APPROVED',
   InProgress = 'IN_PROGRESS',
   Done = 'DONE',
-  Terminated = 'TERMINATED'
+  Terminated = 'TERMINATED',
 }
 
 export type DreamType = {
@@ -118,7 +109,7 @@ export type ImageType = {
 
 export enum InvitationStateEnum {
   Pending = 'PENDING',
-  Accepted = 'ACCEPTED'
+  Accepted = 'ACCEPTED',
 }
 
 export type InvitationType = {
@@ -128,8 +119,6 @@ export type InvitationType = {
   invitationId: Scalars['Int'];
   status?: Maybe<InvitationStateEnum>;
 };
-
-
 
 export type SponsorType = {
   __typename?: 'SponsorType';
@@ -143,13 +132,13 @@ export type SponsorType = {
 
 export enum SponsorTypeEnum {
   PermanentCooperation = 'PERMANENT_COOPERATION',
-  TemporaryCooperation = 'TEMPORARY_COOPERATION'
+  TemporaryCooperation = 'TEMPORARY_COOPERATION',
 }
 
 export enum StepStateEnum {
   Awaiting = 'AWAITING',
   Done = 'DONE',
-  Skiped = 'SKIPED'
+  Skiped = 'SKIPED',
 }
 
 export type UserType = {
@@ -161,74 +150,3 @@ export type UserType = {
   phoneNumber: Scalars['String'];
   userId: Scalars['Int'];
 };
-
-export type DreamerQueryQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DreamerQueryQuery = (
-  { __typename?: 'DreamQuery' }
-  & { categories?: Maybe<Array<Maybe<(
-    { __typename?: 'DreamCategoryType' }
-    & Pick<DreamCategoryType, 'dreamCategoryId' | 'categoryName'>
-    & { defaultSteps?: Maybe<Array<Maybe<(
-      { __typename?: 'DefaultStepType' }
-      & Pick<DefaultStepType, 'stepDescription' | 'isSponsorRelated'>
-    )>>> }
-  )>>> }
-);
-
-export type DreamsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DreamsQuery = (
-  { __typename?: 'DreamQuery' }
-  & { dreams?: Maybe<Array<Maybe<(
-    { __typename?: 'DreamType' }
-    & Pick<DreamType, 'title' | 'dreamId' | 'displayName' | 'age'>
-  )>>> }
-);
-
-export const DreamerQueryDocument = gql`
-    query DreamerQuery {
-  categories {
-    dreamCategoryId
-    categoryName
-    defaultSteps {
-      stepDescription
-      isSponsorRelated
-    }
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DreamerQueryGQL extends Apollo.Query<DreamerQueryQuery, DreamerQueryQueryVariables> {
-    document = DreamerQueryDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const DreamsDocument = gql`
-    query Dreams {
-  dreams {
-    title
-    dreamId
-    displayName
-    age
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DreamsGQL extends Apollo.Query<DreamsQuery, DreamsQueryVariables> {
-    document = DreamsDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
