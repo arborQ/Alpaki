@@ -14,4 +14,7 @@ export class DreamListItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  get subTitle(): string {
+    return [ this.dream.displayName, `${this.dream.age} lat`, this.dream.city ].filter(d => !!d).join(' / ' );
+  }
 }

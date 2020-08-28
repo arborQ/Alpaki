@@ -6,7 +6,7 @@
             [class.female]="dream.gender === 1"
             [class.male]="dream.gender !== 2"
         ></div>
-        <mat-card-title>{{ dream.firstName }} {{ dream.lastName }}</mat-card-title>
+        <mat-card-title>{{ dream.displayName }}</mat-card-title>
         <mat-card-subtitle>{{ dream.age}} lat</mat-card-subtitle>
     </mat-card-header>
     <img mat-card-image src="/assets/person_{{ dream.gender === 2 ? 'female': 'male' }}.png">

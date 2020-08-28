@@ -13,9 +13,10 @@ export interface IDreamCategory {
 
 export interface IDream {
   dreamId: number;
-  firstName: string;
+  title: string;
+  city: string;
+  displayName: string;
   age: number;
-  lastName: string;
   dreamState: string;
   gender: number;
   dreamCategory: IDreamCategory;

@@ -6,21 +6,24 @@ import { DreamListComponent } from './dream-list/dream-list.component';
 import { DreamsService } from './dreams-service';
 import { DreamCardComponent } from './dream-card/dream-card.component';
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { DreamDetailsComponent } from './dream-details/dream-details.component';
 import { DreamListItemComponent } from './dream-list-item/dream-list-item.component';
+import { DreamProgressComponent } from './dream-progress/dream-progress.component';
 
 @NgModule({
-  declarations: [DreamListComponent, DreamCardComponent, DreamDetailsComponent, DreamListItemComponent],
+  declarations: [DreamListComponent, DreamCardComponent, DreamDetailsComponent, DreamListItemComponent, DreamProgressComponent],
   providers: [DreamsService],
   imports: [
     CommonModule,
     DreamsRoutingModule,
     MatCardModule,
     MatChipsModule,
-    MatListModule
+    MatListModule,
+    MatProgressSpinnerModule
   ]
 })
 export class DreamsModule { }
