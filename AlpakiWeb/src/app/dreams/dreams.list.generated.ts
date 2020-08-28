@@ -13,7 +13,15 @@ export type DreamsQuery = { __typename?: 'DreamQuery' } & {
       Types.Maybe<
         { __typename?: 'DreamType' } & Pick<
           Types.DreamType,
-          'title' | 'dreamId' | 'displayName' | 'age'
+          | 'dreamId'
+          | 'title'
+          | 'displayName'
+          | 'age'
+          | 'stepCount'
+          | 'finishedStepCount'
+          | 'categoryName'
+          | 'cityName'
+          | 'dreamImageId'
         >
       >
     >
@@ -23,10 +31,17 @@ export type DreamsQuery = { __typename?: 'DreamQuery' } & {
 export const DreamsDocument = gql`
   query Dreams($page: Int!) {
     dreams(page: $page) {
-      title
       dreamId
+      title
       displayName
       age
+      stepCount
+      finishedStepCount
+      categoryName
+      cityName
+      stepCount
+      finishedStepCount
+      dreamImageId
     }
   }
 `;

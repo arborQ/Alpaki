@@ -15,8 +15,10 @@ export class DisplayImageComponent implements OnInit {
   constructor(private imageService: ImagesService) { }
 
   ngOnInit(): void {
-    this.imageService.getFile(this.fileId).then(file => {
-      this.file = file;
-    });
+    if (this.fileId) {
+      this.imageService.getFile(this.fileId).then(file => {
+        this.file = file;
+      });
+    }
   }
 }

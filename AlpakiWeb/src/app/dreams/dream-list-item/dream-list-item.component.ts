@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IDream } from '../dreams-service';
+import { DreamType } from '../../../types';
 
 @Component({
   selector: 'app-dream-list-item',
@@ -7,7 +7,7 @@ import { IDream } from '../dreams-service';
   styleUrls: ['./dream-list-item.component.less']
 })
 export class DreamListItemComponent implements OnInit {
-  @Input() dream: IDream;
+  @Input() dream: DreamType;
 
   constructor() { }
 
@@ -15,6 +15,6 @@ export class DreamListItemComponent implements OnInit {
   }
 
   get subTitle(): string {
-    return [ this.dream.displayName, `${this.dream.age} lat`, this.dream.city ].filter(d => !!d).join(' / ' );
+    return [ this.dream.displayName, `${this.dream.age} lat`, this.dream.cityName ].filter(d => !!d).join(' / ' );
   }
 }

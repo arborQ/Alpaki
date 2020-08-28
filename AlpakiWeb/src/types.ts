@@ -88,16 +88,20 @@ export enum DreamStateEnum {
 export type DreamType = {
   __typename?: 'DreamType';
   age: Scalars['Int'];
+  categoryName: Scalars['String'];
   cityName: Scalars['String'];
   displayName: Scalars['String'];
   dreamCategory?: Maybe<DreamCategoryType>;
+  dreamCategoryId: Scalars['Int'];
   dreamComeTrueDate: Scalars['DateTimeOffset'];
   dreamId: Scalars['Int'];
   dreamImage?: Maybe<ImageType>;
   dreamImageId?: Maybe<Scalars['ID']>;
   dreamState?: Maybe<DreamStateEnum>;
+  finishedStepCount: Scalars['Int'];
   requiredSteps?: Maybe<Array<Maybe<DeamStepType>>>;
   sponsors?: Maybe<AssignedSponsorType>;
+  stepCount: Scalars['Int'];
   tags: Scalars['String'];
   title: Scalars['String'];
 };

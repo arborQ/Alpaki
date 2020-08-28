@@ -4,5 +4,6 @@
         <br />
         <span class="dream-item-header">{{subTitle}}</span>
     </div>
-    <app-dream-progress progressValue="83"></app-dream-progress>
+    <app-dream-progress [progressValue]="100 * (dream.finishedStepCount / dream.stepCount)"></app-dream-progress>
+    <app-display-image [fileId]="dream.dreamImageId"></app-display-image>
 </div>

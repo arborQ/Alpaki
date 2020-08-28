@@ -13,6 +13,7 @@ import { MatListModule } from '@angular/material/list';
 import { DreamDetailsComponent } from './dream-details/dream-details.component';
 import { DreamListItemComponent } from './dream-list-item/dream-list-item.component';
 import { DreamProgressComponent } from './dream-progress/dream-progress.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [DreamListComponent, DreamCardComponent, DreamDetailsComponent, DreamListItemComponent, DreamProgressComponent],
@@ -23,7 +24,8 @@ import { DreamProgressComponent } from './dream-progress/dream-progress.componen
     MatCardModule,
     MatChipsModule,
     MatListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    SharedModule
   ]
 })
 export class DreamsModule { }

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { DreamsGQL } from './dreams.list.generated';
+import { DreamsGQL, DreamsQuery, DreamsQueryVariables } from './dreams.list.generated';
+import { ApolloQueryResult } from 'apollo-client';
 
 export interface IDreamQueryResponse {
   dreams: IDream[];
@@ -28,6 +29,7 @@ export interface IDream {
 })
 export class DreamsService {
   private dreams: BehaviorSubject<IDream[]> = new BehaviorSubject<IDream[]>([]);
+  private loadedDreamsSubject: BehaviorSubject<ApolloQueryResult<DreamsQuery>> = new BehaviorSubject<ApolloQueryResult<DreamsQuery>>(null);
 
   constructor(private http: HttpClient, private gql: DreamsGQL) {
 
@@ -37,13 +39,12 @@ export class DreamsService {
     this.dreams.next(dreams);
   }
 
-  getDreams() {
-    this.http.get<IDreamQueryResponse>('/api/dreams?page=1')
-      .subscribe(response => {
-        this.dreams.next(response.dreams);
-      });
+  get loadedDreams() {
+    return this.loadedDreamsSubject.asObservable();
+  }
 
-    return this.dreams.asObservable();
+  loadDreams(model: DreamsQueryVariables) {
+    this.gql.fetch(model).toPromise().then(p => this.loadedDreamsSubject.next(p));
   }
 
   getDream(dreamId: number): Observable<IDream> {

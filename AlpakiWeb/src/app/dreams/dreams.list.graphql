@@ -1,9 +1,16 @@
 query Dreams($page:Int!) {
   dreams(page:$page)
    {
-    title
     dreamId 
+    title
     displayName 
     age
+    stepCount
+    finishedStepCount
+    categoryName
+    cityName
+    stepCount
+    finishedStepCount
+    dreamImageId
   }
 }
