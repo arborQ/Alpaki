@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { DreamsGQL } from './dreams.list.generated';
 
 export interface IDreamQueryResponse {
   dreams: IDream[];
@@ -28,11 +29,13 @@ export interface IDream {
 export class DreamsService {
   private dreams: BehaviorSubject<IDream[]> = new BehaviorSubject<IDream[]>([]);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private gql: DreamsGQL) {
 
-updateState(dreams: IDream[]) {
-  this.dreams.next(dreams);
-}
+  }
+
+  updateState(dreams: IDream[]) {
+    this.dreams.next(dreams);
+  }
 
   getDreams() {
     this.http.get<IDreamQueryResponse>('/api/dreams?page=1')
@@ -47,7 +50,7 @@ updateState(dreams: IDream[]) {
     const [existingDream] = this.dreams.value.filter(d => d.dreamId === dreamId);
 
     if (existingDream) {
-      return this.dreams.pipe(map(dreams =>  dreams.filter(d => d.dreamId === dreamId)[0]));
+      return this.dreams.pipe(map(dreams => dreams.filter(d => d.dreamId === dreamId)[0]));
     }
 
     return this.http

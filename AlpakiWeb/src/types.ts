@@ -1,5 +1,7 @@
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -20,8 +22,11 @@ export type Scalars = {
   Decimal: any;
 };
 
-
-
+export type AssignedSponsorType = {
+  __typename?: 'AssignedSponsorType';
+  sponsor?: Maybe<SponsorType>;
+  sponsorId: Scalars['Int'];
+};
 
 export type DeamStepType = {
   __typename?: 'DeamStepType';
@@ -29,7 +34,6 @@ export type DeamStepType = {
   stepDescription: Scalars['String'];
   stepState?: Maybe<StepStateEnum>;
 };
-
 
 export type DefaultStepType = {
   __typename?: 'DefaultStepType';
@@ -54,19 +58,17 @@ export type DreamQuery = {
   users?: Maybe<Array<Maybe<UserType>>>;
 };
 
-
 export type DreamQueryDreamsArgs = {
   dreamId?: Maybe<Scalars['ID']>;
   searchName?: Maybe<Scalars['String']>;
-  gender?: Maybe<GenderEnum>;
   status?: Maybe<DreamStateEnum>;
   ageFrom?: Maybe<Scalars['Int']>;
   ageTo?: Maybe<Scalars['Int']>;
+  page?: Maybe<Scalars['Int']>;
   categories?: Maybe<Array<Maybe<Scalars['Int']>>>;
   orderBy?: Maybe<Scalars['String']>;
   orderAsc?: Maybe<Scalars['Boolean']>;
 };
-
 
 export type DreamQueryUsersArgs = {
   userId?: Maybe<Scalars['ID']>;
@@ -80,32 +82,34 @@ export enum DreamStateEnum {
   Approved = 'APPROVED',
   InProgress = 'IN_PROGRESS',
   Done = 'DONE',
-  Terminated = 'TERMINATED'
+  Terminated = 'TERMINATED',
 }
 
 export type DreamType = {
   __typename?: 'DreamType';
   age: Scalars['Int'];
+  cityName: Scalars['String'];
+  displayName: Scalars['String'];
   dreamCategory?: Maybe<DreamCategoryType>;
   dreamComeTrueDate: Scalars['DateTimeOffset'];
   dreamId: Scalars['Int'];
+  dreamImage?: Maybe<ImageType>;
+  dreamImageId?: Maybe<Scalars['ID']>;
   dreamState?: Maybe<DreamStateEnum>;
-  firstName: Scalars['String'];
-  gender?: Maybe<GenderEnum>;
-  lastName: Scalars['String'];
   requiredSteps?: Maybe<Array<Maybe<DeamStepType>>>;
+  sponsors?: Maybe<AssignedSponsorType>;
   tags: Scalars['String'];
+  title: Scalars['String'];
 };
 
-export enum GenderEnum {
-  NotSpecified = 'NOT_SPECIFIED',
-  Male = 'MALE',
-  Female = 'FEMALE'
-}
+export type ImageType = {
+  __typename?: 'ImageType';
+  imageData?: Maybe<Scalars['ID']>;
+};
 
 export enum InvitationStateEnum {
   Pending = 'PENDING',
-  Accepted = 'ACCEPTED'
+  Accepted = 'ACCEPTED',
 }
 
 export type InvitationType = {
@@ -116,12 +120,25 @@ export type InvitationType = {
   status?: Maybe<InvitationStateEnum>;
 };
 
+export type SponsorType = {
+  __typename?: 'SponsorType';
+  brand: Scalars['String'];
+  contactPersonName: Scalars['String'];
+  cooperationType?: Maybe<SponsorTypeEnum>;
+  displayName: Scalars['String'];
+  email: Scalars['String'];
+  sponsorId: Scalars['Int'];
+};
 
+export enum SponsorTypeEnum {
+  PermanentCooperation = 'PERMANENT_COOPERATION',
+  TemporaryCooperation = 'TEMPORARY_COOPERATION',
+}
 
 export enum StepStateEnum {
   Awaiting = 'AWAITING',
   Done = 'DONE',
-  Skiped = 'SKIPED'
+  Skiped = 'SKIPED',
 }
 
 export type UserType = {

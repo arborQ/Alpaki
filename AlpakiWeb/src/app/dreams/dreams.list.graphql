@@ -1,0 +1,9 @@
+query Dreams($page:Int!) {
+  dreams(page:$page)
+   {
+    title
+    dreamId 
+    displayName 
+    age
+  }
+}
