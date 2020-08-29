@@ -4,9 +4,10 @@ import { UserRolesComponent } from './user-roles/user-roles.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { DisplayImageComponent } from './display-image/display-image.component';
 import { MatFileUploadModule } from 'mat-file-upload';
+import { DisplayImageDirective } from './display-image.directive';
 
 @NgModule({
-  declarations: [UserRolesComponent, DisplayImageComponent],
+  declarations: [UserRolesComponent, DisplayImageComponent, DisplayImageDirective],
   imports: [
     CommonModule,
     MatChipsModule,

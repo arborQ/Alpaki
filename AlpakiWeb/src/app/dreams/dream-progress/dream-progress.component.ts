@@ -12,6 +12,8 @@ export class DreamProgressComponent implements OnInit {
   @Input() imageId: string;
   @Input() progressValue: number;
   color: ThemePalette = 'primary';
+  accent: ThemePalette = 'accent';
+
   mode: ProgressSpinnerMode = 'determinate';
   constructor() { }
 

@@ -1,9 +1,8 @@
 :host {
   width: 100%;
 }
-
 .dream-item {
-  border-radius: .6em;
+  border-radius: 0.6em;
   min-width: 100%;
   display: flex;
   align-content: space-around;
@@ -12,26 +11,21 @@
   min-height: 4em;
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   margin-bottom: 1em;
-
-  &-description {
-    display: flex;
-    flex-direction: column;
-    align-content: space-between;
-
-    >div {
-      flex: 1;
-    }
-  }
-
-  >div {
-    flex: 1;
-  }
-
-  &-title {
-    color: #333;
-  }
-
-  &-header {
-    color: rgb(141, 136, 136);
-  }
+}
+.dream-item-description {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+}
+.dream-item-description > div {
+  flex: 1;
+}
+.dream-item > div {
+  flex: 1;
+}
+.dream-item-title {
+  color: #333;
+}
+.dream-item-header {
+  color: #8d8888;
 }

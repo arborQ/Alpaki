@@ -1,9 +1,13 @@
 <div class="dream-item">
-    <div>
-        <span class="dream-item-title">{{dream.title}}</span>
-        <br />
-        <span class="dream-item-header">{{subTitle}}</span>
+    <div class="dream-item-description">
+        <div>
+            <span class="dream-item-title">{{dream.title}}</span>
+            <br />
+            <span class="dream-item-header">{{subTitle}}</span>
+        </div>
+        <mat-chip-list aria-label="Fish selection">
+            <mat-chip color="primary" selected>{{dream.categoryName}}</mat-chip>
+        </mat-chip-list>
     </div>
     <app-dream-progress [progressValue]="100 * (dream.finishedStepCount / dream.stepCount)"></app-dream-progress>
-    <app-display-image [fileId]="dream.dreamImageId"></app-display-image>
 </div>
