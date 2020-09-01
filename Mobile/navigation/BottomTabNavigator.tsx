@@ -24,21 +24,21 @@ export default function BottomTabNavigator() {
         name="Login"
         component={LoginNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="windowso" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-person" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Pulpit"
         component={PulpitNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-home" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Dreams"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-gift" color={color} />,
         }}
       />
     </BottomTab.Navigator>

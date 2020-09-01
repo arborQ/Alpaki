@@ -7,16 +7,33 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import { DefaultTheme as PaperDefaultTheme, Provider as PaperProvider, Appbar } from 'react-native-paper';
+
+const theme = {
+  ...PaperDefaultTheme,
+  roundness: 2,
+  colors: {
+    ...PaperDefaultTheme.colors,
+    primary: '#437c56',
+    accent: '#f1c40f',
+  },
+};
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
-    </NavigationContainer>
+    <PaperProvider theme={theme}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => { }} />
+        <Appbar.Content title="Title" subtitle="Subtitle" />
+      </Appbar.Header>
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <RootNavigator />
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
 
