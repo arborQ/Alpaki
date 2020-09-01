@@ -1,5 +1,6 @@
 seq-data
 mssql-data
 
-AlpakiWeb
+AlpakiWeb/node_modules
+AlpakiMobile/node_modules
 PublishProfiles
