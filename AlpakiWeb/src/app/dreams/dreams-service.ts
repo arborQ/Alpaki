@@ -3,6 +3,7 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { DreamsGQL, DreamsQuery, DreamsQueryVariables } from './dreams.list.generated';
+import { DreamDetailsGQL, DreamDetailsQuery, DreamDetailsQueryVariables  } from './dreams.details.generated';
 import { ApolloQueryResult } from 'apollo-client';
 
 export interface IDreamQueryResponse {
@@ -31,7 +32,7 @@ export class DreamsService {
   private dreams: BehaviorSubject<IDream[]> = new BehaviorSubject<IDream[]>([]);
   private loadedDreamsSubject: BehaviorSubject<ApolloQueryResult<DreamsQuery>> = new BehaviorSubject<ApolloQueryResult<DreamsQuery>>(null);
 
-  constructor(private http: HttpClient, private gql: DreamsGQL) {
+  constructor(private http: HttpClient, private gql: DreamsGQL, private gqlDetails: DreamDetailsGQL) {
 
   }
 
@@ -47,15 +48,16 @@ export class DreamsService {
     this.gql.fetch(model).toPromise().then(p => this.loadedDreamsSubject.next(p));
   }
 
-  getDream(dreamId: number): Observable<IDream> {
-    const [existingDream] = this.dreams.value.filter(d => d.dreamId === dreamId);
+  getDream(dreamId: number): Promise<ApolloQueryResult<DreamDetailsQuery>> {
+    return this.gqlDetails.fetch({ dreamId: dreamId.toString() }).toPromise();
+    // const [existingDream] = this.dreams.value.filter(d => d.dreamId === dreamId);
 
-    if (existingDream) {
-      return this.dreams.pipe(map(dreams => dreams.filter(d => d.dreamId === dreamId)[0]));
-    }
+    // if (existingDream) {
+    //   return this.dreams.pipe(map(dreams => dreams.filter(d => d.dreamId === dreamId)[0]));
+    // }
 
-    return this.http
-      .get<IDream>(`/api/dreamers/dreams?dreamId=${dreamId}`);
+    // return this.http
+    //   .get<IDream>(`/api/dreamers/dreams?dreamId=${dreamId}`);
   }
 
   deleteDream(dreamId: number) {

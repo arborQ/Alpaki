@@ -10,4 +10,5 @@
         </mat-chip-list>
     </div>
     <app-dream-progress [progressValue]="100 * (dream.finishedStepCount / dream.stepCount)"></app-dream-progress>
+    <a routerLink="/dreams/details" [queryParams]="{dreamId: dream.dreamId}"></a>
 </div>
