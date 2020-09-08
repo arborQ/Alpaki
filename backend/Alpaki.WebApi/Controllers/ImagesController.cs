@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Alpaki.Logic.Handlers.AddTemporaryImage;
 using Alpaki.Logic.Handlers.GetProfileImage;
@@ -37,14 +35,13 @@ namespace Alpaki.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{ProfileImageId:guid}.png")]
         public async Task<IActionResult> GetProfileImage([FromRoute] GetProfileImageRequest request)
         {
             var imageData = await _mediator.Send(request);
 
             return File(imageData.ImageData, "image/png");
-
-            //return Ok(Convert.ToBase64String(imageData.ImageData));
         }
     }
 }

@@ -1,0 +1,64 @@
+<form [formGroup]="registerForm" (ngSubmit)="onFormSubmitted()">
+  <mat-card class="content-card">
+    <mat-card-title>Zarejestruj się</mat-card-title>
+    <mat-card-content>
+      <p>
+        <mat-form-field>
+          <mat-label>Imię</mat-label>
+          <input matInput formControlName="firstName">
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <mat-label>Nazwisko</mat-label>
+          <input matInput formControlName="lastName">
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field>
+          <mat-label>Oddział</mat-label>
+          <mat-select formControlName="brand">
+            <mat-option value="">Brak</mat-option>
+            <mat-option *ngFor="let brand of options | async" [value]="brand">{{brand}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <mat-label>Numer telefonu</mat-label>
+          <input matInput formControlName="phoneNumber">
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
+      </p>
+
+
+      <p>
+        <mat-form-field>
+          <mat-label>Hasło</mat-label>
+          <input matInput formControlName="password">
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <mat-label>Kod</mat-label>
+          <input [disabled]="isUrlCode" matInput formControlName="code">
+        </mat-form-field>
+      </p>
+
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">
+          Zarejestruj się
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>

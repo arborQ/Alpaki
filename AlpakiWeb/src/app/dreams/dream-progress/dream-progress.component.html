@@ -1,0 +1,11 @@
+<div class="spinner-container">
+    <mat-progress-spinner class="spinner-back" [color]="accent" [mode]="mode" [value]="100">
+    </mat-progress-spinner>
+    <mat-progress-spinner 
+        matBadge="{{progressValue}} %" 
+        matBadgePosition="before" 
+        [color]="color" 
+        [mode]="mode" 
+        [value]="progressValue || 1">
+    </mat-progress-spinner>
+</div>

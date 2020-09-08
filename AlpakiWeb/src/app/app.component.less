@@ -1,0 +1,67 @@
+.example-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #eee;
+  }
+  
+  .router-outlet {
+    width: 90%;
+    margin: 1em auto;
+}
+
+  .content-card {
+      max-width: 800px;
+      margin: 20px auto;
+  }
+  mat-sidenav {
+      min-width: 150px;
+  }
+
+  mat-nav-list {
+    a {
+        width: 100%;
+        display: block;
+        min-height: 2em;
+        line-height: 2em;
+        text-align: center;
+        text-decoration: none;
+        margin: 1em 0;
+    }
+  }
+.header {
+    display: flex;
+    background-color: #FFF;
+    border-bottom: solid 1px rgba(0,0,0,.12);
+    align-items: center;
+    > button {
+        margin-left: 10px;
+    }
+    > a {
+        margin-right: 10px;
+    }
+  .app-logo {
+      background-image: url(../assets/logo.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      height: 50px;
+      width: 100%;
+
+      background-position: center;
+      position: relative;
+
+      a {
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+      }
+  }
+}
+  

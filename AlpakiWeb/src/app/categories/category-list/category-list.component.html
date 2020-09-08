@@ -1,0 +1,26 @@
+<mat-accordion class="example-headers-align">
+
+    <mat-expansion-panel *ngFor="let category of categories$ | async">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ category.categoryName }}
+        </mat-panel-title>
+        <mat-panel-description>
+          Przypisanych marzeń: {{ category.dreamCount }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <app-category-form (saveForm)="submitUpdateCategory($event)" [category]="category"></app-category-form>
+
+    </mat-expansion-panel>
+    
+    <mat-expansion-panel open>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>Dodaj nową</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <app-category-form (saveForm)="submitCreateNewCategory($event)"></app-category-form>
+    </mat-expansion-panel>
+  </mat-accordion>

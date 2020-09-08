@@ -63,7 +63,7 @@ namespace Alpaki.Tests.IntegrationTests.UserControllerTests
             IntegrationTestsFixture.SetUserAdminContext();
 
             // Act
-            var response = await Client.GetAsync($"/api/user?page={page}").AsResponse<GetUsersResponse>();
+            var response = await Client.GetAsync($"/api/user?page={page - 1}").AsResponse<GetUsersResponse>();
 
             // Assert
             response.Users.Should().HaveCount(expectedCount);

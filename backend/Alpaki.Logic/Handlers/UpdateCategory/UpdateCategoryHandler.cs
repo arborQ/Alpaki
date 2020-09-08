@@ -46,13 +46,13 @@ namespace Alpaki.Logic.Handlers.UpdateCategory
                     if (requestCategory != null)
                     {
                         dbCategory.IsSponsorRelated = requestCategory.IsSponsorRelated;
-                        dbCategory.StepDescription = requestCategory.StepName;
+                        dbCategory.StepDescription = requestCategory.StepDescription;
                     }
                 }
 
                 foreach (var requestCategory in request.DefaultSteps.Where(c => c.CategoryDefaultStepId == default))
                 {
-                    category.DefaultSteps.Add(new DreamCategoryDefaultStep { IsSponsorRelated = requestCategory.IsSponsorRelated, StepDescription = requestCategory.StepName });
+                    category.DefaultSteps.Add(new DreamCategoryDefaultStep { IsSponsorRelated = requestCategory.IsSponsorRelated, StepDescription = requestCategory.StepDescription });
                 }
             }
 

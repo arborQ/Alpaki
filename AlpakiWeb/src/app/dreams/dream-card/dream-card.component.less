@@ -1,0 +1,29 @@
+.dream-card {
+    max-width: 200px;
+    margin-right: 1em;
+    position: relative;
+
+    a {
+        &::after {
+            position: absolute;
+            content: '';
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+  }
+  mat-card-title {
+      white-space: nowrap;
+  }
+  .dream-header-image {
+    background-size: cover;
+    
+    &.female {
+        background-image: url(../../../assets/person_female.png);
+    }
+    &.male {
+        background-image: url(../../../assets/person_male.png);
+    }
+  }

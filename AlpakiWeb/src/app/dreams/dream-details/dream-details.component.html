@@ -1,0 +1,24 @@
+<div class="dream-details-component">
+
+    <mat-card class="dream-card" *ngIf="(dream$ | async) as dream">
+        <mat-card-header>
+            <div mat-card-avatar class="dream-header-image {{ dream.gender === 'FEMALE' ? 'female': 'male' }}"></div>
+            <mat-card-title>{{ dream.firstName }} {{ dream.lastName }}</mat-card-title>
+            <mat-card-subtitle>{{ dream.age}} lat</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-chip-list>
+                <mat-chip color="primary" selected>{{ dream.dreamCategory.categoryName}}</mat-chip>
+            </mat-chip-list>
+            <mat-selection-list #steps>
+                <div mat-subheader>Kroki do spełnienia marzenia</div>
+                <mat-list-option *ngFor="let step of steps$ | async">
+                  {{step}}
+                </mat-list-option>
+              </mat-selection-list>
+              <!-- <pre>
+                  {{ steps.selectedOptions.selected.length }}
+              </pre> -->
+        </mat-card-content>
+    </mat-card>
+</div>

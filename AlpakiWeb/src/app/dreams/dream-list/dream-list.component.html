@@ -1,0 +1,8 @@
+<div class="dream-list-component">
+    <h2 class="mat-display-2">Najnowsze marzenia</h2>
+    <div class="dream-list">
+        <ng-container *ngFor="let dream of dreams$ | async">
+            <app-dream-list-item [dream]="dream"></app-dream-list-item>
+        </ng-container>
+    </div>
+</div>

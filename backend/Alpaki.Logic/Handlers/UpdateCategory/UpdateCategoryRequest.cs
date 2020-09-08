@@ -21,7 +21,7 @@ namespace Alpaki.Logic.Handlers.UpdateCategory
 
             public int Order { get; set; }
 
-            public string StepName { get; set; }
+            public string StepDescription { get; set; }
 
             public bool IsSponsorRelated { get; set; }
         }

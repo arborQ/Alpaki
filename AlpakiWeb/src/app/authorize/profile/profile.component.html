@@ -1,0 +1,21 @@
+<mat-card class="example-card" *ngIf="profile$ | async as profile">
+    <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{profile.firstName}} {{profile.lastName}}</mat-card-title>
+        <mat-card-subtitle>{{profile.email}}</mat-card-subtitle>
+    </mat-card-header>
+    <div class="image-container">
+        <button mat-mini-fab color="primary" aria-label="Edytuj profil">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <app-display-image fileId="eb65cc85-80d7-4be1-c1ae-08d849b153f0"></app-display-image>
+    </div>
+    <mat-card-content>
+        <p>{{profile.brand}}</p>
+        <p>{{profile.phoneNumber}}</p>
+        <p>
+            <app-user-roles [currentRole]="profile.userRole"></app-user-roles>
+        </p>
+    </mat-card-content>
+    <app-profile-edit [profile]="profile"></app-profile-edit>
+</mat-card>

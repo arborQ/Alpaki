@@ -1,0 +1,18 @@
+query DreamDetails($dreamId: ID!) {
+  dreams(dreamId: $dreamId) {
+    dreamId
+    title
+    displayName
+    age
+    cityName
+    dreamComeTrueDate
+    dreamCategoryId
+    categoryName
+    dreamImageId
+    requiredSteps {
+      dreamStepId
+      stepState
+      stepDescription
+    }
+  }
+}

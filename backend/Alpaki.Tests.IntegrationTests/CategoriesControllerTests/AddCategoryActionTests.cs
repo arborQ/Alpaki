@@ -34,7 +34,7 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
 
             // Act
 
-            var response = await Client.PostAsync(ActionUrl, new { categoryName, defaultSteps = new[] { new { stepName = "test" } } }.WithJsonContent().json);
+            var response = await Client.PostAsync(ActionUrl, new { categoryName, defaultSteps = new[] { new { stepDescription = "test" } } }.WithJsonContent().json);
 
             // Assert
             response.IsSuccessStatusCode.Should().Be(isPermited);
@@ -67,7 +67,7 @@ namespace Alpaki.Tests.IntegrationTests.CategoriesControllerTests
 
             foreach(var step in request.DefaultSteps)
             {
-                var dbStep = dbCategory.DefaultSteps.SingleOrDefault(s => s.StepDescription == step.StepName);
+                var dbStep = dbCategory.DefaultSteps.SingleOrDefault(s => s.StepDescription == step.StepDescription);
                 dbStep.Should().NotBeNull();
             }
         }

@@ -1,0 +1,14 @@
+<div class="dream-item">
+    <div class="dream-item-description">
+        <div>
+            <span class="dream-item-title">{{dream.title}}</span>
+            <br />
+            <span class="dream-item-header">{{subTitle}}</span>
+        </div>
+        <mat-chip-list aria-label="Fish selection">
+            <mat-chip color="primary" selected>{{dream.categoryName}}</mat-chip>
+        </mat-chip-list>
+    </div>
+    <app-dream-progress [progressValue]="100 * (dream.finishedStepCount / dream.stepCount)"></app-dream-progress>
+    <a routerLink="/dreams/details" [queryParams]="{dreamId: dream.dreamId}"></a>
+</div>

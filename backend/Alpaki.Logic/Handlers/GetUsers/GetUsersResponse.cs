@@ -10,6 +10,8 @@ namespace Alpaki.Logic.Handlers.GetUsers
     {
         public IReadOnlyCollection<UserListItem> Users { get; set; }
 
+        public int TotalCount { get; set; }
+
         public class UserListItem
         {
             public long UserId { get; set; }
