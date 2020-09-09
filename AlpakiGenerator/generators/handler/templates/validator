@@ -1,0 +1,15 @@
+using Alpaki.Database;
+using FluentValidation;
+
+namespace Alpaki.Logic.Handlers.<%= name %>
+{
+    public class <%= name %>RequestValidator : AbstractValidator<<%= name %>Request>
+    {
+        private readonly IDatabaseContext _databaseContext;
+
+        public <%= name %>RequestValidator(IDatabaseContext databaseContext)
+        {
+            _databaseContext = databaseContext;
+        }
+    }
+}

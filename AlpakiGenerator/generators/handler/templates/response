@@ -1,0 +1,7 @@
+namespace Alpaki.Logic.Handlers.<%= name %>
+{
+    public class <%= name %>Response
+    {
+
+    }
+}

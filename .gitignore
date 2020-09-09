@@ -2,4 +2,5 @@ seq-data
 mssql-data
 
 AlpakiWeb/node_modules
+AlpakiGenerator/node_modules
 PublishProfiles

@@ -1,0 +1,24 @@
+using System.Threading;
+using System.Threading.Tasks;
+using Alpaki.Database;
+using MediatR;
+
+namespace Alpaki.Logic.Handlers.<%= name %>
+{
+    public class <%= name %>Handler : IRequestHandler<<%= name %>Request, <%= name %>Response>
+    {
+        private readonly IDatabaseContext _databaseContext;
+
+        public <%= name %>Handler(IDatabaseContext databaseContext)
+        {
+            _databaseContext = databaseContext;
+        }
+
+        public async Task<<%= name %>Response> Handle(<%= name %>Request request, CancellationToken cancellationToken)
+        {
+            var response = new <%= name %>Response();
+            
+            return await Task.FromResult(response);
+        }
+    }
+}

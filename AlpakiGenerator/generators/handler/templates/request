@@ -1,0 +1,12 @@
+using MediatR;
+
+namespace Alpaki.Logic.Handlers.<%= name %>
+{
+    public class <%= name %>Request : IRequest<<%= name %>Response>
+    {
+        public <%= name %>Request()
+        {
+
+        }
+    }
+}
