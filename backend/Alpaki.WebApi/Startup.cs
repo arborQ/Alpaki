@@ -129,6 +129,7 @@ namespace Alpaki.WebApi
                 options =>
                 {
                     options.Filters.Add(typeof(ApiKeyFilter));
+                    options.Filters.Add(typeof(ValidateModelStateAttribute));
                 }
             );
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();

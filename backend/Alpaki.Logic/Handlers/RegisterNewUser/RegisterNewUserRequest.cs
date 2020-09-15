@@ -1,12 +1,22 @@
+using System;
 using MediatR;
 
 namespace Alpaki.Logic.Handlers.RegisterNewUser
 {
     public class RegisterNewUserRequest : IRequest<RegisterNewUserResponse>
     {
-        public RegisterNewUserRequest()
-        {
+        public string Email { get; set; }
 
-        }
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Brand { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public string Password { get; set; }
+
+        public Guid? ProfileImageId { get; set; }
     }
 }

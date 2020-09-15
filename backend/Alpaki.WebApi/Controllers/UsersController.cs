@@ -10,6 +10,7 @@ using Alpaki.Logic.Handlers.GetUsers;
 using Microsoft.AspNetCore.Authorization;
 using Alpaki.Logic.Handlers.GetUser;
 using Alpaki.CrossCutting.Interfaces;
+using Alpaki.Logic.Handlers.RegisterNewUser;
 
 namespace Alpaki.WebApi.Controllers
 {
@@ -64,6 +65,11 @@ namespace Alpaki.WebApi.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.Forbidden)]
         public Task<DeleteUserResponse> DeleteUser([FromQuery] DeleteUserRequest deleteUserRequest) => _mediator.Send(deleteUserRequest);
+
+        [HttpPost]
+        [ProducesResponseType(typeof(RegisterNewUserResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        public Task<RegisterNewUserResponse> RegisterUser([FromBody] RegisterNewUserRequest registerUserRequest) => _mediator.Send(registerUserRequest);
 
     }
 }
