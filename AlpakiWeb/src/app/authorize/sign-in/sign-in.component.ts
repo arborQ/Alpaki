@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { SignInService } from '../sign-in.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
 export class SignInComponent implements OnInit {
   loginForm: FormGroup;
   isProcessing = false;
-  constructor(private router: Router,  private signInService: SignInService) { }
+  constructor(private router: Router, private signInService: SignInService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -30,8 +31,14 @@ export class SignInComponent implements OnInit {
     this.signInService
       .signIn(login, password)
       .toPromise()
-      .then(() => {
+      .then((a) => {
         this.router.navigateByUrl('/dreams/list');
+      })
+      .catch(({ error }) => {
+        const [firstError] = error.errors;
+        if (firstError) {
+          this.snackBar.open(firstError.errorMessage, 'OK');
+        }
       })
       .finally(() => {
         this.loginForm.enable();

@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileService } from './profile/profile.service';
@@ -18,6 +19,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { SharedModule } from '../shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
 import { ProfileEditComponent } from './profile/profile-edit/profile-edit.component';
+import { SignInService } from './sign-in.service';
 
 @NgModule({
   declarations: [
@@ -37,10 +39,11 @@ import { ProfileEditComponent } from './profile/profile-edit/profile-edit.compon
     AuthorizeRoutingModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     MatChipsModule,
     MatIconModule,
     SharedModule
   ],
-  providers: [ProfileService]
+  providers: [ProfileService, SignInService, {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}]
 })
 export class AuthorizeModule { }

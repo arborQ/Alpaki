@@ -50,14 +50,6 @@ export class DreamsService {
 
   getDream(dreamId: number): Promise<ApolloQueryResult<DreamDetailsQuery>> {
     return this.gqlDetails.fetch({ dreamId: dreamId.toString() }).toPromise();
-    // const [existingDream] = this.dreams.value.filter(d => d.dreamId === dreamId);
-
-    // if (existingDream) {
-    //   return this.dreams.pipe(map(dreams => dreams.filter(d => d.dreamId === dreamId)[0]));
-    // }
-
-    // return this.http
-    //   .get<IDream>(`/api/dreamers/dreams?dreamId=${dreamId}`);
   }
 
   deleteDream(dreamId: number) {

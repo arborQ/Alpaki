@@ -12,14 +12,16 @@ import { of } from 'rxjs';
 export class DreamDetailsComponent {
   constructor(private dreamService: DreamsService, private activatedRoute: ActivatedRoute) { }
   dreamId: number | null = null;
-  dreamResponse$ = this.activatedRoute.paramMap.pipe(
+  dreamResponse$ = this.activatedRoute.params.pipe(
     switchMap(params => {
-      this.dreamId = +params.get('dreamId');
+      console.log({ params });
+      this.dreamId = +params.dreamId;
 
       return this.dreamService.getDream(this.dreamId);
     })
   );
-  steps$ = of([ 'Zdobyć kasę', 'Wydać kasę' ]);
-  dream$ = this.dreamResponse$.pipe(map(response => response));
-  isLoading$ = of(false);
+
+  dream$ = this.dreamResponse$.pipe(map(response => response.data.dreams[0]));
+  isLoading$ = this.dreamResponse$.pipe(map(response => response.loading));
+  steps$ = this.dream$.pipe(map(dream => dream.requiredSteps));
 }

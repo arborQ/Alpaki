@@ -6,7 +6,7 @@ import { DreamDetailsComponent } from './dream-details/dream-details.component';
 
 const routes: Routes = [
   { path: 'list', component: DreamListComponent },
-  { path: 'details', component: DreamDetailsComponent, data: { title: 'lol' } },
+  { path: 'details/:dreamId', component: DreamDetailsComponent, data: { title: 'lol' } },
   { path: '**', redirectTo: 'list?page=1' }
 ];
 

@@ -9,6 +9,8 @@
             <mat-chip color="primary" selected>{{dream.categoryName}}</mat-chip>
         </mat-chip-list>
     </div>
-    <app-dream-progress [progressValue]="100 * (dream.finishedStepCount / dream.stepCount)"></app-dream-progress>
-    <a routerLink="/dreams/details" [queryParams]="{dreamId: dream.dreamId}"></a>
+    <span class="progress-value">
+        {{ 100 * (dream.finishedStepCount / dream.stepCount) }}
+    </span>
+    <a [routerLink]="['/dreams/details/', dream.dreamId]"></a>
 </div>
