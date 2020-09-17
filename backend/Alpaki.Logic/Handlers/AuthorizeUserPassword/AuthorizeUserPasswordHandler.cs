@@ -36,7 +36,7 @@ namespace Alpaki.Logic.Handlers.AuthorizeUserPassword
 
             var token = _jwtGenerator.Generate(user);
 
-            return new AuthorizeUserPasswordResponse { Token = token, Login = user.Email };
+            return new AuthorizeUserPasswordResponse { Token = token, Login = user.Email, ApplicationType = user.ApplicationType };
         }
     }
 }

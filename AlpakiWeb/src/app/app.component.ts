@@ -1,9 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { of } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CurrentUserService } from 'src/current-user.service';
 import { Router, NavigationStart } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
+import { map } from 'rxjs/operators';
+import { ApplicationType } from './authorize/sign-in/sign-in.models';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +29,25 @@ export class AppComponent implements OnDestroy, OnInit {
   private mobileQueryListener: () => void;
 
   $isAuthorized = this.currentUserService.$isAuthorized;
+
+  menuPositions$ = this.currentUserService.currentUser.pipe(map(currentUser => {
+    let menuOptions = [];
+
+    if (!currentUser) {
+      menuOptions = [...menuOptions,
+      { label: 'Zaloguj się', path: '/authorize/sign-in' },
+      { label: 'Rejestracja', path: '/authorize/register' },
+      ];
+    }
+    console.log(currentUser?.applicationType);
+    if ((currentUser?.applicationType & ApplicationType.Dream) === ApplicationType.Dream) {
+      menuOptions = [...menuOptions,
+        { label: 'Marzenia', path: '/dreams/list' },
+        ];
+    }
+
+    return menuOptions;
+  }));
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this.mobileQueryListener);

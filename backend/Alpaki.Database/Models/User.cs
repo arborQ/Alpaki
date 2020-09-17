@@ -33,6 +33,8 @@ namespace Alpaki.Database.Models
 
         public UserRoleEnum Role { get; set; }
 
+        public ApplicationType ApplicationType { get; set; }
+
         public ICollection<AssignedDreams> AssignedDreams { get; set; }
 
         [ForeignKey(nameof(ProfileImage))]

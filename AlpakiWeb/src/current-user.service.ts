@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { CurrentUser } from './models/current-user';
 import { map } from 'rxjs/operators';
+import { ApplicationType } from './app/authorize/sign-in/sign-in.models';
 const userStorageKey = 'currentUser';
 const tokenStorageKey = 'authorize';
 
@@ -19,8 +20,8 @@ export class CurrentUserService {
     this.$isAuthorized = this.currentUser.pipe(map(u => !!u));
   }
 
-  setCurrentUser(login: string, token: string) {
-    const currentUser: CurrentUser = { login, expire: new Date() };
+  setCurrentUser(login: string, token: string, applicationType: ApplicationType) {
+    const currentUser: CurrentUser = { login, expire: new Date(), applicationType };
     localStorage.setItem(userStorageKey, JSON.stringify(currentUser));
     localStorage.setItem(tokenStorageKey, token);
     this.currentUserSubject.next(currentUser);

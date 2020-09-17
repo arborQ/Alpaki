@@ -1,4 +1,3 @@
-import { logging } from 'protractor';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -18,7 +17,7 @@ export class SignInService {
     return this.http
       .post('/api/authorize', { login, password })
       .pipe(map((response: ISignInModel) => {
-        this.currentUserService.setCurrentUser(response.login, response.token);
+        this.currentUserService.setCurrentUser(response.login, response.token, response.applicationType);
         this.snackBar.open(`Zalogowałeś się jako ${response.login}`);
         return true;
       }));

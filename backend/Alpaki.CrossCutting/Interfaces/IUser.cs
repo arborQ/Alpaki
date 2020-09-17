@@ -7,5 +7,7 @@ namespace Alpaki.CrossCutting.Interfaces
         long UserId { get; }
 
         UserRoleEnum Role { get; }
+
+        ApplicationType ApplicationType { get; }
     }
 }

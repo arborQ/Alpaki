@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
 using Alpaki.Database.Models.Invitations;
@@ -32,14 +31,6 @@ namespace Alpaki.Database
                    DreamCategoryId = index + 1,
                    CategoryName = name,
                }));
-
-            var adminPassword = "test123!";
-            var adminLogin = "admin@admin.pl";
-
-            var adminUser = new User { FirstName = "admin", LastName = "admin", Email = adminLogin, UserId = 1, Role = UserRoleEnum.Admin, PasswordHash = _passwordHasher.HashPassword(null, adminPassword) };
-            modelBuilder.Entity<User>().HasData(adminUser);
-            _logger.LogInformation($"[ADMIN]: admin user was created with token: [{_jwtGenerator.Generate(adminUser)}]");
-            _logger.LogInformation($"[ADMIN]: admin user was created with login: [{adminLogin}] password: [{adminPassword}]");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

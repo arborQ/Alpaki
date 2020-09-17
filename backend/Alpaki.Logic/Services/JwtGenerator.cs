@@ -32,6 +32,7 @@ namespace Alpaki.Logic.Services
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                     new Claim(ClaimTypes.Name, user.UserId.ToString()),
                     new Claim(ClaimTypes.Role, ((int)user.Role).ToString()), 
+                    new Claim(ClaimTypes.System, ((int)user.ApplicationType).ToString()),
                 }),
                 Expires = _systemClock.UtcNow.AddDays(_validDays).DateTime,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
