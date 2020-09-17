@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Alpaki.Database.Models.Invitations;
+using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Invitations.InviteAVolunteer;
 using Alpaki.Logic.Features.Invitations.Repositories;
 

@@ -1,5 +1,5 @@
 ﻿using Alpaki.CrossCutting.Enums;
-using Alpaki.Database.Models.Invitations;
+using Alpaki.Database.Models;
 using AutoFixture;
 using AutoFixture.Dsl;
 

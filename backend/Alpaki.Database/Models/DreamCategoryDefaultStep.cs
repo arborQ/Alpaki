@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alpaki.Database.Models
 {
+    [Table("DreamCategoryDefaultStep", Schema = "Dreams")]
     public class DreamCategoryDefaultStep
     {
         [Key]

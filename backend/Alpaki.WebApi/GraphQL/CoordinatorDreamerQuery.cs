@@ -2,7 +2,6 @@
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using Alpaki.Database.Models;
-using Alpaki.Database.Models.Invitations;
 
 namespace Alpaki.WebApi.GraphQL
 {

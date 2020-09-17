@@ -2,7 +2,6 @@
 using System.Linq;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
-using Alpaki.Database.Models.Invitations;
 using Alpaki.Logic.Extensions;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;

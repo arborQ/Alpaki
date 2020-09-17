@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Alpaki.Database.Models.Invitations;
+using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Invitations.Repositories;
 using MediatR;
 using Microsoft.Extensions.Internal;

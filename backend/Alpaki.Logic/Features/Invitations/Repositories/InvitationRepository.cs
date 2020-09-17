@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
-using Alpaki.Database.Models.Invitations;
+using Alpaki.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.Logic.Features.Invitations.Repositories

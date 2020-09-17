@@ -8,6 +8,7 @@ using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Logic;
 using Alpaki.Logic.Services;
+using Alpaki.Moto.Database;
 using Alpaki.WebApi.Behaviors;
 using Alpaki.WebApi.Filters;
 using Alpaki.WebApi.GraphQL;
@@ -69,11 +70,21 @@ namespace Alpaki.WebApi
                     opt
                         .UseLoggerFactory(loggerFactory)
                         .EnableSensitiveDataLogging()
-                        .UseSqlServer(connectionString),
+                        .UseSqlServer(connectionString, x => x.MigrationsHistoryTable("DreamsMigrationsHistory", "System")),
+                ServiceLifetime.Transient
+            );
+
+            services.AddDbContext<MotoDatabaseContext>(
+                opt =>
+                    opt
+                        .UseLoggerFactory(loggerFactory)
+                        .EnableSensitiveDataLogging()
+                        .UseSqlServer(connectionString, x => x.MigrationsHistoryTable("MotoMigrationsHistory", "System")),
                 ServiceLifetime.Transient
             );
 
             services.AddTransient<IDatabaseContext, DatabaseContext>();
+            services.AddTransient<IMotoDatabaseContext, MotoDatabaseContext>();
 
             var seacretKey = Configuration.GetValue<string>($"{nameof(JwtConfig)}:{nameof(JwtConfig.SeacretKey)}");
 
@@ -133,6 +144,7 @@ namespace Alpaki.WebApi
                 }
             );
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
+            services.AddHealthChecks().AddDbContextCheck<MotoDatabaseContext>();
             services.AddLogging(loggingBuilder =>
             {
                 var seqConfigruation = Configuration.GetSection("Seq");
@@ -192,7 +204,7 @@ namespace Alpaki.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDatabaseContext databaseContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDatabaseContext databaseContext, IMotoDatabaseContext motoDatabaseContext)
         {
             app.UseProblemDetails();
 
@@ -202,6 +214,7 @@ namespace Alpaki.WebApi
             }
 
             databaseContext.Migrate();
+            motoDatabaseContext.Migrate();
 
             ConfigureSwagger(app);
 

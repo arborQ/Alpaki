@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Alpaki.CrossCutting.Enums;
-using Alpaki.Database.Models.Invitations;
+using Alpaki.Database.Models;
 
 namespace Alpaki.Logic.Handlers.GetInvitations
 {

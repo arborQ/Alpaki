@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Alpaki.CrossCutting.Enums;
 
-namespace Alpaki.Database.Models.Invitations
+namespace Alpaki.Database.Models
 {
+    [Table("Invitation", Schema = "Dreams")]
     public class Invitation
     {
         [Key]

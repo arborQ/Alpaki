@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
-using Alpaki.Database.Models.Invitations;
+using Alpaki.Database.Models;
 using Alpaki.Logic.Features.Invitations.RegisterVolunteer;
 using Alpaki.Tests.IntegrationTests.Fixtures;
 using AutoFixture;

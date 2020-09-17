@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alpaki.Database.Models
 {
+    [Table("DreamCategory", Schema = "Dreams")]
     public class DreamCategory
     {
         [Key]

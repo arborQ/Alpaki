@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database.Models;
-using Alpaki.Database.Models.Invitations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

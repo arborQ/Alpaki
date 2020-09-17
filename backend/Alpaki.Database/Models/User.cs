@@ -7,6 +7,7 @@ using Alpaki.CrossCutting.Interfaces;
 
 namespace Alpaki.Database.Models
 {
+    [Table("User", Schema = "Shared")]
     public class User: IUser
     {
         [Key]

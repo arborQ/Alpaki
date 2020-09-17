@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alpaki.Database.Models
 {
+    [Table("Image", Schema = "Shared")]
     public class Image
     {
         [Key]

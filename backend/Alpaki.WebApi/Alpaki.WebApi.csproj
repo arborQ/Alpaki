@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Alpaki.Database\Alpaki.Database.csproj" />
     <ProjectReference Include="..\Alpaki.Logic\Alpaki.Logic.csproj" />
+    <ProjectReference Include="..\Alpaki.Moto.Database\Alpaki.Moto.Database.csproj" />
   </ItemGroup>
 
   <ItemGroup>

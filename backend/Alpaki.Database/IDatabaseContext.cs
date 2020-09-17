@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaki.Database.Models;
-using Alpaki.Database.Models.Invitations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 

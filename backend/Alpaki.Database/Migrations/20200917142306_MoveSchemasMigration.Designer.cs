@@ -4,14 +4,16 @@ using Alpaki.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpaki.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200917142306_MoveSchemasMigration")]
+    partial class MoveSchemasMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,7 +209,7 @@ namespace Alpaki.Database.Migrations
                     b.ToTable("Image","Shared");
                 });
 
-            modelBuilder.Entity("Alpaki.Database.Models.Invitation", b =>
+            modelBuilder.Entity("Alpaki.Database.Models.Invitations.Invitation", b =>
                 {
                     b.Property<int>("InvitationId")
                         .ValueGeneratedOnAdd()
@@ -237,7 +239,7 @@ namespace Alpaki.Database.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Invitation","Dreams");
+                    b.ToTable("Invitations");
                 });
 
             modelBuilder.Entity("Alpaki.Database.Models.Sponsor", b =>

@@ -2,6 +2,7 @@
 
 namespace Alpaki.Database.Models
 {
+    [Table("AssignedDreams", Schema = "Dreams")]
     public class AssignedDreams
     {
         [ForeignKey(nameof(Volunteer))]

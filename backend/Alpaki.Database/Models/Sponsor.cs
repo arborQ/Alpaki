@@ -6,6 +6,7 @@ using Alpaki.CrossCutting.Enums;
 
 namespace Alpaki.Database.Models
 {
+    [Table("Sponsor", Schema = "Dreams")]
     public class Sponsor
     {
         [Key]
