@@ -3,7 +3,7 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.Database;
 using Alpaki.Database.Models;
 
-namespace Alpaki.WebApi.GraphQL
+namespace Alpaki.WebApi.GraphQL.DreamQuery
 {
     public class AdminDreamerQuery : DreamerQuery
     {
@@ -32,7 +32,7 @@ namespace Alpaki.WebApi.GraphQL
 
         protected override IQueryable<Invitation> QueryInvitations()
         {
-            return _invitationsDatabaseContext.Invitations.Where(x=>x.Status == InvitationStateEnum.Pending);
+            return _invitationsDatabaseContext.Invitations.Where(x => x.Status == InvitationStateEnum.Pending);
         }
 
         protected override IQueryable<DreamCategory> QueryDreamCategories()

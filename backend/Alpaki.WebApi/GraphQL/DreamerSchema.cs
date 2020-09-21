@@ -1,16 +1,14 @@
-﻿using Alpaki.CrossCutting.Interfaces;
-using GraphQL;
+﻿using GraphQL;
 using GraphQL.Types;
-using Microsoft.AspNetCore.Http;
 
-namespace Alpaki.WebApi.GraphQL
+namespace Alpaki.WebApi.GraphQL.DreamQuery
 {
     public class DreamerSchema : Schema
     {
         public DreamerSchema(IDependencyResolver resolver)
             : base(resolver)
         {
-            Query = resolver.Resolve<AdminDreamerQuery>();
+            Query = resolver.Resolve<Query>();
         }
     }
 }

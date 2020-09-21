@@ -11,7 +11,9 @@ using Alpaki.Logic.Services;
 using Alpaki.Moto.Database;
 using Alpaki.WebApi.Behaviors;
 using Alpaki.WebApi.Filters;
-using Alpaki.WebApi.GraphQL;
+using Alpaki.WebApi.GraphQL.DreamQuery;
+using Alpaki.WebApi.GraphQL.MotoQuery;
+using Alpaki.WebApi.GraphQL.MotoQuery.Types;
 using Alpaki.WebApi.Policies;
 using Alpaki.WebApi.Swagger;
 using FluentValidation;
@@ -201,6 +203,8 @@ namespace Alpaki.WebApi
         private static void RegisterGraphQLSchemas(IServiceCollection services)
         {
             services.AddScoped<DreamerSchema>();
+
+            services.AddTransient<BrandsQuery>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

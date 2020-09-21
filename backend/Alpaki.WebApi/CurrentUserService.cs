@@ -44,5 +44,20 @@ namespace Alpaki.WebApi
                 }
             }
         }
+
+        public ApplicationType ApplicationType
+        {
+            get
+            {
+                try
+                {
+                    return (ApplicationType)int.Parse(_httpContext.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.System).Value);
+                }
+                catch
+                {
+                    return ApplicationType.None;
+                }
+            }
+        }
     }
 }

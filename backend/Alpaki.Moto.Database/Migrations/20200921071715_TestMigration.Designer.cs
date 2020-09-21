@@ -3,14 +3,16 @@ using Alpaki.Moto.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpaki.Moto.Database.Migrations
 {
     [DbContext(typeof(MotoDatabaseContext))]
-    partial class MotoDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200921071715_TestMigration")]
+    partial class TestMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,7 +3,7 @@ using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using GraphQL.Types;
 
-namespace Alpaki.WebApi.GraphQL
+namespace Alpaki.WebApi.GraphQL.DreamQuery
 {
     public class DreamStateEnumType : EnumerationGraphType<DreamStateEnum>
     {

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Alpaki.Moto.Database.Models;
+using Alpaki.Moto.Database.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -19,11 +20,14 @@ namespace Alpaki.Moto.Database
 
         private void SeedData(ModelBuilder modelBuilder)
         {
+        
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            SeedData(modelBuilder);
 
+            //modelBuilder.Entity<Brand>().Property(b => b.BrandId).HasConversion(s => s.Value, x => new BrandId(x));
         }
 
         public void EnsureCreated()

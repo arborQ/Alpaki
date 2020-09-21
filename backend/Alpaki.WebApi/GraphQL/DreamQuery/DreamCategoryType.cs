@@ -1,9 +1,9 @@
 ﻿using Alpaki.Database.Models;
 using GraphQL.Types;
 
-namespace Alpaki.WebApi.GraphQL
+namespace Alpaki.WebApi.GraphQL.DreamQuery
 {
-    public class DreamCategoryType: ObjectGraphType<DreamCategory>
+    public class DreamCategoryType : ObjectGraphType<DreamCategory>
     {
         public DreamCategoryType()
         {

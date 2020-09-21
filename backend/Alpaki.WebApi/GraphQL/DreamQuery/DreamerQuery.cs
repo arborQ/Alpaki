@@ -3,12 +3,23 @@ using System.Linq;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.Database.Models;
 using Alpaki.Logic.Extensions;
+using Alpaki.WebApi.GraphQL.MotoQuery.Types;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 
-namespace Alpaki.WebApi.GraphQL
+namespace Alpaki.WebApi.GraphQL.DreamQuery
 {
-    public abstract class DreamerQuery : ObjectGraphType<DreamType>
+    public class Query : ObjectGraphType
+    {
+        public Query()
+        {
+            Name = "Query";
+            Field<AdminDreamerQuery>("dreams", resolve: context => new { });
+            Field<MotoGraphQuery>("moto", resolve: context => new { });
+        }
+    }
+
+    public abstract class DreamerQuery : ObjectGraphType
     {
         protected abstract IQueryable<Dream> QueryDreams();
 
