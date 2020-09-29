@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IsAuthorizedGuard } from 'src/guards/is-authorized/is-authorized.guard';
-import { DreamApplicationGuard } from './application.guard';
+import { DreamApplicationGuard, MotoApplicationGuard } from './application.guard';
 
 
 const routes: Routes = [
@@ -24,6 +24,11 @@ const routes: Routes = [
     path: 'users',
     loadChildren: () => import('./users/users.module').then(a => a.UsersModule),
     canActivate: [IsAuthorizedGuard, DreamApplicationGuard]
+  },
+  {
+    path: 'moto',
+    loadChildren: () => import('./moto/moto.module').then(a => a.MotoModule),
+    canActivate: [IsAuthorizedGuard, MotoApplicationGuard]
   }
 ];
 

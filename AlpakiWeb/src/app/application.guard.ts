@@ -8,7 +8,8 @@ import { ApplicationType } from './authorize/sign-in/sign-in.models';
 abstract class ApplicationGuard implements CanActivate {
   constructor(private applicationType: ApplicationType, private currentUserService: CurrentUserService) { }
   canActivate(): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    return this.currentUserService.currentUser.pipe(map(currentUser => currentUser.applicationType === this.applicationType));
+    return this.currentUserService.currentUser
+      .pipe(map(currentUser => (currentUser.applicationType & this.applicationType) === this.applicationType));
   }
 }
 

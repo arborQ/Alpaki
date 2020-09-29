@@ -5,38 +5,44 @@ import { Injectable } from '@angular/core';
 import * as Apollo from 'apollo-angular';
 export type DreamerQueryQueryVariables = Types.Exact<{ [key: string]: never }>;
 
-export type DreamerQueryQuery = { __typename?: 'DreamQuery' } & {
-  categories?: Types.Maybe<
-    Array<
-      Types.Maybe<
-        { __typename?: 'DreamCategoryType' } & Pick<
-          Types.DreamCategoryType,
-          'dreamCategoryId' | 'categoryName'
-        > & {
-            defaultSteps?: Types.Maybe<
-              Array<
-                Types.Maybe<
-                  { __typename?: 'DefaultStepType' } & Pick<
-                    Types.DefaultStepType,
-                    'stepDescription' | 'isSponsorRelated'
+export type DreamerQueryQuery = { __typename?: 'Query' } & {
+  dreams?: Types.Maybe<
+    { __typename?: 'DreamQuery' } & {
+      categories?: Types.Maybe<
+        Array<
+          Types.Maybe<
+            { __typename?: 'DreamCategoryType' } & Pick<
+              Types.DreamCategoryType,
+              'dreamCategoryId' | 'categoryName'
+            > & {
+                defaultSteps?: Types.Maybe<
+                  Array<
+                    Types.Maybe<
+                      { __typename?: 'DefaultStepType' } & Pick<
+                        Types.DefaultStepType,
+                        'stepDescription' | 'isSponsorRelated'
+                      >
+                    >
                   >
-                >
-              >
-            >;
-          }
-      >
-    >
+                >;
+              }
+          >
+        >
+      >;
+    }
   >;
 };
 
 export const DreamerQueryDocument = gql`
   query DreamerQuery {
-    categories {
-      dreamCategoryId
-      categoryName
-      defaultSteps {
-        stepDescription
-        isSponsorRelated
+    dreams {
+      categories {
+        dreamCategoryId
+        categoryName
+        defaultSteps {
+          stepDescription
+          isSponsorRelated
+        }
       }
     }
   }

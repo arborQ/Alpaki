@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.2.0" />
     <PackageReference Include="graphiql" Version="2.0.0" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="GraphQL.Authorization" Version="2.1.29" />
@@ -29,9 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Alpaki.Common.Jobs\Alpaki.Common.Jobs.csproj" />
     <ProjectReference Include="..\Alpaki.Database\Alpaki.Database.csproj" />
     <ProjectReference Include="..\Alpaki.Logic\Alpaki.Logic.csproj" />
     <ProjectReference Include="..\Alpaki.Moto.Database\Alpaki.Moto.Database.csproj" />
+    <ProjectReference Include="..\Alpaki.MotoLogic\Alpaki.MotoLogic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

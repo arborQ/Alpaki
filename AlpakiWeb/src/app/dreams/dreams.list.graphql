@@ -1,16 +1,18 @@
 query Dreams($page:Int!) {
-  dreams(page:$page)
-   {
-    dreamId 
-    title
-    displayName 
-    age
-    stepCount
-    finishedStepCount
-    categoryName
-    cityName
-    stepCount
-    finishedStepCount
-    dreamImageId
+    dreams {
+    dreams(page:$page)
+    {
+      dreamId 
+      title
+      displayName 
+      age
+      stepCount
+      finishedStepCount
+      categoryName
+      cityName
+      stepCount
+      finishedStepCount
+      dreamImageId
+    }
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
+using Alpaki.Logic.Extensions;
 using GraphQL.Types;
 
 namespace Alpaki.WebApi.GraphQL.MotoQuery.Types
@@ -25,7 +26,7 @@ namespace Alpaki.WebApi.GraphQL.MotoQuery.Types
             //    return DefaultQuery(context);
             //}
 
-            return QueryFilterItems(context);
+            return QueryFilterItems(context).Paged(0, 10);
         }
 
         protected virtual IQueryable<T> DefaultQuery(ResolveFieldContext<object> context)

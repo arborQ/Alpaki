@@ -21,5 +21,7 @@ namespace Alpaki.Moto.Database
 
         DbSet<Brand> Brands { get; }
 
+        DbSet<BrandDomainEvent> BrandDomainEvents { get; }
+
     }
 }

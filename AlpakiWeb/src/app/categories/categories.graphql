@@ -1,9 +1,11 @@
 query DreamerQuery {
-  categories {
-    dreamCategoryId 
-    categoryName
-    defaultSteps {
-      stepDescription, isSponsorRelated
+  dreams {
+    categories {
+      dreamCategoryId 
+      categoryName
+      defaultSteps {
+        stepDescription, isSponsorRelated
+      }
     }
   }
 }

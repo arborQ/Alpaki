@@ -7,41 +7,47 @@ export type DreamsQueryVariables = Types.Exact<{
   page: Types.Scalars['Int'];
 }>;
 
-export type DreamsQuery = { __typename?: 'DreamQuery' } & {
+export type DreamsQuery = { __typename?: 'Query' } & {
   dreams?: Types.Maybe<
-    Array<
-      Types.Maybe<
-        { __typename?: 'DreamType' } & Pick<
-          Types.DreamType,
-          | 'dreamId'
-          | 'title'
-          | 'displayName'
-          | 'age'
-          | 'stepCount'
-          | 'finishedStepCount'
-          | 'categoryName'
-          | 'cityName'
-          | 'dreamImageId'
+    { __typename?: 'DreamQuery' } & {
+      dreams?: Types.Maybe<
+        Array<
+          Types.Maybe<
+            { __typename?: 'DreamType' } & Pick<
+              Types.DreamType,
+              | 'dreamId'
+              | 'title'
+              | 'displayName'
+              | 'age'
+              | 'stepCount'
+              | 'finishedStepCount'
+              | 'categoryName'
+              | 'cityName'
+              | 'dreamImageId'
+            >
+          >
         >
-      >
-    >
+      >;
+    }
   >;
 };
 
 export const DreamsDocument = gql`
   query Dreams($page: Int!) {
-    dreams(page: $page) {
-      dreamId
-      title
-      displayName
-      age
-      stepCount
-      finishedStepCount
-      categoryName
-      cityName
-      stepCount
-      finishedStepCount
-      dreamImageId
+    dreams {
+      dreams(page: $page) {
+        dreamId
+        title
+        displayName
+        age
+        stepCount
+        finishedStepCount
+        categoryName
+        cityName
+        stepCount
+        finishedStepCount
+        dreamImageId
+      }
     }
   }
 `;

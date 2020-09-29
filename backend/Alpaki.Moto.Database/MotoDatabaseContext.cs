@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Alpaki.Moto.Database.Models;
-using Alpaki.Moto.Database.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -12,6 +11,8 @@ namespace Alpaki.Moto.Database
 
         public DbSet<Brand> Brands { get; set; }
 
+        public DbSet<BrandDomainEvent> BrandDomainEvents { get; set; }
+
         public MotoDatabaseContext(DbContextOptions<MotoDatabaseContext> options, ILogger<MotoDatabaseContext> logger)
             : base(options)
         {
@@ -20,7 +21,7 @@ namespace Alpaki.Moto.Database
 
         private void SeedData(ModelBuilder modelBuilder)
         {
-        
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

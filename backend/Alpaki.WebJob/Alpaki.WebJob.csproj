@@ -13,7 +13,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Alpaki.Common.Jobs\Alpaki.Common.Jobs.csproj" />
     <ProjectReference Include="..\Alpaki.Moto.Job\Alpaki.Moto.Job.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

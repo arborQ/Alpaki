@@ -1,0 +1,12 @@
+<div>
+    <table mat-table [dataSource]="dataSource | async" class="mat-elevation-z8">
+        <!-- Position Column -->
+        <ng-container matColumnDef="brandName">
+            <th mat-header-cell *matHeaderCellDef> Nazwa </th>
+            <td mat-cell *matCellDef="let element"> {{element.brandName}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [length]="1000000" [pageSize]="10" (page)="changePage($event)"></mat-paginator>
+</div>

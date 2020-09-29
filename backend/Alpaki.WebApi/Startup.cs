@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Alpaki.Common.Jobs;
 using Alpaki.CrossCutting.Enums;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
@@ -116,7 +117,9 @@ namespace Alpaki.WebApi
 
             RegisterGraphQL(services);
 
-            services.RegisterLogicServices();
+            services
+                .RegisterLogicServices()
+                .RegisterMotoLogicServices();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddControllers();
             services.AddHttpContextAccessor();
@@ -163,6 +166,8 @@ namespace Alpaki.WebApi
                     Console.WriteLine($"[Log]: Using Console");
                 }
             });
+            
+            CommonJobRegister.Initialize(services, Configuration);
 
             services.AddProblemDetails(
                 opt =>

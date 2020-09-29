@@ -7,54 +7,60 @@ export type DreamDetailsQueryVariables = Types.Exact<{
   dreamId: Types.Scalars['ID'];
 }>;
 
-export type DreamDetailsQuery = { __typename?: 'DreamQuery' } & {
+export type DreamDetailsQuery = { __typename?: 'Query' } & {
   dreams?: Types.Maybe<
-    Array<
-      Types.Maybe<
-        { __typename?: 'DreamType' } & Pick<
-          Types.DreamType,
-          | 'dreamId'
-          | 'title'
-          | 'displayName'
-          | 'age'
-          | 'cityName'
-          | 'dreamComeTrueDate'
-          | 'dreamCategoryId'
-          | 'categoryName'
-          | 'dreamImageId'
-        > & {
-            requiredSteps?: Types.Maybe<
-              Array<
-                Types.Maybe<
-                  { __typename?: 'DeamStepType' } & Pick<
-                    Types.DeamStepType,
-                    'dreamStepId' | 'stepState' | 'stepDescription'
+    { __typename?: 'DreamQuery' } & {
+      dreams?: Types.Maybe<
+        Array<
+          Types.Maybe<
+            { __typename?: 'DreamType' } & Pick<
+              Types.DreamType,
+              | 'dreamId'
+              | 'title'
+              | 'displayName'
+              | 'age'
+              | 'cityName'
+              | 'dreamComeTrueDate'
+              | 'dreamCategoryId'
+              | 'categoryName'
+              | 'dreamImageId'
+            > & {
+                requiredSteps?: Types.Maybe<
+                  Array<
+                    Types.Maybe<
+                      { __typename?: 'DeamStepType' } & Pick<
+                        Types.DeamStepType,
+                        'dreamStepId' | 'stepState' | 'stepDescription'
+                      >
+                    >
                   >
-                >
-              >
-            >;
-          }
-      >
-    >
+                >;
+              }
+          >
+        >
+      >;
+    }
   >;
 };
 
 export const DreamDetailsDocument = gql`
   query DreamDetails($dreamId: ID!) {
-    dreams(dreamId: $dreamId) {
-      dreamId
-      title
-      displayName
-      age
-      cityName
-      dreamComeTrueDate
-      dreamCategoryId
-      categoryName
-      dreamImageId
-      requiredSteps {
-        dreamStepId
-        stepState
-        stepDescription
+    dreams {
+      dreams(dreamId: $dreamId) {
+        dreamId
+        title
+        displayName
+        age
+        cityName
+        dreamComeTrueDate
+        dreamCategoryId
+        categoryName
+        dreamImageId
+        requiredSteps {
+          dreamStepId
+          stepState
+          stepDescription
+        }
       }
     }
   }

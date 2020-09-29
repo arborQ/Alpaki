@@ -13,18 +13,25 @@ namespace Alpaki.Moto.Database.Models
         {
             BrandName = brandName;
             IsActive = true;
+
+            BrandDomainEvents = new HashSet<BrandDomainEvent>()
+            {
+                new BrandDomainEvent()
+            };
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long BrandId { get; private set; }
+        public long BrandId { get; set; }
 
         [MaxLength(500)]
         [Required]
-        public string BrandName { get; private set; }
+        public string BrandName { get; set; }
 
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; set; }
 
-        public virtual ICollection<Model> Models { get; private set; }
+        public virtual ICollection<Model> Models { get; set; }
+
+        public virtual ICollection<BrandDomainEvent> BrandDomainEvents { get; set; }
     }
 }

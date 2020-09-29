@@ -39,10 +39,16 @@ export class AppComponent implements OnDestroy, OnInit {
       { label: 'Rejestracja', path: '/authorize/register' },
       ];
     }
-    console.log(currentUser?.applicationType);
+
     if ((currentUser?.applicationType & ApplicationType.Dream) === ApplicationType.Dream) {
       menuOptions = [...menuOptions,
         { label: 'Marzenia', path: '/dreams/list' },
+        ];
+    }
+
+    if ((currentUser?.applicationType & ApplicationType.Moto) === ApplicationType.Moto) {
+      menuOptions = [...menuOptions,
+        { label: 'Marki samochodów', path: '/moto/brands' },
         ];
     }
 
