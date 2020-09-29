@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ICategory, ICategoryStep } from '../categories.service';
-import { TranslationWidth } from '@angular/common';
 
 @Component({
   selector: 'app-category-form',
@@ -45,7 +44,7 @@ export class CategoryFormComponent implements OnInit {
   }
 
   onSubmit() {
-    var category = this.categoryForm.getRawValue();
+    const category = this.categoryForm.getRawValue();
     this.saveForm.emit({ category });
   }
 }

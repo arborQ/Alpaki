@@ -1,11 +1,9 @@
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { UsersService } from '../users.service';
-import { map, switchMap, last, takeLast, takeWhile, filter, take, skip, flatMap, concatMap, distinctUntilChanged, distinctUntilKeyChanged } from 'rxjs/operators';
+import { map, switchMap, distinctUntilKeyChanged } from 'rxjs/operators';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSort, Sort } from '@angular/material/sort';
-import { combineLatest } from 'rxjs';
-import { query } from '@angular/animations';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-user-list',
@@ -14,7 +12,11 @@ import { query } from '@angular/animations';
 })
 export class UserListComponent {
 
-  constructor(private usersService: UsersService, private activeRoute: ActivatedRoute, private router: Router) { }
+  constructor(
+    private usersService: UsersService,
+    private activeRoute: ActivatedRoute,
+    private router: Router
+  ) { }
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -33,23 +35,6 @@ export class UserListComponent {
       })))
     .pipe(distinctUntilKeyChanged<{ page: number }>('page'))
     .pipe(switchMap(queryParams => this.usersService.users(queryParams)));
-
-  // ngOnInit(): void {
-  //   this.activeRoute.queryParams.subscribe(a => {
-  //     console.log({ a });
-  //   });
-  // }
-  // ngAfterViewInit(): void {
-  //   // this.sort.sortChange.subscribe((sort: Sort) => {
-  //   //   this.router.navigate(['users/list'], { queryParams: { sortBy: sort.active, sortDir: sort.direction }, queryParamsHandling: 'merge' });
-  //   // });
-
-  //   // this.userResponse$.subscribe(_ => {
-  //   //   console.log({ _ });
-  //   //   this.isLoading = _.loading;
-  //   // });
-  // }
-
 
   removeUser(userId: number) {
     this.usersService.deleteUser(userId);

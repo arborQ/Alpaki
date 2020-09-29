@@ -27,13 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: AlpakiWeb
+        working-directory: frontend
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js 12.8
+    - name: Use Node.js 12.18.4
       uses: actions/setup-node@v1
       with:
-        node-version: 12.8
+        node-version: 12.18.4
     - name: Install dependencies
       run: yarn install
     - name: Lint

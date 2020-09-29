@@ -145,5 +145,11 @@
   },
   "rulesDirectory": [
     "codelyzer"
-  ]
+  ],
+  "linterOptions" : {
+    "exclude" : [
+      "**/*.spec.ts",
+      "src/types.ts"
+    ]
+  }
 }

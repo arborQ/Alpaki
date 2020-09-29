@@ -28,10 +28,10 @@ export class RegisterComponent implements OnInit {
     this.activeRoute.queryParams.subscribe(qyeryParams => {
       const { code } = qyeryParams;
       if (code) {
-        this.registerForm.controls['code'].setValue(code);
-        this.registerForm.controls['code'].disable();
+        this.registerForm.controls.code.setValue(code);
+        this.registerForm.controls.code.disable();
       } else {
-        this.registerForm.controls['code'].enable();
+        this.registerForm.controls.code.enable();
       }
     });
   }
