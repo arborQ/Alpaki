@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 import { MotoQueryGQL } from './brands.list.generated';
-import { combineLatest, of } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -22,13 +21,27 @@ export class BrandsComponent implements OnInit {
     }));
 
   // graphQlResponse = this.brandsQuery.fetch({ page: 0, search: '' });
+  search = this.activeRoute.queryParamMap.pipe(map(queryParams => queryParams.get('search') || ''));
+  dataSource = this.graphQlResponse.pipe(map(r => r.data.moto.brands.items));
+  totalCount = this.graphQlResponse.pipe(map(r => r.data.moto.brands.totalCount));
+  isLoadingResults = this.graphQlResponse.pipe(map(r => r.loading));
 
-  dataSource = this.graphQlResponse.pipe(map(r => r.data.moto.brands));
-  displayedColumns = ['brandName'];
+  displayedColumns = ['brandName', 'action'];
   ngOnInit(): void {
   }
 
   changePage($event: PageEvent) {
     this.router.navigate([], { relativeTo: this.activeRoute, queryParams: { page: $event.pageIndex }, queryParamsHandling: 'merge' });
+  }
+
+  triggerSearch(search: string) {
+    this.router.navigate([], { relativeTo: this.activeRoute, queryParams: { search }, queryParamsHandling: 'merge' });
+  }
+
+  editBrand($event: MouseEvent, brandId: number) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    return false;
   }
 }

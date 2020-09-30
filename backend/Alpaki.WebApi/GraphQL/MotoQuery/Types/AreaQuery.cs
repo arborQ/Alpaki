@@ -19,21 +19,21 @@ namespace Alpaki.WebApi.GraphQL.MotoQuery.Types
 
         public abstract QueryArguments QueryArguments { get; }
 
-        public IQueryable<T> FilterItems(ResolveFieldContext<object> context)
+        public IQueryable<T> FilterItems(ResolveFieldContext context)
         {
             //if (!_currentUserService.ApplicationType.HasFlag(_applicationType))
             //{
             //    return DefaultQuery(context);
             //}
 
-            return QueryFilterItems(context).Paged(0, 10);
+            return QueryFilterItems(context);
         }
 
-        protected virtual IQueryable<T> DefaultQuery(ResolveFieldContext<object> context)
+        protected virtual IQueryable<T> DefaultQuery(ResolveFieldContext context)
         {
             return Enumerable.Empty<T>().AsQueryable();
         }
 
-        protected abstract IQueryable<T> QueryFilterItems(ResolveFieldContext<object> context);
+        protected abstract IQueryable<T> QueryFilterItems(ResolveFieldContext context);
     }
 }

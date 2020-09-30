@@ -43,7 +43,13 @@
         margin-right: 10px;
     }
   .app-logo {
-      background-image: url(../assets/logo.png);
+      display: none;
+      // background-image: url(../assets/logo.png);
+      &::after {
+        content: 'Alpaki app';
+        line-height: 50px;
+        margin: 0 auto;
+      }
       background-size: contain;
       background-repeat: no-repeat;
       height: 50px;

@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using Alpaki.CrossCutting.Enums;
-using Alpaki.CrossCutting.Interfaces;
-using Alpaki.Logic.Extensions;
+﻿using System;
+using System.Linq;
 using Alpaki.Moto.Database;
 using Alpaki.Moto.Database.Models;
 using GraphQL.Types;
@@ -9,34 +7,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.WebApi.GraphQL.MotoQuery.Types
 {
-    public class BrandsQuery : AreaQuery<Brand>
+    public class BrandPagedCollectionType : PagedCollection<BrandType, Brand>
     {
-        private readonly IMotoDatabaseContext _motoDatabaseContext;
+        public BrandPagedCollectionType(IServiceProvider  serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
         private readonly FilterField<string, StringGraphType> _searchArgument = new FilterField<string, StringGraphType>("search");
         private readonly FilterField<int?, IntGraphType> _pageArgument = new FilterField<int?, IntGraphType>("page");
+        private readonly IServiceProvider _serviceProvider;
+
         public override QueryArguments QueryArguments => new QueryArguments(
                     _searchArgument.GraphType,
                     _pageArgument.GraphType);
 
-
-
-        public BrandsQuery(IMotoDatabaseContext motoDatabaseContext, ICurrentUserService currentUserService)
-            :base(ApplicationType.Moto, currentUserService)
+        protected override IQueryable<Brand> FilterItems(ResolveFieldContext context)
         {
-            _motoDatabaseContext = motoDatabaseContext;
-        }
-        
-        protected override IQueryable<Brand> QueryFilterItems(ResolveFieldContext context)
-        {
-            var page = _pageArgument.Value(context);
             var search = _searchArgument.Value(context);
-
-            return _motoDatabaseContext
+            return (_serviceProvider.GetService(typeof(IMotoDatabaseContext)) as IMotoDatabaseContext)
                 .Brands
                 .Include(b => b.Models)
                 .Where(b => string.IsNullOrEmpty(search) || b.BrandName.Contains(search) || b.Models.Any(m => m.ModelName.Contains(search)))
                 .OrderBy(b => b.BrandName)
-                .Paged(page)
                 .AsNoTracking();
         }
     }

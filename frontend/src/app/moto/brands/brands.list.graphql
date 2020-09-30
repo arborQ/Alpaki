@@ -1,9 +1,11 @@
-query MotoQuery($page:Int!, $search: String) {
+query MotoQuery($page: Int!, $search: String) {
   moto {
-    brands(page:$page, search: $search) {
-      brandId
-      brandName 
-      modelCount
+    brands {
+      totalCount(search: $search)
+      items(page: $page, search: $search) {
+        brandId
+        brandName
+      }
     }
   }
 }

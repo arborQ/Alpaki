@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Alpaki.Common.Jobs;
 using Alpaki.CrossCutting.Enums;
+using Alpaki.CrossCutting.Extensions;
 using Alpaki.CrossCutting.Interfaces;
 using Alpaki.Database;
 using Alpaki.Logic;
@@ -87,7 +88,7 @@ namespace Alpaki.WebApi
             );
 
             services.AddTransient<IDatabaseContext, DatabaseContext>();
-            services.AddTransient<IMotoDatabaseContext, MotoDatabaseContext>();
+            services.AddFactory<IMotoDatabaseContext, MotoDatabaseContext>();
 
             var seacretKey = Configuration.GetValue<string>($"{nameof(JwtConfig)}:{nameof(JwtConfig.SeacretKey)}");
 

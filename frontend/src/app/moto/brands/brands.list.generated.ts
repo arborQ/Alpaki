@@ -12,14 +12,21 @@ export type MotoQueryQuery = { __typename?: 'Query' } & {
   moto?: Types.Maybe<
     { __typename?: 'MotoGraphQuery' } & {
       brands?: Types.Maybe<
-        Array<
-          Types.Maybe<
-            { __typename?: 'BrandType' } & Pick<
-              Types.BrandType,
-              'brandId' | 'brandName' | 'modelCount'
-            >
-          >
-        >
+        { __typename?: 'BrandPagedCollectionType' } & Pick<
+          Types.BrandPagedCollectionType,
+          'totalCount'
+        > & {
+            items?: Types.Maybe<
+              Array<
+                Types.Maybe<
+                  { __typename?: 'BrandType' } & Pick<
+                    Types.BrandType,
+                    'brandId' | 'brandName'
+                  >
+                >
+              >
+            >;
+          }
       >;
     }
   >;
@@ -28,10 +35,12 @@ export type MotoQueryQuery = { __typename?: 'Query' } & {
 export const MotoQueryDocument = gql`
   query MotoQuery($page: Int!, $search: String) {
     moto {
-      brands(page: $page, search: $search) {
-        brandId
-        brandName
-        modelCount
+      brands {
+        totalCount(search: $search)
+        items(page: $page, search: $search) {
+          brandId
+          brandName
+        }
       }
     }
   }

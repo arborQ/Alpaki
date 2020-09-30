@@ -163,10 +163,21 @@ export enum InvitationStateEnum {
 
 export type MotoGraphQuery = {
   __typename?: 'MotoGraphQuery';
-  brands?: Maybe<Array<Maybe<BrandType>>>;
+  brands?: Maybe<BrandPagedCollectionType>;
 };
 
-export type MotoGraphQueryBrandsArgs = {
+export type BrandPagedCollectionType = {
+  __typename?: 'BrandPagedCollectionType';
+  items?: Maybe<Array<Maybe<BrandType>>>;
+  totalCount?: Maybe<Scalars['Int']>;
+};
+
+export type BrandPagedCollectionTypeItemsArgs = {
+  search?: Maybe<Scalars['String']>;
+  page?: Maybe<Scalars['Int']>;
+};
+
+export type BrandPagedCollectionTypeTotalCountArgs = {
   search?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
 };
