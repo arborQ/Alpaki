@@ -18,7 +18,18 @@ export type BrandDetailsQueryQuery = { __typename?: 'Query' } & {
                 { __typename?: 'BrandType' } & Pick<
                   Types.BrandType,
                   'brandId' | 'brandName'
-                >
+                > & {
+                    models?: Types.Maybe<
+                      Array<
+                        Types.Maybe<
+                          { __typename?: 'ModelType' } & Pick<
+                            Types.ModelType,
+                            'modelId' | 'modelName'
+                          >
+                        >
+                      >
+                    >;
+                  }
               >
             >
           >;
@@ -35,6 +46,10 @@ export const BrandDetailsQueryDocument = gql`
         items(brandId: $brandId) {
           brandId
           brandName
+          models {
+            modelId
+            modelName
+          }
         }
       }
     }

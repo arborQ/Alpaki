@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, Optional, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -21,7 +21,7 @@ export class BrandEditComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { brandId: number }
   ) { }
   isLoading = true;
-
+  models: any[] = [];
   editForm: FormGroup;
 
   ngOnInit(): void {
@@ -36,6 +36,8 @@ export class BrandEditComponent implements OnInit {
         this.editForm.disable();
         this.brandsService.details({ brandId: selectBrandId }).toPromise().then(p => {
           const brandName = p.brandName;
+          this.models = p.models;
+
           this.editForm.setValue({ brandName, brandId: selectBrandId });
           this.isLoading = false;
           this.editForm.enable();

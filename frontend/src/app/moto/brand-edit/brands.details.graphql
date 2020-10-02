@@ -4,6 +4,10 @@ query BrandDetailsQuery($brandId: Int!) {
       items(brandId: $brandId) {
         brandId
         brandName
+        models {
+          modelId
+          modelName
+        }
       }
     }
   }

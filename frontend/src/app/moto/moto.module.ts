@@ -14,10 +14,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BrandsService } from './brands.service';
+import { MatListModule } from '@angular/material/list';
+import { ModelListComponent } from './model-list/model-list.component';
 
 @NgModule({
-  declarations: [BrandsComponent, BrandEditComponent],
+  declarations: [BrandsComponent, BrandEditComponent, ModelListComponent],
   imports: [
     CommonModule,
     MotoRoutingModule,
@@ -30,7 +31,8 @@ import { BrandsService } from './brands.service';
     MatDialogModule,
     MatFormFieldModule,
     MatCardModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatListModule
   ]
 })
 export class MotoModule { }
