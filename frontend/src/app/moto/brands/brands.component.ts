@@ -6,6 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BrandEditComponent } from 'src/app/moto/brand-edit/brand-edit.component';
 import { Location } from '@angular/common';
+import { BrandsService } from '../brands.service';
 
 @Component({
   selector: 'app-brands',
@@ -15,7 +16,7 @@ import { Location } from '@angular/common';
 export class BrandsComponent implements OnInit {
 
   constructor(
-    private brandsQuery: MotoQueryGQL,
+    private brandsService: BrandsService,
     private activeRoute: ActivatedRoute,
     private router: Router,
     private location: Location,
@@ -25,15 +26,14 @@ export class BrandsComponent implements OnInit {
     .pipe(switchMap(queryParams => {
       const page = queryParams.get('page') ?? '0';
       const search = queryParams.get('search') ?? '';
-      return this.brandsQuery.fetch({ page: +page, search });
+      return this.brandsService.searchBrands({ page: +page, search });
     }));
 
   search = this.activeRoute.queryParamMap.pipe(map(queryParams => queryParams.get('search') || ''));
-  dataSource = this.graphQlResponse.pipe(map(r => r.data.moto.brands.items));
-  totalCount = this.graphQlResponse.pipe(map(r => r.data.moto.brands.totalCount));
-  isLoadingResults = this.graphQlResponse.pipe(map(r => r.loading));
+  dataSource = this.graphQlResponse.pipe(map(r => r.items));
+  totalCount = this.graphQlResponse.pipe(map(r => r.totalCount));
 
-  displayedColumns = ['brandName', 'action'];
+  displayedColumns = ['brandName', 'modelCount', 'action'];
   ngOnInit(): void {
   }
 

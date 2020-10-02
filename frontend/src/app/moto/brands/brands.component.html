@@ -1,7 +1,4 @@
 <div class="brands-container">
-    <div class="example-loading-shade" *ngIf="isLoadingResults | async">
-        <mat-spinner></mat-spinner>
-    </div>
     <mat-form-field class="example-form-field">
         <mat-label>Szukaj...</mat-label>
         <input matInput type="text" [value]="search | async" (change)="triggerSearch($event.target.value)">
@@ -14,6 +11,10 @@
         <ng-container matColumnDef="brandName">
             <th mat-header-cell *matHeaderCellDef> Nazwa </th>
             <td mat-cell *matCellDef="let element"> {{element.brandName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="modelCount">
+            <th mat-header-cell *matHeaderCellDef> Ile? </th>
+            <td mat-cell *matCellDef="let element"> {{element.modelCount}} </td>
         </ng-container>
         <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Akcja </th>

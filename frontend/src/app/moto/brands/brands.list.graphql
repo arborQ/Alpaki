@@ -5,6 +5,7 @@ query MotoQuery($page: Int!, $search: String) {
       items(page: $page, search: $search) {
         brandId
         brandName
+        modelCount
       }
     }
   }

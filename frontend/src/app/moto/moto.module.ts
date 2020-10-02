@@ -13,6 +13,8 @@ import { BrandEditComponent } from './brand-edit/brand-edit.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrandsService } from './brands.service';
 
 @NgModule({
   declarations: [BrandsComponent, BrandEditComponent],
@@ -27,7 +29,8 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatCardModule
+    MatCardModule,
+    ReactiveFormsModule
   ]
 })
 export class MotoModule { }

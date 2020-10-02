@@ -21,7 +21,7 @@ export type MotoQueryQuery = { __typename?: 'Query' } & {
                 Types.Maybe<
                   { __typename?: 'BrandType' } & Pick<
                     Types.BrandType,
-                    'brandId' | 'brandName'
+                    'brandId' | 'brandName' | 'modelCount'
                   >
                 >
               >
@@ -40,6 +40,7 @@ export const MotoQueryDocument = gql`
         items(page: $page, search: $search) {
           brandId
           brandName
+          modelCount
         }
       }
     }
