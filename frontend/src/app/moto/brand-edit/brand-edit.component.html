@@ -1,0 +1,12 @@
+<form [formGroup]="editForm" (ngSubmit)="onLoginFormSubmitted()">
+    <div class="example-container">
+        <mat-card class="mat-elevation-z8">
+            <mat-form-field appearance="fill">
+                <mat-label>Nazwa marki</mat-label>
+                <input matInput placeholder="Nazwa marki" [formControl]="brandName" required>
+                <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+            </mat-form-field>
+        </mat-card>
+    </div>
+</form>
+<mat-spinner *ngIf="isLoading"></mat-spinner>

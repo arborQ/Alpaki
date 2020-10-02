@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 import { MotoQueryGQL } from './brands.list.generated';
 import { PageEvent } from '@angular/material/paginator';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BrandEditComponent } from 'src/app/moto/brand-edit/brand-edit.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-brands',
@@ -11,7 +14,12 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class BrandsComponent implements OnInit {
 
-  constructor(private brandsQuery: MotoQueryGQL, private activeRoute: ActivatedRoute, private router: Router) { }
+  constructor(
+    private brandsQuery: MotoQueryGQL,
+    private activeRoute: ActivatedRoute,
+    private router: Router,
+    private location: Location,
+    private dialog: MatDialog) { }
 
   graphQlResponse = this.activeRoute.queryParamMap
     .pipe(switchMap(queryParams => {
@@ -20,7 +28,6 @@ export class BrandsComponent implements OnInit {
       return this.brandsQuery.fetch({ page: +page, search });
     }));
 
-  // graphQlResponse = this.brandsQuery.fetch({ page: 0, search: '' });
   search = this.activeRoute.queryParamMap.pipe(map(queryParams => queryParams.get('search') || ''));
   dataSource = this.graphQlResponse.pipe(map(r => r.data.moto.brands.items));
   totalCount = this.graphQlResponse.pipe(map(r => r.data.moto.brands.totalCount));
@@ -41,7 +48,12 @@ export class BrandsComponent implements OnInit {
   editBrand($event: MouseEvent, brandId: number) {
     $event.preventDefault();
     $event.stopPropagation();
-
+    const currentPath = this.location.path();
+    this.location.replaceState(`/moto/brands/edit/${brandId}`);
+    const dialogRef = this.dialog.open(BrandEditComponent, { data: { brandId } });
+    dialogRef.afterClosed().subscribe(() => {
+      this.location.replaceState(currentPath);
+    });
     return false;
   }
 }

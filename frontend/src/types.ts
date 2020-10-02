@@ -175,11 +175,13 @@ export type BrandPagedCollectionType = {
 export type BrandPagedCollectionTypeItemsArgs = {
   search?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
+  brandId?: Maybe<Scalars['Int']>;
 };
 
 export type BrandPagedCollectionTypeTotalCountArgs = {
   search?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
+  brandId?: Maybe<Scalars['Int']>;
 };
 
 export type BrandType = {

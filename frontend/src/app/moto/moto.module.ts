@@ -9,7 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { BrandEditComponent } from '../brand-edit/brand-edit.component';
+import { BrandEditComponent } from './brand-edit/brand-edit.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [BrandsComponent, BrandEditComponent],
@@ -21,7 +24,10 @@ import { BrandEditComponent } from '../brand-edit/brand-edit.component';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatCardModule
   ]
 })
 export class MotoModule { }

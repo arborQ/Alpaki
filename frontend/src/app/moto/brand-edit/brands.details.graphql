@@ -1,0 +1,10 @@
+query BrandDetailsQuery($brandId: Int!) {
+  moto {
+    brands {
+      items(brandId: $brandId) {
+        brandId
+        brandName
+      }
+    }
+  }
+}
