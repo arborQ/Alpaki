@@ -1,10 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, Optional, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { BrandsService } from '../brands.service';
+import { Location } from '@angular/common';
+
+@Component({
+  selector: 'app-brand-edit-page',
+  template: '<div></div>'
+})
+export class BrandEditPageComponent implements OnInit {
+  constructor(private activeRoute: ActivatedRoute, private dialog: MatDialog, private router: Router) { }
+  ngOnInit(): void {
+    this.activeRoute.params.pipe(map(params => params.brandId))
+      .subscribe(brandId => {
+        this.dialog.open(BrandEditComponent, { width: '250px', disableClose: true, data: { brandId } })
+        .afterClosed().subscribe(() => {
+          this.router.navigate(['/moto/brands']);
+        });
+      });
+  }
+}
 
 @Component({
   selector: 'app-brand-edit',

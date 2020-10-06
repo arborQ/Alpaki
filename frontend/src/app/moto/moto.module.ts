@@ -15,10 +15,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ModelListComponent } from './model-list/model-list.component';
+import { AddBrandComponent } from './add-brand/add-brand.component';
 
 @NgModule({
-  declarations: [BrandsComponent, BrandEditComponent, ModelListComponent],
+  declarations: [BrandsComponent, BrandEditComponent, ModelListComponent, AddBrandComponent],
   imports: [
     CommonModule,
     MotoRoutingModule,
@@ -32,7 +34,8 @@ import { ModelListComponent } from './model-list/model-list.component';
     MatFormFieldModule,
     MatCardModule,
     ReactiveFormsModule,
-    MatListModule
+    MatListModule,
+    MatTooltipModule
   ]
 })
 export class MotoModule { }
