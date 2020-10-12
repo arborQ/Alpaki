@@ -50,7 +50,7 @@ export class BrandsComponent implements OnInit {
     $event.preventDefault();
     $event.stopPropagation();
     const currentPath = this.location.path();
-    this.location.replaceState(`/moto/brands/add`);
+    this.location.go(`/moto/brands/add`);
     const dialogRef = this.dialog.open(AddBrandComponent);
     dialogRef.afterClosed().subscribe(() => {
       this.location.replaceState(currentPath);
@@ -62,7 +62,7 @@ export class BrandsComponent implements OnInit {
     $event.preventDefault();
     $event.stopPropagation();
     const currentPath = this.location.path();
-    this.location.replaceState(`/moto/brands/edit/${brandId}`);
+    this.location.go(`/moto/brands/edit/${brandId}`);
     const dialogRef = this.dialog.open(BrandEditComponent, { width: '250px', data: { brandId } });
     dialogRef.afterClosed().subscribe(() => {
       this.location.replaceState(currentPath);

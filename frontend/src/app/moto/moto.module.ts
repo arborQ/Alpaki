@@ -18,9 +18,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ModelListComponent } from './model-list/model-list.component';
 import { AddBrandComponent } from './add-brand/add-brand.component';
+import { AddModelComponent } from './add-model/add-model.component';
 
 @NgModule({
-  declarations: [BrandsComponent, BrandEditComponent, ModelListComponent, AddBrandComponent],
+  declarations: [BrandsComponent, BrandEditComponent, ModelListComponent, AddBrandComponent, AddModelComponent],
   imports: [
     CommonModule,
     MotoRoutingModule,

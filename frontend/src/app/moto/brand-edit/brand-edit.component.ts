@@ -17,9 +17,9 @@ export class BrandEditPageComponent implements OnInit {
     this.activeRoute.params.pipe(map(params => params.brandId))
       .subscribe(brandId => {
         this.dialog.open(BrandEditComponent, { width: '250px', disableClose: true, data: { brandId } })
-        .afterClosed().subscribe(() => {
-          this.router.navigate(['/moto/brands']);
-        });
+          .afterClosed().subscribe(() => {
+            this.router.navigate(['/moto/brands']);
+          });
       });
   }
 }
@@ -42,13 +42,18 @@ export class BrandEditComponent implements OnInit {
   models: any[] = [];
   editForm: FormGroup;
 
+  brandId = this.activeRoute.params.pipe(map(params => {
+    const selectBrandId = params.brandId || this.data?.brandId;
+    return selectBrandId;
+  }));
+
   ngOnInit(): void {
     this.editForm = new FormGroup({
       brandId: new FormControl('', Validators.required),
       brandName: new FormControl('', Validators.required),
     });
 
-    this.activeRoute.params.pipe(map(params => params.brandId))
+    this.brandId
       .subscribe(brandId => {
         const selectBrandId = brandId || this.data?.brandId;
         this.editForm.disable();

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -8,7 +8,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   template: '<div></div>'
 })
 export class AddBrandPageComponent implements OnInit {
-  constructor(private activeRoute: ActivatedRoute, private dialog: MatDialog, private router: Router) { }
+  constructor(
+    private dialog: MatDialog,
+    private router: Router) { }
   ngOnInit(): void {
     this.dialog.open(AddBrandComponent)
       .afterClosed().subscribe(() => {
@@ -24,7 +26,7 @@ export class AddBrandPageComponent implements OnInit {
 })
 export class AddBrandComponent implements OnInit {
 
-  constructor() { }
+  constructor(@Optional() public dialogRef: MatDialogRef<AddBrandComponent>) { }
   addForm: FormGroup;
 
   ngOnInit(): void {
@@ -32,7 +34,9 @@ export class AddBrandComponent implements OnInit {
       brandName: new FormControl('', Validators.required),
     });
   }
-  cancel() {}
+  cancel() {
+    this.dialogRef?.close();
+  }
 
-  onSubmited() {}
+  onSubmited() { }
 }

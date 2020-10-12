@@ -6,9 +6,14 @@
     </ng-container>
    
     <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef> Akcja </th>
+        <th mat-header-cell *matHeaderCellDef> 
+            <a  (click)="addModel($event)" [href]="'/moto/models/add/' + brandId" mat-button matSuffix color="accent" aria-label="dodaj" matTooltip="Dodaj model">
+                <mat-icon>add</mat-icon>
+            </a>
+        </th>
         <td mat-cell *matCellDef="let element">
-            <a mat-raised-button href="#dddd">Edytuj</a>
+            <a mat-raised-button (click)="editModel($event, element.modelId)"
+                [href]="'/moto/models/edit/' + element.modelId">Edytuj</a>
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

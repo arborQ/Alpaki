@@ -1,16 +1,15 @@
-<form [formGroup]="editForm" (ngSubmit)="onLoginFormSubmitted()">
+<form [formGroup]="addForm" (ngSubmit)="onSubmited()">
     <mat-dialog-content class="mat-typography">
         <div class="example-container">
             <mat-form-field appearance="fill">
-                <mat-label>Nazwa marki</mat-label>
-                <input matInput placeholder="Nazwa marki" formControlName="brandName" required>
-                <mat-error *ngIf="editForm.invalid">Nazwa jest wymagana</mat-error>
+                <mat-label>Nazwa modelu</mat-label>
+                <input matInput placeholder="Nazwa modelu" formControlName="modelName" required>
+                <mat-error *ngIf="addForm.invalid">Nazwa jest wymagana</mat-error>
             </mat-form-field>
         </div>
         <div>
 
         </div>
-        <app-model-list [models]="models" [brandId]="brandId | async"></app-model-list>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
         <button mat-stroked-button (click)="cancel()" type="button">Anuluj</button>
