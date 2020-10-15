@@ -16,5 +16,7 @@ export class AddModelComponent implements OnInit {
       modelName: new FormControl('', Validators.required),
     });
   }
+  cancel() {}
 
+  onSubmited() {}
 }

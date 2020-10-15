@@ -1,15 +1,16 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Alpaki.Database;
+using Alpaki.<%= module %>.Database;
 using MediatR;
 
 namespace Alpaki.Logic.Handlers.<%= name %>
 {
     public class <%= name %>Handler : IRequestHandler<<%= name %>Request, <%= name %>Response>
     {
-        private readonly IDatabaseContext _databaseContext;
+        private readonly <%= context %> _databaseContext;
 
-        public <%= name %>Handler(IDatabaseContext databaseContext)
+        public <%= name %>Handler(<%= context %> databaseContext)
         {
             _databaseContext = databaseContext;
         }
@@ -18,7 +19,7 @@ namespace Alpaki.Logic.Handlers.<%= name %>
         {
             var response = new <%= name %>Response();
             
-            return await Task.FromResult(response);
+            throw new NotImplementedException();
         }
     }
 }

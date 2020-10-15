@@ -3,9 +3,17 @@ import { Component, Inject, Optional, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BrandsService } from '../brands.service';
-import { Location } from '@angular/common';
+
+export function OpenInDialog(dialog: MatDialog, brandId: number): Observable<any> {
+  const dialogRef = dialog
+  .open(BrandEditComponent, { width: '550px', disableClose: true, data: { brandId } })
+  .afterClosed();
+
+  return dialogRef;
+}
 
 @Component({
   selector: 'app-brand-edit-page',
@@ -16,10 +24,7 @@ export class BrandEditPageComponent implements OnInit {
   ngOnInit(): void {
     this.activeRoute.params.pipe(map(params => params.brandId))
       .subscribe(brandId => {
-        this.dialog.open(BrandEditComponent, { width: '250px', disableClose: true, data: { brandId } })
-          .afterClosed().subscribe(() => {
-            this.router.navigate(['/moto/brands']);
-          });
+        OpenInDialog(this.dialog, brandId);
       });
   }
 }
@@ -69,7 +74,7 @@ export class BrandEditComponent implements OnInit {
   }
   cancel() { this.dialogRef?.close(); }
   onLoginFormSubmitted() {
-    const newBrand = { brandId: this.editForm.value.brandId, brandName: this.editForm.value.brandName };
+    const newBrand = { brandId: +this.editForm.value.brandId, brandName: this.editForm.value.brandName };
     this.http.put('/api/Moto/Brand', newBrand).toPromise().then(() => {
       this.brandsService.update(newBrand);
       this.dialogRef?.close();

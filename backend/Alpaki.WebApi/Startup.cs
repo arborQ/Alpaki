@@ -98,6 +98,7 @@ namespace Alpaki.WebApi
                 var coordinatorClaims = new[] { UserRoleEnum.Coordinator, UserRoleEnum.Admin }.Select(c => ((int)c).ToString()).ToArray();
                 var volunteerClaims = new[] { UserRoleEnum.Admin, UserRoleEnum.Coordinator, UserRoleEnum.Volunteer }.Select(c => ((int)c).ToString()).ToArray();
 
+                options.AddPolicy(ModuleAccessAttribute.ResolvePolicyName(ApplicationType.Moto), policy => policy.RequireClaim(ClaimTypes.System, new[] { ((int)ApplicationType.Moto).ToString() }));
                 options.AddPolicy(AdminAccessAttribute.PolicyName, policy => policy.RequireClaim(ClaimTypes.Role, adminClaims));
                 options.AddPolicy(CoordinatorAccessAttribute.PolicyName, policy => policy.RequireClaim(ClaimTypes.Role, coordinatorClaims));
                 options.AddPolicy(VolunteerAccessAttribute.PolicyName, policy => policy.RequireClaim(ClaimTypes.Role, volunteerClaims));
@@ -187,6 +188,7 @@ namespace Alpaki.WebApi
 
         private static void RegisterGraphQL(IServiceCollection services)
         {
+
             services.AddScoped<IDependencyResolver>(x =>
                 new FuncDependencyResolver(x.GetRequiredService));
             services.AddGraphQL(x =>
@@ -194,7 +196,7 @@ namespace Alpaki.WebApi
                 x.ExposeExceptions = true; //set true only in development mode. make it switchable.
             })
             .AddGraphTypes(ServiceLifetime.Scoped)
-            .AddUserContextBuilder(httpContext => httpContext.User)
+            .AddUserContextBuilder(context => context.User)
             .AddDataLoader();
 
             RegisterServices(services);

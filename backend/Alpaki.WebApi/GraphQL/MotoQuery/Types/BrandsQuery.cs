@@ -30,7 +30,7 @@ namespace Alpaki.WebApi.GraphQL.MotoQuery.Types
         {
             var page = _pageArgument.Value(context);
             var search = _searchArgument.Value(context);
-
+            var contextxx = context.UserContext;
             return _motoDatabaseContext
                 .Brands
                 .Include(b => b.Models)

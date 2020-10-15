@@ -1,0 +1,36 @@
+using System.Threading.Tasks;
+using Alpaki.Logic.Handlers.DeleteBrand;
+using Alpaki.<%= module %>.Database;
+using AutoFixture;
+using NSubstitute;
+using Xunit;
+
+namespace Alpaki.<%= module %>.UnitTests.Handlers
+{
+    public class <%= name %>HandlerTests
+    {
+        private readonly Fixture _fixture;
+        private readonly <%= name %>Handler _sut;
+        private readonly <%= context %> _databaseContext;
+
+        public <%= name %>HandlerTests()
+        {
+            _fixture = new Fixture();
+            _databaseContext = Substitute.For<<%= context %>>();
+
+            _sut = new <%= name %>Handler(_databaseContext);
+        }
+
+        [Fact]
+        public async Task <%= name %>Handler_Hendle_Success()
+        {
+            // Arrange
+            var request = new <%= name %>Request();
+
+            // Act
+            await _sut.Handle(request, default);
+
+            //  Assert
+        }
+    }
+}

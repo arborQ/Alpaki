@@ -4,7 +4,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { MotoQueryGQL } from './brands.list.generated';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BrandEditComponent } from 'src/app/moto/brand-edit/brand-edit.component';
+import { BrandEditComponent, OpenInDialog } from 'src/app/moto/brand-edit/brand-edit.component';
 import { AddBrandComponent } from 'src/app/moto/add-brand/add-brand.component';
 import { Location } from '@angular/common';
 import { BrandsService } from '../brands.service';
@@ -63,8 +63,7 @@ export class BrandsComponent implements OnInit {
     $event.stopPropagation();
     const currentPath = this.location.path();
     this.location.go(`/moto/brands/edit/${brandId}`);
-    const dialogRef = this.dialog.open(BrandEditComponent, { width: '250px', data: { brandId } });
-    dialogRef.afterClosed().subscribe(() => {
+    OpenInDialog(this.dialog, brandId).subscribe(() => {
       this.location.replaceState(currentPath);
     });
     return false;
