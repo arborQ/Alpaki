@@ -19,9 +19,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ModelListComponent } from './model-list/model-list.component';
 import { AddBrandComponent } from './add-brand/add-brand.component';
 import { AddModelComponent } from './add-model/add-model.component';
+import { CarIssuesComponent } from './car-issues/car-issues.component';
 
 @NgModule({
-  declarations: [BrandsComponent, BrandEditComponent, ModelListComponent, AddBrandComponent, AddModelComponent],
+  declarations: [BrandsComponent, BrandEditComponent, ModelListComponent, AddBrandComponent, AddModelComponent, CarIssuesComponent],
   imports: [
     CommonModule,
     MotoRoutingModule,

@@ -49,6 +49,7 @@ export class AppComponent implements OnDestroy, OnInit {
     if ((currentUser?.applicationType & ApplicationType.Moto) === ApplicationType.Moto) {
       menuOptions = [...menuOptions,
         { label: 'Marki samochodów', path: '/moto/brands' },
+        { label: 'Usterki', path: '/moto/car/issues' }
         ];
     }
 

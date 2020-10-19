@@ -195,6 +195,10 @@ namespace Alpaki.WebApi
             {
                 x.ExposeExceptions = true; //set true only in development mode. make it switchable.
             })
+            //.AddGraphQLAuthorization(options =>
+            //{
+            //    options.AddPolicy("Authorized", p => p.RequireAuthenticatedUser());
+            //})
             .AddGraphTypes(ServiceLifetime.Scoped)
             .AddUserContextBuilder(context => context.User)
             .AddDataLoader();

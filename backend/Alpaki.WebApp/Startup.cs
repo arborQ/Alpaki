@@ -9,6 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Alpaki.WebApp.Data;
+using Alpaki.Moto.Database;
+using Alpaki.CrossCutting.Extensions;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.WebApp
 {
@@ -19,6 +23,11 @@ namespace Alpaki.WebApp
             Configuration = configuration;
         }
 
+        public static readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder.AddConsole();
+        });
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -28,6 +37,18 @@ namespace Alpaki.WebApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+
+            var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
+            services.AddDbContext<MotoDatabaseContext>(
+            opt =>
+                opt
+                    .UseLoggerFactory(loggerFactory)
+                    .EnableSensitiveDataLogging()
+                    .UseSqlServer(connectionString, x => x.MigrationsHistoryTable("MotoMigrationsHistory", "System")),
+            ServiceLifetime.Transient
+);
+
+            services.AddFactory<IMotoDatabaseContext, MotoDatabaseContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

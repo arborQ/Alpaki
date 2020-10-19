@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Alpaki.Logic.Handlers.DeleteBrand;
 using Alpaki.Moto.Database;
@@ -28,7 +29,7 @@ namespace Alpaki.Moto.UnitTests.Handlers
             var request = new DeleteBrandRequest();
 
             // Act
-            await _sut.Handle(request, default);
+            await Assert.ThrowsAnyAsync<NotImplementedException>(() => _sut.Handle(request, default));
 
             //  Assert
         }

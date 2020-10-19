@@ -1,0 +1,65 @@
+﻿@page "/Moto/BrandsList";
+@using Alpaki.Moto.Database;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+@using Alpaki.Moto.Database.Models;
+
+@inject IMotoDatabaseContext databaseContext;
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Marki samochodów</h5>
+        @if (_brands == null)
+        {
+            <div>Loading...</div>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Aktywne?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var brand in _brands)
+                    {
+                        <tr>
+                            <td>@brand.BrandName</td>
+                            <td>@brand.IsActive</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    IReadOnlyCollection<Brand> _brands;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _brands = await databaseContext.Brands.Take(10).ToListAsync();
+    }
+}
