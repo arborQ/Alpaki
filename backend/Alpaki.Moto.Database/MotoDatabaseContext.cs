@@ -13,6 +13,7 @@ namespace Alpaki.Moto.Database
         public MotoDatabaseContext(DbContextOptions<MotoDatabaseContext> options)
             : base(options)
         {
+            Database.ini
         }
 
         private void SeedData(ModelBuilder modelBuilder)

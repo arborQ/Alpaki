@@ -2,13 +2,21 @@
 @using Alpaki.Moto.Database;
 @using System.Linq;
 @using Microsoft.EntityFrameworkCore;
-@using Alpaki.Moto.Database.Models;
 
 @inject IMotoDatabaseContext databaseContext;
+@inject IJSRuntime JsRuntime;
 
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Marki samochodów</h5>
+        <EditForm Model="@searchModel" OnValidSubmit="@HandleValidSubmit">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" @bind-value="@searchModel.Search" placeholder="Szukaj marki samochodu..." aria-label="Szukaj marki samochodu..." aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Szukaj</button>
+                </div>
+            </div>
+        </EditForm>
         @if (_brands == null)
         {
             <div>Loading...</div>
@@ -19,7 +27,8 @@
                 <thead>
                     <tr>
                         <th>Nazwa</th>
-                        <th>Aktywne?</th>
+                        <th>Ile?</th>
+                        <th style="width: 100px;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,39 +36,47 @@
                     {
                         <tr>
                             <td>@brand.BrandName</td>
-                            <td>@brand.IsActive</td>
+                            <td>@brand.ModelCount</td>
+                            <td style="width: 100px;">
+                                <button type="button" class="btn btn-primary" @onclick="@(_ => EditBrand(brand.BrandId))">Edytuj</button>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
         }
-        <div class="modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Modal body text goes here.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
 @code {
-    IReadOnlyCollection<Brand> _brands;
-
-    protected override async Task OnInitializedAsync()
+    class SearchModel
     {
-        _brands = await databaseContext.Brands.Take(10).ToListAsync();
+        public string Search { get; set; }
+    }
+
+    class BrandViewModel
+    {
+        public long BrandId { get; set; }
+
+        public string BrandName { get; set; }
+
+        public int ModelCount { get; set; }
+    }
+
+    IReadOnlyCollection<BrandViewModel> _brands;
+    SearchModel searchModel = new SearchModel { Search = "Toyota" };
+    protected override Task OnInitializedAsync()
+    {
+        return HandleValidSubmit();
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        _brands = await databaseContext.Brands.Where(b => b.BrandName.Contains(searchModel.Search)).Select(b => new BrandViewModel { BrandName = b.BrandName, BrandId = b.BrandId, ModelCount = b.Models.Count }).ToListAsync();
+    }
+
+    public async Task EditBrand(long brandId)
+    {
+        await JsRuntime.InvokeVoidAsync("alert", $"Edit brand {brandId}");
     }
 }
