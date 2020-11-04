@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using Alpaki.CrossCutting.Extensions;
 using Alpaki.TimeSheet.Database;
+using Alpaki.TimeSheet.Logic;
 using Alpaki.WebApp.Data;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 
 namespace Alpaki.WebApp
 {
@@ -50,8 +53,9 @@ namespace Alpaki.WebApp
 
             services.AddTransient<ITimeSheetDatabaseContext, TimeSheetDatabaseContext>();
             services.AddFactory<ITimeSheetDatabaseContext, TimeSheetDatabaseContext>();
-        }
 
+            services.RegisterTimeSheetLogicServices();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ITimeSheetDatabaseContext timeSheetDatabaseContext)

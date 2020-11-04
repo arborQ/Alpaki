@@ -7,7 +7,7 @@ namespace Alpaki.TimeSheet.Logic
 {
     public static class InitializeTimeSheetLogic
     {
-        public static IServiceCollection RegisterMotoLogicServices(this IServiceCollection services)
+        public static IServiceCollection RegisterTimeSheetLogicServices(this IServiceCollection services)
         {
             services.AddValidatorsFromAssemblyContaining(typeof(InitializeTimeSheetLogic));
             services.AddMediatR(typeof(InitializeTimeSheetLogic).GetTypeInfo().Assembly);

@@ -4,8 +4,11 @@
 @using Alpaki.TimeSheet.Database
 @using Microsoft.EntityFrameworkCore
 @using Alpaki.TimeSheet.Database.Models
+@using Alpaki.Logic.Handlers.UpdateTimeSheet
+@using MediatR;
 
 @inject ITimeSheetDatabaseContext databaseContext
+@inject IMediator mediator;
 
 @code {
     [Parameter]
@@ -53,6 +56,16 @@
         }
 
         await base.OnParametersSetAsync();
+    }
+
+    private async Task SaveTimeSheet()
+    {
+        await mediator.Send(new UpdateTimeSheetRequest
+        {
+            Year = Year,
+            Month = Month, 
+            Entries = Enumerable.Range(0, 1).Select(_ => new UpdateTimeSheetRequest.TimeEntryRequest { Day = _ + 1, Hours = 8 }).ToList()
+        });
     }
 }
 
