@@ -1,0 +1,90 @@
+﻿@page "/time-sheet/{Year:int}/{Month:int}"
+@using System;
+@using System.Globalization
+@using Alpaki.TimeSheet.Database
+@using Microsoft.EntityFrameworkCore
+@using Alpaki.TimeSheet.Database.Models
+
+@inject ITimeSheetDatabaseContext databaseContext
+
+@code {
+    [Parameter]
+    public int Year { get; set; }
+
+    [Parameter]
+    public int Month { get; set; }
+
+    private int? DaysInMonth { get; set; }
+    private int? LastMonthDayCount { get; set; }
+    private int? NextMonthDayCount { get; set; }
+    private int? TodayDayOfMonth { get; set; }
+
+    private string[] DayNames => CultureInfo.CurrentUICulture.DateTimeFormat.DayNames;
+
+    private string NextMonthUrlPath { get; set; }
+    private string PrevMonthUrlPath { get; set; }
+
+    private IList<TimeEntry> TimeEntries { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            var firstDayDate = new DateTime(Year, Month, 1);
+            var nextMonthFirstDate = firstDayDate.AddMonths(1);
+            var prevMonthFirstDate = firstDayDate.AddMonths(-1);
+            var monthFirstDayName = firstDayDate.DayOfWeek.ToString();
+            var nextMonthFirstDayName = nextMonthFirstDate.DayOfWeek.ToString();
+
+            TodayDayOfMonth = DateTime.Now.Year == Year && DateTime.Now.Month == Month ? DateTime.Now.Day : (int?)null;
+            LastMonthDayCount = Array.FindIndex(DayNames, d => d == monthFirstDayName);
+            NextMonthDayCount = 7 - Array.FindIndex(DayNames, d => d == nextMonthFirstDayName);
+
+            DaysInMonth = DateTime.DaysInMonth(Year, Month);
+
+            NextMonthUrlPath = $"/time-sheet/{nextMonthFirstDate.Year}/{nextMonthFirstDate.Month}";
+            PrevMonthUrlPath = $"/time-sheet/{prevMonthFirstDate.Year}/{prevMonthFirstDate.Month}";
+
+            TimeEntries = await databaseContext.TimeEntries.Where(te => te.Year == Year && te.Month == Month).ToListAsync();
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+
+        }
+
+        await base.OnParametersSetAsync();
+    }
+}
+
+<h3>TimeSheet @Year/@Month @TimeEntries?.Count</h3>
+
+<div class="calendar-container">
+    <div class="actions">
+        <a href="@PrevMonthUrlPath" class="btn btn-primary btn-sm">Prev month</a>
+        <a href="@NextMonthUrlPath" class="btn btn-primary btn-sm">Next month</a>
+    </div>
+    <div class="calendar">
+        @foreach (var day in DayNames)
+        {
+            <span class="day-name">@day</span>
+        }
+        @for (var day = 0; day < LastMonthDayCount; day++)
+        {
+            <div class="day day--disabled"></div>
+        }
+        @for (var day = 0; day < DaysInMonth; day++)
+        {
+            <div class="day @((day + 1) == TodayDayOfMonth ? "day--today" : "")">@(day + 1)</div>
+        }
+        @for (var day = 0; day < NextMonthDayCount; day++)
+        {
+            <div class="day day--disabled">
+
+            </div>
+        }
+    </div>
+    <div class="actions">
+        <a href="@PrevMonthUrlPath" class="btn btn-primary btn-sm">Prev month</a>
+        <a href="@NextMonthUrlPath" class="btn btn-primary btn-sm">Next month</a>
+    </div>
+</div>

@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Globalization;
+using Alpaki.CrossCutting.Extensions;
+using Alpaki.TimeSheet.Database;
+using Alpaki.WebApp.Data;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Alpaki.WebApp.Data;
-using Alpaki.Moto.Database;
-using Alpaki.CrossCutting.Extensions;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 
 namespace Alpaki.WebApp
 {
@@ -39,21 +38,23 @@ namespace Alpaki.WebApp
             services.AddSingleton<WeatherForecastService>();
 
             var connectionString = Configuration.GetValue<string>("DefaultConnectionString");
-            services.AddDbContext<MotoDatabaseContext>(
+            services.AddDbContext<TimeSheetDatabaseContext>(
             opt =>
                 opt
                     .UseLoggerFactory(loggerFactory)
                     .EnableSensitiveDataLogging()
                     .EnableServiceProviderCaching()
-                    .UseSqlServer(connectionString, x => x.MigrationsHistoryTable("MotoMigrationsHistory", "System")),
+                    .UseSqlServer(connectionString, x => x.MigrationsHistoryTable("TimeSheetMigrationsHistory", "System")),
             ServiceLifetime.Transient
-);
+            );
 
-            services.AddFactory<IMotoDatabaseContext, MotoDatabaseContext>();
+            services.AddTransient<ITimeSheetDatabaseContext, TimeSheetDatabaseContext>();
+            services.AddFactory<ITimeSheetDatabaseContext, TimeSheetDatabaseContext>();
         }
 
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ITimeSheetDatabaseContext timeSheetDatabaseContext)
         {
             if (env.IsDevelopment())
             {
@@ -64,6 +65,8 @@ namespace Alpaki.WebApp
                 app.UseExceptionHandler("/Error");
             }
 
+            timeSheetDatabaseContext.Migrate();
+
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -73,6 +76,10 @@ namespace Alpaki.WebApp
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+            var defaultDateCulture = "pl-PL";
+            var ci = new CultureInfo(defaultDateCulture);
+            ci.NumberFormat.NumberDecimalSeparator = ".";
+            ci.NumberFormat.CurrencyDecimalSeparator = ".";
         }
     }
 }
