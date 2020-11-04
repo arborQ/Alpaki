@@ -24,6 +24,7 @@ module.exports = class extends Generator {
                 choices: [
                     { name: 'Dream', value: 'Dream' },
                     { name: 'Moto', value: 'Moto' },
+                    { name: 'TimeSheet', value: 'TimeSheet' },
                 ]
             },
             {
@@ -33,6 +34,7 @@ module.exports = class extends Generator {
                 choices: [
                     { name: 'IDatabaseContext', value: 'IDatabaseContext' },
                     { name: 'IMotoDatabaseContext', value: 'IMotoDatabaseContext' },
+                    { name: 'ITimeSheetDatabaseContext', value: 'ITimeSheetDatabaseContext' },
                 ]
             },
             {
