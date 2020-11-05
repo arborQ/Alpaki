@@ -1,3 +1,4 @@
+using System.Linq;
 using Alpaki.TimeSheet.Database;
 using FluentValidation;
 
@@ -10,6 +11,7 @@ namespace Alpaki.Logic.Handlers.UpdateTimeSheet
         {
             RuleFor(r => r.Year).GreaterThanOrEqualTo(2020);
             RuleFor(r => r.Month).GreaterThanOrEqualTo(1).LessThanOrEqualTo(12);
+            RuleFor(r => r.Entries).Must(r => r.All(e => e.Hours >= 0 && e.Hours <= 24));
         }
     }
 }

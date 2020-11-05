@@ -10,9 +10,13 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="@($"/time-sheet/{DateTime.Now.Year}/{DateTime.Now.Month}")">
-                <span class="oi oi-calendar" aria-hidden="true"></span> Time Sheet
-            </NavLink>
+            @for (var i = -3; i < 3; i++)
+            {
+                var month = DateTime.Now.AddMonths(i);
+                <NavLink class="nav-link" href="@($"/time-sheet/{month.Year}/{month.Month}")">
+                    <span class="oi oi-calendar" aria-hidden="true"></span> Time Sheet (@month.Year/@month.ToString("MMM"))
+                </NavLink>
+            }
         </li>
     </ul>
 </div>

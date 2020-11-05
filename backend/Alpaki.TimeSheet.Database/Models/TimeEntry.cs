@@ -18,7 +18,7 @@ namespace Alpaki.TimeSheet.Database.Models
         public Project Project { get; set; }
 
         [ForeignKey(nameof(Project))]
-        public long ProjectId { get; set; }
+        public long? ProjectId { get; set; }
     }
 
     [Table("Project", Schema = "TimeSheet")]

@@ -47,8 +47,9 @@
 
             NextMonthUrlPath = $"/time-sheet/{nextMonthFirstDate.Year}/{nextMonthFirstDate.Month}";
             PrevMonthUrlPath = $"/time-sheet/{prevMonthFirstDate.Year}/{prevMonthFirstDate.Month}";
-
             TimeEntries = await databaseContext.TimeEntries.Where(te => te.Year == Year && te.Month == Month).ToListAsync();
+
+            TimeEntries = Enumerable.Range(0, DaysInMonth.Value).Select(_ => new TimeEntry { Day = _ + 1, Hours = TimeEntries.FirstOrDefault(t => t.Day == _ +1)?.Hours ?? 0 }).ToList();
         }
         catch (ArgumentOutOfRangeException)
         {
@@ -63,8 +64,8 @@
         await mediator.Send(new UpdateTimeSheetRequest
         {
             Year = Year,
-            Month = Month, 
-            Entries = Enumerable.Range(0, 1).Select(_ => new UpdateTimeSheetRequest.TimeEntryRequest { Day = _ + 1, Hours = 8 }).ToList()
+            Month = Month,
+            Entries = TimeEntries.Select(d => new UpdateTimeSheetRequest.TimeEntryRequest { Day = d.Day, Hours = d.Hours }).ToList()
         });
     }
 }
@@ -74,26 +75,42 @@
 <div class="calendar-container">
     <div class="actions">
         <a href="@PrevMonthUrlPath" class="btn btn-primary btn-sm">Prev month</a>
+        <button class="btn btn-danger" @onclick="@SaveTimeSheet">Save</button>
         <a href="@NextMonthUrlPath" class="btn btn-primary btn-sm">Next month</a>
     </div>
     <div class="calendar">
+        @if (TimeEntries != null)
+        {
+            foreach (var entry in TimeEntries)
+            {
+                <section class="task task--info" style="grid-row: @((entry.Day + LastMonthDayCount - 1) / 7 + 2); grid-column: @((entry.Day + LastMonthDayCount - 1) % 7 + 1) / span 1;">
+                    <EditTime @bind-Hours="@entry.Hours"></EditTime>
+                </section>
+            }
+        }
         @foreach (var day in DayNames)
         {
             <span class="day-name">@day</span>
         }
-        @for (var day = 0; day < LastMonthDayCount; day++)
+        @if (LastMonthDayCount < 7)
         {
-            <div class="day day--disabled"></div>
+            for (var day = 0; day < LastMonthDayCount; day++)
+            {
+                <div class="day day--disabled"></div>
+            }
         }
         @for (var day = 0; day < DaysInMonth; day++)
         {
             <div class="day @((day + 1) == TodayDayOfMonth ? "day--today" : "")">@(day + 1)</div>
         }
-        @for (var day = 0; day < NextMonthDayCount; day++)
+        @if (NextMonthDayCount < 7)
         {
-            <div class="day day--disabled">
+            for (var day = 0; day < NextMonthDayCount; day++)
+            {
+                <div class="day day--disabled">
 
-            </div>
+                </div>
+            }
         }
     </div>
     <div class="actions">

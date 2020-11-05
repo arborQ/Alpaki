@@ -43,11 +43,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{75A967
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.Moto.Components", "Alpaki.Moto.Components\Alpaki.Moto.Components.csproj", "{5776110B-FEE1-4A8A-8FB1-FBD5AA866DE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaki.TimeSheet.Logic", "Alpaki.TimeSheetLogic\Alpaki.TimeSheet.Logic.csproj", "{F1825DED-0F5F-41F4-9D23-A17FC2EBB214}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.TimeSheet.Logic", "Alpaki.TimeSheetLogic\Alpaki.TimeSheet.Logic.csproj", "{F1825DED-0F5F-41F4-9D23-A17FC2EBB214}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaki.TimeSheet.Database", "Alpaki.TimeSheet.Database\Alpaki.TimeSheet.Database.csproj", "{3BA8017C-C651-4401-8F0B-1D37C7923D4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.TimeSheet.Database", "Alpaki.TimeSheet.Database\Alpaki.TimeSheet.Database.csproj", "{3BA8017C-C651-4401-8F0B-1D37C7923D4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaki.TimeSheet.Tests", "Alpaki.TimeSheet.Tests\Alpaki.TimeSheet.Tests.csproj", "{F29A7B32-C806-4934-A950-30C8138E2D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.TimeSheet.Tests", "Alpaki.TimeSheet.Tests\Alpaki.TimeSheet.Tests.csproj", "{F29A7B32-C806-4934-A950-30C8138E2D96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

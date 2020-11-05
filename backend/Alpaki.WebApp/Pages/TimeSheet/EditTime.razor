@@ -1,0 +1,33 @@
+﻿<span>
+    <input onfocus="this.select()" value="@Hours.ToString("0.00")" @onchange="@((e) => UpdateHoursValue(e.Value.ToString()))" class="form-control" />
+</span>
+
+@code {
+    [Parameter]
+    public decimal Hours { get; set; }
+
+    [Parameter]
+    public EventCallback<decimal> HoursChanged { get; set; }
+
+    private async Task UpdateHoursValue(string input)
+    {
+        if (decimal.TryParse(input, out var newValue) && newValue != Hours)
+        {
+            if (newValue < 0)
+            {
+                newValue = 0;
+            }
+
+            if (newValue > 24)
+            {
+                newValue = 24;
+            }
+            Hours = newValue;
+            await HoursChanged.InvokeAsync(newValue);
+        }
+        else
+        {
+            await HoursChanged.InvokeAsync(0);
+        }
+    }
+}
