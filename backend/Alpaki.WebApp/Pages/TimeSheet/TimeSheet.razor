@@ -47,8 +47,7 @@
 
             NextMonthUrlPath = $"/time-sheet/{nextMonthFirstDate.Year}/{nextMonthFirstDate.Month}";
             PrevMonthUrlPath = $"/time-sheet/{prevMonthFirstDate.Year}/{prevMonthFirstDate.Month}";
-            //TimeEntries = await databaseContext.TimeEntries.Where(te => te.Year == Year && te.Month == Month).ToListAsync();
-            TimeEntries = await databaseContext.TimeEntries.Where(te => false).ToListAsync();
+            TimeEntries = await databaseContext.TimeEntries.Where(te => te.Year == Alpaki.CrossCutting.ValueObjects.Year.From(Year) && te.Month == Alpaki.CrossCutting.ValueObjects.Month.From(Month)).ToListAsync();
 
             TimeEntries = Enumerable.Range(0, DaysInMonth.Value).Select(_ => new TimeEntry { Day = _ + 1, Hours = TimeEntries.FirstOrDefault(t => t.Day == _ + 1)?.Hours ?? 0 }).ToList();
         }
