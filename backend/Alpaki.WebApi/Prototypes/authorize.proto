@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+service Authorize {
+	rpc ValidateUser(AuthorizeRequest) returns (AuthorizeResponse);
+}
+
+message AuthorizeRequest {
+	string login = 1;
+	string password = 2;
+}
+
+message AuthorizeResponse {
+	string token = 1;
+}

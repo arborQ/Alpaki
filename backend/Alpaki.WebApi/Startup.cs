@@ -12,6 +12,7 @@ using Alpaki.Logic;
 using Alpaki.Logic.Services;
 using Alpaki.Moto.Database;
 using Alpaki.WebApi.Behaviors;
+using Alpaki.WebApi.Controllers;
 using Alpaki.WebApi.Filters;
 using Alpaki.WebApi.GraphQL.DreamQuery;
 using Alpaki.WebApi.GraphQL.MotoQuery;
@@ -89,7 +90,7 @@ namespace Alpaki.WebApi
 
             services.AddTransient<IDatabaseContext, DatabaseContext>();
             services.AddFactory<IMotoDatabaseContext, MotoDatabaseContext>();
-
+            services.AddTransient<AuthorizeService>();
             var seacretKey = Configuration.GetValue<string>($"{nameof(JwtConfig)}:{nameof(JwtConfig.SeacretKey)}");
 
             services.AddAuthorization(options =>
@@ -245,6 +246,7 @@ namespace Alpaki.WebApi
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<AuthorizeService>();
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
             });
