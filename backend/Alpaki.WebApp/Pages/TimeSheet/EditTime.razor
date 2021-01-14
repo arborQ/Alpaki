@@ -1,6 +1,23 @@
-﻿<span>
-    <input onfocus="this.select()" value="@Hours.ToString("0.00")" @onchange="@((e) => UpdateHoursValue(e.Value.ToString()))" class="form-control" />
-</span>
+﻿@inject IJSRuntime JSRuntime
+
+@if (InEditMode)
+{
+    <span>
+        <input onfocus="this.select()"
+               value="@Hours.ToString("0.00")"
+               @ref="HourInput"
+               autofocus="@true"
+               @onblur="@(() => { InEditMode = false; })"
+               @onchange="@((e) => UpdateHoursValue(e.Value.ToString()))"
+               class="form-control" />
+    </span>
+}
+else
+{
+    <button class="btn btn-link" @onclick="@(async () => { InEditMode = true; })">
+        @Hours
+    </button>
+}
 
 @code {
     [Parameter]
@@ -8,6 +25,9 @@
 
     [Parameter]
     public EventCallback<decimal> HoursChanged { get; set; }
+
+    private bool InEditMode = false;
+    private ElementReference HourInput;
 
     private async Task UpdateHoursValue(string input)
     {

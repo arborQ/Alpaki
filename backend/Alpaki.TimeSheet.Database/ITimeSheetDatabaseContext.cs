@@ -17,6 +17,8 @@ namespace Alpaki.TimeSheet.Database
 
         DbSet<TimeEntry> TimeEntries { get; }
 
+        DbSet<TimeSheetPeriod> TimeSheetPeriods { get; }
+
         DbSet<Project> Projects { get; }
     }
 }

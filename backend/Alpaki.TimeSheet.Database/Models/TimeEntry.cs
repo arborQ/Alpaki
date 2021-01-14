@@ -1,17 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Alpaki.CrossCutting.ValueObjects;
 
 namespace Alpaki.TimeSheet.Database.Models
 {
-    [Table("TimeEntry", Schema = "TimeSheet")]
+    [Table(nameof(TimeEntry), Schema = "TimeSheet")]
     public class TimeEntry
     {
-        public int Year { get; set; }
+        public TimeSheetPeriod TimeSheet { get; set; }
 
-        public int Month { get; set; }
+        public Year Year { get; set; }
+
+        public Month Month { get; set; }
 
         public int Day { get; set; }
 
-        public long UserId { get; set; }
+        public UserId UserId { get; set; }
 
         public decimal Hours { get; set; }
 
@@ -19,13 +22,5 @@ namespace Alpaki.TimeSheet.Database.Models
 
         [ForeignKey(nameof(Project))]
         public long? ProjectId { get; set; }
-    }
-
-    [Table("Project", Schema = "TimeSheet")]
-    public class Project
-    {
-        public long ProjectId { get; set; }
-
-        public string ProjectName { get; set; }
     }
 }

@@ -5,7 +5,7 @@
 @using Microsoft.EntityFrameworkCore
 @using Alpaki.TimeSheet.Database.Models
 @using Alpaki.Logic.Handlers.UpdateTimeSheet
-@using MediatR;
+@using MediatR
 
 @inject ITimeSheetDatabaseContext databaseContext
 @inject IMediator mediator;
@@ -47,9 +47,10 @@
 
             NextMonthUrlPath = $"/time-sheet/{nextMonthFirstDate.Year}/{nextMonthFirstDate.Month}";
             PrevMonthUrlPath = $"/time-sheet/{prevMonthFirstDate.Year}/{prevMonthFirstDate.Month}";
-            TimeEntries = await databaseContext.TimeEntries.Where(te => te.Year == Year && te.Month == Month).ToListAsync();
+            //TimeEntries = await databaseContext.TimeEntries.Where(te => te.Year == Year && te.Month == Month).ToListAsync();
+            TimeEntries = await databaseContext.TimeEntries.Where(te => false).ToListAsync();
 
-            TimeEntries = Enumerable.Range(0, DaysInMonth.Value).Select(_ => new TimeEntry { Day = _ + 1, Hours = TimeEntries.FirstOrDefault(t => t.Day == _ +1)?.Hours ?? 0 }).ToList();
+            TimeEntries = Enumerable.Range(0, DaysInMonth.Value).Select(_ => new TimeEntry { Day = _ + 1, Hours = TimeEntries.FirstOrDefault(t => t.Day == _ + 1)?.Hours ?? 0 }).ToList();
         }
         catch (ArgumentOutOfRangeException)
         {
@@ -63,20 +64,20 @@
     {
         await mediator.Send(new UpdateTimeSheetRequest
         {
-            Year = Year,
-            Month = Month,
+            Year = Alpaki.CrossCutting.ValueObjects.Year.From(Year),
+            Month = Alpaki.CrossCutting.ValueObjects.Month.From(Month),
             Entries = TimeEntries.Select(d => new UpdateTimeSheetRequest.TimeEntryRequest { Day = d.Day, Hours = d.Hours }).ToList()
         });
     }
 }
 
-<h3>TimeSheet @Year/@Month @TimeEntries?.Count</h3>
+<h3>TimeSheet @Year/@Month</h3>
 
 <div class="calendar-container">
+    <button class="btn btn-danger" @onclick="@SaveTimeSheet">Save</button>
     <div class="actions">
-        <a href="@PrevMonthUrlPath" class="btn btn-primary btn-sm">Prev month</a>
-        <button class="btn btn-danger" @onclick="@SaveTimeSheet">Save</button>
-        <a href="@NextMonthUrlPath" class="btn btn-primary btn-sm">Next month</a>
+        <a href="@PrevMonthUrlPath" class="btn btn-prev"><span class="oi oi-chevron-left" aria-hidden="true"></span></a>
+        <a href="@NextMonthUrlPath" class="btn btn-next"><span class="oi oi-chevron-right" aria-hidden="true"></span></a>
     </div>
     <div class="calendar">
         @if (TimeEntries != null)
@@ -112,9 +113,5 @@
                 </div>
             }
         }
-    </div>
-    <div class="actions">
-        <a href="@PrevMonthUrlPath" class="btn btn-primary btn-sm">Prev month</a>
-        <a href="@NextMonthUrlPath" class="btn btn-primary btn-sm">Next month</a>
     </div>
 </div>

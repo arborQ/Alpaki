@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Alpaki.CrossCutting.ValueObjects;
 using MediatR;
 
 namespace Alpaki.Logic.Handlers.UpdateTimeSheet
@@ -10,9 +11,9 @@ namespace Alpaki.Logic.Handlers.UpdateTimeSheet
 
         }
 
-        public int Year { get; set; }
+        public Year Year { get; set; }
 
-        public int Month { get; set; }
+        public Month Month { get; set; }
 
         public IReadOnlyCollection<TimeEntryRequest> Entries { get; set; }
 

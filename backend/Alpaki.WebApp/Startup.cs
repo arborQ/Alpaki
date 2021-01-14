@@ -5,6 +5,8 @@ using Alpaki.CrossCutting.Extensions;
 using Alpaki.TimeSheet.Database;
 using Alpaki.TimeSheet.Logic;
 using Alpaki.WebApp.Data;
+using Alpaki.WebApp.Store;
+using Blazored.LocalStorage;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -55,6 +57,10 @@ namespace Alpaki.WebApp
             services.AddFactory<ITimeSheetDatabaseContext, TimeSheetDatabaseContext>();
 
             services.RegisterTimeSheetLogicServices();
+
+            services.AddHttpClient();
+            services.AddSingleton<StateContainer>();
+            services.AddBlazoredLocalStorage();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,14 +4,16 @@ using Alpaki.TimeSheet.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpaki.TimeSheet.Database.Migrations
 {
     [DbContext(typeof(TimeSheetDatabaseContext))]
-    partial class TimeSheetDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210113124835_TimeSheetKeysMigration")]
+    partial class TimeSheetKeysMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,16 +71,16 @@ namespace Alpaki.TimeSheet.Database.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LockedFrom")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Year", "Month", "UserId");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Year", "Month");
 
                     b.ToTable("TimeSheetPeriod","TimeSheet");
                 });
@@ -91,7 +93,7 @@ namespace Alpaki.TimeSheet.Database.Migrations
 
                     b.HasOne("Alpaki.TimeSheet.Database.Models.TimeSheetPeriod", "TimeSheet")
                         .WithMany("TimeEntries")
-                        .HasForeignKey("Year", "Month", "UserId")
+                        .HasForeignKey("Year", "Month")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

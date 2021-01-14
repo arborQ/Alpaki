@@ -9,10 +9,10 @@ namespace Alpaki.TimeSheet.Tests
         [Fact]
         public void Test1()
         {
-            var sss = Substitute.For<ITimeSheetDatabaseContext>();
-            sss.Migrate();
-            //sss.Received(0).Migrate();
-            sss.DidNotReceiveWithAnyArgs().Migrate();
+            //var sss = Substitute.For<ITimeSheetDatabaseContext>();
+            //sss.Migrate();
+            ////sss.Received(0).Migrate();
+            //sss.DidNotReceiveWithAnyArgs().Migrate();
         }
     }
 }

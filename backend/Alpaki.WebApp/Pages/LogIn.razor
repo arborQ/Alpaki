@@ -1,3 +1,65 @@
 ﻿@page "/authorize/login"
+@using Newtonsoft.Json
+@using System
+@using System.Text
+@inject IHttpClientFactory httpClientFactory
+@inject Blazored.LocalStorage.ILocalStorageService StateContainer
 
-<h1>Login</h1>
+<form @onsubmit="@ValidateUser">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Authorize user</h5>
+            <p class="card-text">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind-value="@Email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" @bind-value="@Password">
+                </div>
+            </p>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            @if (IsAuthorized)
+            {
+                <button type="button" class="btn btn-primary" @onclick="LogOut">Log out</button>
+            }
+        </div>
+    </div>
+</form>
+
+@code {
+    private string Email { get; set; }
+
+    private string Password { get; set; }
+
+    private bool IsAuthorized { get; set; }
+
+    async Task ValidateUser()
+    {
+        var httpClient = httpClientFactory.CreateClient("authorize.login");
+        var json = JsonConvert.SerializeObject(new { Login = Email, Password = Password });
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+        var loginResponse = await httpClient.PostAsync("http://localhost:5000/api/authorize", data);
+
+        var response = await loginResponse.Content.ReadAsStringAsync();
+        var model = JsonConvert.DeserializeObject<LoginResponse>(response);
+        await StateContainer.SetItemAsync<string>("bearer_token", model.Token);
+
+        IsAuthorized = true;
+    }
+
+    async Task LogOut()
+    {
+        await StateContainer.ClearAsync();
+        IsAuthorized = false;
+    }
+
+    class LoginResponse
+    {
+        public string Token { get; set; }
+
+        public string Login { get; set; }
+    }
+}

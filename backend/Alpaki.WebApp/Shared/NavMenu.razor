@@ -1,4 +1,5 @@
 ﻿@using System;
+@inject Blazored.LocalStorage.ILocalStorageService StateContainer
 
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Alpaki.WebApp</a>
@@ -14,7 +15,19 @@
             {
                 var month = DateTime.Now.AddMonths(i);
                 <NavLink class="nav-link" href="@($"/time-sheet/{month.Year}/{month.Month}")">
-                    <span class="oi oi-calendar" aria-hidden="true"></span> Time Sheet (@month.Year/@month.ToString("MMM"))
+                    <span class="oi oi-calendar" aria-hidden="true"></span> (@month.Year/@month.ToString("MMM"))
+                </NavLink>
+            }
+            @if (!IsAuthorized)
+            {
+                <NavLink class="nav-link" href="/authorize/login">
+                    <span class="oi oi-person" aria-hidden="true"></span> Log In
+                </NavLink>
+            }
+            else
+            {
+                <NavLink class="nav-link" @onclick="LogOut">
+                    <span class="oi oi-delete" aria-hidden="true"></span> Log Out
                 </NavLink>
             }
         </li>
@@ -23,8 +36,32 @@
 
 @code {
     private bool collapseNavMenu = true;
-
+    private bool IsAuthorized { get; set; }
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        IsAuthorized = !string.IsNullOrEmpty(await StateContainer.GetItemAsync<string>("bearer_token"));
+
+        StateContainer.Changed += async (e, c) =>
+        {
+            IsAuthorized = !string.IsNullOrEmpty(await StateContainer.GetItemAsync<string>("bearer_token"));
+
+        };
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    async Task LogOut()
+    {
+        await StateContainer.RemoveItemAsync("bearer_token");
+    }
 
     private void ToggleNavMenu()
     {
