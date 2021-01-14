@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,36 +24,33 @@ namespace Alpaki.Logic.Handlers.UpdateTimeSheet
 
             var timePeriod = await _databaseContext.TimeSheetPeriods
                 .Include(p => p.TimeEntries)
+                .Include(p => p.DomainEvents)
                 .SingleOrDefaultAsync(p => p.Year == request.Year && p.Month == request.Month && p.UserId == userId, cancellationToken);
 
-            if (timePeriod == null)
-            {
-                timePeriod = new TimeSheetPeriod
+            var timeEntries = request
+                .Entries
+                .Where(e => e.Hours > 0)
+                .Select(e => new TimeEntry
                 {
                     Year = request.Year,
                     Month = request.Month,
-                    UserId = userId,
-                    CreatedAt = DateTime.UtcNow,
-                    TimeEntries = new List<TimeEntry>()
-                };
+                    Day = e.Day,
+                    Hours = e.Hours,
+                    UserId = userId
+                })
+                .ToList();
 
+            if (timePeriod == null)
+            {
+                timePeriod = new TimeSheetPeriod(request.Year, request.Month, userId, timeEntries);
                 await _databaseContext.TimeSheetPeriods.AddAsync(timePeriod, cancellationToken);
             }
 
-            timePeriod.TimeEntries = request.Entries.Where(e => e.Hours > 0).Select(e => new TimeEntry
-            {
-                Year = request.Year,
-                Month = request.Month,
-                Day = e.Day,
-                Hours = e.Hours,
-                UserId = userId
-            }).ToList();
+            timePeriod.UpdateHours(timeEntries);
 
             await _databaseContext.SaveChangesAsync(cancellationToken);
 
-            var response = new UpdateTimeSheetResponse();
-
-            return response;
+            return new UpdateTimeSheetResponse();
         }
     }
 }

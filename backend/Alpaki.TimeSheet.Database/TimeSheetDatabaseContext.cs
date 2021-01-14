@@ -1,4 +1,6 @@
-﻿using Alpaki.CrossCutting.ValueObjects;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Alpaki.CrossCutting.ValueObjects;
 using Alpaki.TimeSheet.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +34,10 @@ namespace Alpaki.TimeSheet.Database
                 .Entity<TimeSheetPeriod>()
                 .Property(p => p.Year)
                 .HasConversion(year => year.Value, year => Year.From(year));
+            modelBuilder
+                .Entity<TimeSheetPeriod>()
+                .Property(p => p.CreatedAt)
+                .HasDefaultValueSql("getdate()");
 
             modelBuilder
                 .Entity<TimeSheetPeriod>()
@@ -63,6 +69,16 @@ namespace Alpaki.TimeSheet.Database
                 .Entity<TimeEntry>()
                 .Property(p => p.UserId)
                 .HasConversion(userId => userId.Value, userId => new UserId(userId));
+
+            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            modelBuilder
+                .Entity<DomainEvent<TimeSheetEventData, TimeSheetEventType>>()
+                .ToTable("PeriodDomainEvents", "TimeSheet")
+                .Property(p => p.EventData)
+                .HasConversion(
+                    data => JsonSerializer.Serialize(data, jsonSerializerOptions), 
+                    st => JsonSerializer.Deserialize<TimeSheetEventData>(st, jsonSerializerOptions)
+                );
 
             SeedData(modelBuilder);
         }
