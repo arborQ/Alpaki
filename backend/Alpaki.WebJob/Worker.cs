@@ -1,68 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Alpaki.WebJob.Jobs;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Quartz;
 
 namespace Alpaki.WebJob
 {
-    public static class CronHelper
-    {
-        public static CronScheduleBuilder EverySecond => CronScheduleBuilder.CronSchedule("* * * * * ? *");
-
-        public static CronScheduleBuilder EveryEachSecond(int second) => CronScheduleBuilder.CronSchedule($"0/5 0 0 ? * * *");
-    }
-
-    public interface IScheduledJob : IJob
-    {
-        string Name { get; }
-
-        string GroupName { get; }
-
-        CronScheduleBuilder CronSchedule { get; }
-    }
-
-    public class HelloJob : IScheduledJob
-    {
-        private readonly ILogger<HelloJob> _logger;
-
-        public HelloJob(ILogger<HelloJob> logger)
-        {
-            _logger = logger;
-        }
-
-        public string Name => nameof(HelloJob);
-
-        public string GroupName => $"{nameof(HelloJob)}Group";
-
-        public CronScheduleBuilder CronSchedule => CronHelper.EverySecond;
-
-        public Task Execute(IJobExecutionContext context)
-        {
-            _logger.LogInformation("Working...");
-
-            return Task.CompletedTask;
-        }
-    }
-
-    public class HelloJobOther : IScheduledJob
-    {
-        public string Name => nameof(HelloJobOther);
-
-        public string GroupName => $"{nameof(HelloJobOther)}Group";
-
-        public CronScheduleBuilder CronSchedule => CronHelper.EveryEachSecond(5);
-
-        public async Task Execute(IJobExecutionContext context)
-        {
-            await Console.Out.WriteLineAsync("OTHER Greetings from HelloJob!!!!!");
-        }
-    }
-
-    public class Worker : BackgroundService, IDisposable
+    public class Worker : BackgroundService
     {
         private readonly IScheduler _scheduler;
         private readonly IEnumerable<IScheduledJob> _jobs;
@@ -75,7 +22,7 @@ namespace Alpaki.WebJob
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             foreach (var job in _jobs)
             {
@@ -87,11 +34,10 @@ namespace Alpaki.WebJob
 
                 var trigger = TriggerBuilder.Create()
                     .WithIdentity("trigger1", job.GroupName)
-                    .WithSchedule(job.CronSchedule)
-                    .StartNow()
+                    .WithSimpleSchedule(job.Schedule)
                     .Build();
 
-                await _scheduler.ScheduleJob(scheduledJob, trigger);
+                await _scheduler.ScheduleJob(scheduledJob, trigger, cancellationToken);
             }
 
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -99,7 +45,7 @@ namespace Alpaki.WebJob
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            await _scheduler.Start();
+            await _scheduler.Start(cancellationToken);
             _logger.LogInformation("Scheduler started at: {time}", DateTimeOffset.Now);
             await base.StartAsync(cancellationToken);
         }
@@ -108,7 +54,7 @@ namespace Alpaki.WebJob
         {
             if (_scheduler.IsStarted)
             {
-                await _scheduler.Shutdown();
+                await _scheduler.Shutdown(cancellationToken);
                 _logger.LogInformation("Scheduler shutdown at: {time}", DateTimeOffset.Now);
             }
 

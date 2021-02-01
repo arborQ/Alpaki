@@ -1,3 +1,4 @@
+using Alpaki.WebJob.Jobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
@@ -20,9 +21,9 @@ namespace Alpaki.WebJob
                     var scheduler = await factory.GetScheduler();
 
                     services.AddTransient<IScheduledJob, HelloJob>();
-                    //services.AddTransient<IScheduledJob, HelloJobOther>();
-                    
-                    services.AddSingleton<IScheduler>(scheduler);
+                    services.AddTransient<IScheduledJob, HelloJobOther>();
+
+                    services.AddSingleton(scheduler);
                     services.AddHostedService<Worker>();
                 });
     }
