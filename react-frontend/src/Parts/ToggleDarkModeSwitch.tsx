@@ -5,7 +5,6 @@ export function ToggleDarkModeSwitch() {
     const [isDark, toggleDark] = useState(false);
 
     useEffect(() => {
-        console.log('use effect');
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             toggleDark(true);
@@ -13,7 +12,7 @@ export function ToggleDarkModeSwitch() {
             document.documentElement.classList.remove('dark');
             toggleDark(false);
         }
-    }, [isDark]);
+    }, [1]);
 
     return (
         <SwitchButton 
