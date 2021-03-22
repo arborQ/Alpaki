@@ -10,6 +10,8 @@ const resources = {
             "login.login_label": "User name",
             "login.password_label": "Password",
             "login.submit": "Validate user",
+            "menu.home": "Dashboard",
+            "menu.login": "Sign in!",
         }
     },
     pl: {
@@ -18,6 +20,8 @@ const resources = {
             "login.login_label": "Nazwa użytkownika",
             "login.password_label": "Hasło",
             "login.submit": "Zaloguj mnie",
+            "menu.home": "Dashboard",
+            "menu.login": "Zaloguj!",
         }
     }
 };
