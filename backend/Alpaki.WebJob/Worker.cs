@@ -6,6 +6,7 @@ using Alpaki.WebJob.Jobs;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Quartz;
+using Quartz.Spi;
 
 namespace Alpaki.WebJob
 {
@@ -15,8 +16,9 @@ namespace Alpaki.WebJob
         private readonly IEnumerable<IScheduledJob> _jobs;
         private readonly ILogger<Worker> _logger;
 
-        public Worker(IScheduler scheduler, IEnumerable<IScheduledJob> jobs, ILogger<Worker> logger)
+        public Worker(IScheduler scheduler, IEnumerable<IScheduledJob> jobs, IJobFactory jobFactory, ILogger<Worker> logger)
         {
+            scheduler.JobFactory = jobFactory;
             _scheduler = scheduler;
             _jobs = jobs;
             _logger = logger;

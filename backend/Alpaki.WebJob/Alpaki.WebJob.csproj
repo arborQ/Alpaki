@@ -9,4 +9,8 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
     <PackageReference Include="Quartz" Version="3.2.4" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alpaki.SearchEngine\Alpaki.SearchEngine.csproj" />
+  </ItemGroup>
 </Project>
