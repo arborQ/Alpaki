@@ -16,6 +16,8 @@ export function ToggleDarkModeSwitch() {
 
     return (
         <SwitchButton 
+        name="dark_mode"
+        label="Toggle dark mode"
         checked={isDark} 
         onChecked={(dark) => {
             localStorage.theme = dark ? 'dark': 'light';
