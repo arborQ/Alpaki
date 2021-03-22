@@ -2,12 +2,12 @@ import React from 'react';
 import {
     Route,
 } from "react-router-dom";
-import { LoginPage } from './Login';
+import { Dashboard } from './Dashboard';
 
-export function LoginRoute({ path }: { path: string }) {
+export function DashboardRoute({ path }: { path: string }) {
     return (
         <Route path={path} exact>
-            <LoginPage />
+            <Dashboard />
         </Route>
     );
 }

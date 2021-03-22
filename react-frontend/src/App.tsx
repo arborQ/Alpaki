@@ -1,9 +1,10 @@
 import { LoginRoute } from './Pages/Authorize/LoginRoute';
+import { DashboardRoute } from './Pages/Dashboard/DashboardRoute';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Link, 
+  Redirect
 } from "react-router-dom";
 import './i18n';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +15,7 @@ function App() {
   const { t }  = useTranslation();
 
   const menuOptions = [
-    { path: '/', text : t('menu.home') },
+    { path: '/dashboard', text : t('menu.home') },
     { path: '/authorize/login', text : t('menu.login') },
   ];
   return (
@@ -29,7 +30,9 @@ function App() {
         <div className="w-5/6">
           <div className="bg-back dark:bg-gray-700 md:container md:mx-auto h-screen">
             <Switch>
+              <DashboardRoute path="/dashboard" />
               <LoginRoute path="/authorize/login" />
+              <Redirect to="/dashboard" />
             </Switch>
           </div>
         </div>

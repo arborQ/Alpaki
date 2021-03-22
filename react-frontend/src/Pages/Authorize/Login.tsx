@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { AuthorizeUserData } from './LoginService';
 import { TextInput } from 'Components/TextInput';
@@ -21,7 +21,7 @@ export function LoginPage() {
                             <div className="w-full lg:w-1/3 md:w-3/4 m-2">
                                 <Card>
                                     <TextInput label={loginLabel} name="login" value={values.login} onChange={handleChange('login')} />
-                                    <TextInput label={passwordLabel} name="password" value={values.password} onChange={handleChange('password')} />
+                                    <TextInput label={passwordLabel} name="password" value={values.password} onChange={handleChange('password')} type="password" />
                                     <SubmitButton>{submitButton}</SubmitButton>
                                 </Card>
                             </div>
