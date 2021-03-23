@@ -13,8 +13,8 @@ steps:
 - script: |
     yarn install --production=false
     yarn run build
-    copy ./package.json ./build/package.json
-    copy ./production.server.js ./build/production.server.js
+    cp ./package.json ./build/package.json
+    cp ./production.server.js ./build/production.server.js
   workingDirectory: './react-frontend'
   displayName: 'yarn install, yarn build'
 
