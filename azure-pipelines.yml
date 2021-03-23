@@ -13,8 +13,15 @@ steps:
 - script: |
     yarn install
     yarn run build
+    copy ./package.json ./build/package.json
+    copy ./production.server.js ./build/production.server.js
   workingDirectory: './react-frontend'
   displayName: 'yarn install, yarn build'
+
+- script: |
+    yarn install --production=true
+  workingDirectory: './react-frontend/build'
+  displayName: 'yarn install express'
 
 - task: ArchiveFiles@1
   displayName: 'Archive files '

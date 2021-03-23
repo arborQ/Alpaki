@@ -1,6 +1,6 @@
 seq-data
 mssql-data
-
+node_modules
 AlpakiWeb/node_modules
 AlpakiGenerator/node_modules
 PublishProfiles
