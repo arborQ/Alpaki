@@ -12,7 +12,7 @@ export function ToggleDarkModeSwitch() {
             document.documentElement.classList.remove('dark');
             toggleDark(false);
         }
-    }, [1]);
+    }, []);
 
     return (
         <SwitchButton 

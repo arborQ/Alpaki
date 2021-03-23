@@ -8,7 +8,7 @@ export function ToggleLanguageSwitch() {
         <SwitchButton  
         name="language"
         label={i18n.language}
-        checked={i18n.language == 'pl'} 
+        checked={i18n.language === 'pl'} 
         onChecked={(isPl) => {
             i18n.changeLanguage(isPl ? 'pl': 'en');
         }} />
