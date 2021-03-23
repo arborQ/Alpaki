@@ -10,19 +10,11 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- task: Npm@0
-  displayName: 'npm install'
-  inputs:
-    cwd: './react-frontend'
-    arguments: '--force'
-
-- task: Npm@1
-  displayName: 'npm build'
-  inputs:
-    command: custom
-    workingDir: './react-frontend'
-    verbose: false
-    customCommand: run build
+- script: |
+    npm install
+    npm run build
+  workingDirectory: './react-frontend'
+  displayName: 'npm install, run build'
 
 - task: ArchiveFiles@1
   displayName: 'Archive files '
