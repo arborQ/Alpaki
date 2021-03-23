@@ -5,5 +5,5 @@ const port = 8080;
 app.use(express.static('./'));
 
 app.listen(port, () => {
-  console.log(`App listening at https://localhost:${port}`)
+  console.log(`App listening at http://localhost:${port}`)
 });
