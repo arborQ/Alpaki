@@ -11,7 +11,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    yarn install
+    yarn install --production=false
     yarn run build
     copy ./package.json ./build/package.json
     copy ./production.server.js ./build/production.server.js
