@@ -15,6 +15,7 @@ steps:
     yarn run build
     cp ./package.json ./build/package.json
     cp ./production.server.js ./build/production.server.js
+    cp ./Dockerfile ./build/Dockerfile
   workingDirectory: './react-frontend'
   displayName: 'yarn install, yarn build'
 
