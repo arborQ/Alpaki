@@ -1,5 +1,13 @@
 trigger:
-- master
+  branches:
+    include:
+    - master
+    - releases/*
+  paths:
+    include:
+    - react-frontend
+    exclude:
+    - README.md
 
 pool:
   vmImage: 'ubuntu-latest'
