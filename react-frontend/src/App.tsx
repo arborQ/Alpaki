@@ -1,5 +1,6 @@
 import { LoginRoute } from './Pages/Authorize/LoginRoute';
 import { DashboardRoute } from './Pages/Dashboard/DashboardRoute';
+import { ProductsRoute } from './Pages/Products/products.route';
 import {
   BrowserRouter as Router,
   Switch,
@@ -18,6 +19,7 @@ function App() {
   const menuOptions = [
     { path: '/dashboard', text: t('menu.home') },
     { path: '/authorize/login', text: t('menu.login') },
+    { path: '/shop/products', text: t('menu.shop.products') },
   ];
   return (
     <Router>
@@ -33,6 +35,7 @@ function App() {
           <Switch>
             <DashboardRoute path="/dashboard" />
             <LoginRoute path="/authorize/login" />
+            <ProductsRoute path="/shop/products" />
             <Redirect to="/dashboard" />
           </Switch>
         </div>

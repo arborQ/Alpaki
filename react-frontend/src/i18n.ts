@@ -12,6 +12,7 @@ const resources = {
             "login.submit": "Validate user",
             "menu.home": "Dashboard",
             "menu.login": "Sign in!",
+            "menu.shop.products": "Products",
         }
     },
     pl: {
@@ -22,6 +23,7 @@ const resources = {
             "login.submit": "Zaloguj mnie",
             "menu.home": "Dashboard",
             "menu.login": "Zaloguj!",
+            "menu.shop.products": "Produkty",
         }
     }
 };
