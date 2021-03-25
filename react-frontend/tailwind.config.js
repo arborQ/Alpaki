@@ -12,7 +12,12 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      width: ['focus-within'],
+      height: ['focus-within'],
+      position: ['focus-within'],
+      padding: ['focus-within']
+    },
   },
   plugins: [],
 }
