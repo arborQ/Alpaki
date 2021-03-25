@@ -25,11 +25,13 @@ namespace Alpaki.WebJob
                     services.AddSingleton<IJobFactory, JobFactory>();
                     services.AddTransient<ITestService, TestService>();
 
-                    services.AddTransient<IScheduledJob, HelloJob>();
-                    services.AddTransient<IScheduledJob, HelloJobOther>();
+                    //services.AddTransient<IScheduledJob, HelloJob>();
+                    //services.AddTransient<IScheduledJob, HelloJobOther>();
+                    services.AddTransient<IScheduledJob, SynchronizePartyShop>();
 
                     services.AddTransient<HelloJob>();
                     services.AddTransient<HelloJobOther>();
+                    services.AddTransient<SynchronizePartyShop>();
 
                     services.AddSingleton(scheduler);
                     services.AddHostedService<Worker>();

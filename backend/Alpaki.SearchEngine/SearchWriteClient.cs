@@ -31,7 +31,6 @@ namespace Alpaki.SearchEngine
             var fieldBuilder = new FieldBuilder();
             var searchFields = fieldBuilder.Build(typeof(T));
             var definition = new SearchIndex(indexName, searchFields);
-
             await _searchIndexClient.CreateOrUpdateIndexAsync(definition);
 
             return _searchIndexClient.GetSearchClient(indexName);
