@@ -22,6 +22,7 @@ steps:
     yarn install --production=false
     yarn run build
     cp ./package.json ./build/package.json
+    cp ./yarn.lock ./build/yarn.lock
     cp ./production.server.js ./build/production.server.js
     cp ./Dockerfile ./build/Dockerfile
   workingDirectory: './react-frontend'
