@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'Components/Card';
-import { SearchResponse, SearchItem } from './product.models';
+import { SearchItem } from './product.models';
 
 interface ProductTileProps {
     item: SearchItem;

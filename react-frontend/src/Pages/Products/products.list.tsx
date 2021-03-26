@@ -38,9 +38,7 @@ export function ProductList() {
                 <Card>
                     <form onSubmit={e => { 
                         e.preventDefault(); 
-                        if(searchInput != null) {
-                            searchInput?.current?.blur(); 
-                        }
+                        searchInput?.current?.blur(); 
                         }}>
                         <div className="transition duration-500 ease-in-out focus-within:bg-gray-50 focus-within:w-screen focus-within:h-screen focus-within:absolute focus-within:p-10 top-0 left-0">
                             <TextInput

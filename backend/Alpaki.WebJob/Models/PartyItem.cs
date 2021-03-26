@@ -1,5 +1,6 @@
 ﻿using Azure.Search.Documents.Indexes;
 using Azure.Search.Documents.Indexes.Models;
+using Newtonsoft.Json;
 
 namespace Alpaki.WebJob.Models
 {
@@ -11,6 +12,7 @@ namespace Alpaki.WebJob.Models
         public string code { get; set; }
 
         [SimpleField(IsKey = true, IsFilterable = true)]
+        [JsonProperty("objectID")]
         public string key => code.Replace('&', '-');
 
         public string ean { get; set; }

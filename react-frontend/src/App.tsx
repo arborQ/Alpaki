@@ -20,6 +20,7 @@ function App() {
     { path: '/dashboard', text: t('menu.home') },
     { path: '/authorize/login', text: t('menu.login') },
     { path: '/shop/products', text: t('menu.shop.products') },
+    { path: '/shop/products/ai', text: t('menu.shop.products.ai') },
   ];
   return (
     <Router>
@@ -31,7 +32,7 @@ function App() {
           <ToggleDarkModeSwitch />
           <ToggleLanguageSwitch /> 
         </div>
-        <div className="w-5/6 bg-back dark:bg-gray-700 h-screen">
+        <div className="w-5/6 bg-back dark:bg-gray-700 h-screen overflow-hidden overflow-y-auto">
           <Switch>
             <DashboardRoute path="/dashboard" />
             <LoginRoute path="/authorize/login" />

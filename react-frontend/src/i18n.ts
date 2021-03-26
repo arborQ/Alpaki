@@ -13,6 +13,7 @@ const resources = {
             "menu.home": "Dashboard",
             "menu.login": "Sign in!",
             "menu.shop.products": "Products",
+            "menu.shop.products.ai": "Products (AI)",
         }
     },
     pl: {
@@ -24,6 +25,7 @@ const resources = {
             "menu.home": "Dashboard",
             "menu.login": "Zaloguj!",
             "menu.shop.products": "Produkty",
+            "menu.shop.products.ai": "Produkty (AI)",
         }
     }
 };
