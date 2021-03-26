@@ -7,8 +7,6 @@ import { SearchItem } from './product.models';
 
 const searchClient = algoliasearch('SR9N5725NZ', '164a52f63b83b46dc1e9a88afc977f93');
 
-searchClient.search()
-
 export function ProductSearch() {
     return (
         <div className="w-full flex justify-center">
