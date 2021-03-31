@@ -7,5 +7,7 @@
         public string ApplicationId { get; set; }
 
         public string ApiKey { get; set; }
+
+        public string ProductsUrl { get; set; }
     }
 }

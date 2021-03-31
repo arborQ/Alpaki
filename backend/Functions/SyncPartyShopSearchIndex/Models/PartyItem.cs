@@ -1,44 +1,29 @@
-﻿using Azure.Search.Documents.Indexes;
-using Azure.Search.Documents.Indexes.Models;
-using Newtonsoft.Json;
-
-namespace Alpaki.WebJob.Models
+﻿namespace SyncPartyShopSearchIndex.Models
 {
     public class PartyItem
     {
-        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.EnLucene, IsSortable = true)]
         public string name { get; set; }
 
         public string code { get; set; }
 
-        [SimpleField(IsKey = true, IsFilterable = true)]
-        [JsonProperty("objectID")]
-        public string key => code.Replace('&', '-');
-
         public string ean { get; set; }
 
-        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.EnLucene)]
         public string description { get; set; }
 
-        [SimpleField(IsFacetable = true)]
         public string photos { get; set; }
 
         public string category_path { get; set; }
 
-        [SimpleField(IsFacetable = true)]
         public string category_name { get; set; }
 
-        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.EnLucene, IsSortable = true, IsFilterable = true, IsFacetable = true)]
         public string price_net { get; set; }
 
         public string tax { get; set; }
 
-        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.EnLucene, IsSortable = true, IsFilterable = true, IsFacetable = true)]
         public string price_gross { get; set; }
 
         public string currency { get; set; }
 
-        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.EnLucene, IsSortable = true, IsFilterable = true, IsFacetable = true)]
         public string is_available { get; set; }
 
         public string stock { get; set; }

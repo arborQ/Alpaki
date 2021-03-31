@@ -17,12 +17,8 @@ namespace SyncPartyShopSearchIndex
             builder.Services.AddHttpClient();
 
             builder.Services.AddSingleton(services => {
-
                 var config = services.GetService<IConfiguration>();
-                var url = config.GetValue<string>("ProductsUrl");
-                var searchConfig = config.GetSection("SearchIndex").Get<SearchIndexConfig>();
-
-                return searchConfig;
+                return  config.GetSection("SearchIndex").Get<SearchIndexConfig>();
             });
 
             builder.Services.AddTransient<ISearchClient>(_ =>
@@ -31,19 +27,13 @@ namespace SyncPartyShopSearchIndex
 
                 return new SearchClient(config.ApplicationId, config.ApiKey);
             });
-
-            //builder.Services.AddSingleton<IMyService>((s) => {
-            //    return new MyService();
-            //});
-
-            //builder.Services.AddSingleton<ILoggerProvider, MyLoggerProvider>();
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
             builder.ConfigurationBuilder
                 .AddEnvironmentVariables()
-                .AddJsonFile("local.settings.json", false);
+                .AddJsonFile("local.settings.json", true);
         }
     }
 }

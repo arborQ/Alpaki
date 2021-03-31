@@ -1,13 +1,17 @@
 using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Algolia.Search.Clients;
+using CsvHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
+using SyncPartyShopSearchIndex.Models;
 
 namespace SyncPartyShopSearchIndex
 {
@@ -15,17 +19,40 @@ namespace SyncPartyShopSearchIndex
     {
         private readonly HttpClient _httpClient;
         private readonly ISearchClient _searchClient;
+        private readonly SearchIndexConfig _searchIndexConfig;
 
-        public SyncPartyShopFunction(HttpClient httpClient, ISearchClient searchClient)
+        public SyncPartyShopFunction(HttpClient httpClient, ISearchClient searchClient, SearchIndexConfig searchIndexConfig)
         {
             _httpClient = httpClient;
             _searchClient = searchClient;
+            _searchIndexConfig = searchIndexConfig;
         }
 
         [FunctionName("SyncPartyShop")]
-        public void Run([TimerTrigger("1 * * * * *")]TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("0 1 * * *")] TimerInfo myTimer, ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            try
+            {
+                var response = await _httpClient.GetAsync(_searchIndexConfig.ProductsUrl);
+
+                using TextReader streamReader = new StreamReader(await response.Content.ReadAsStreamAsync());
+
+                var reader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+                var items = reader.GetRecords<PartyItem>().ToList();
+
+                var test = items.GroupBy(a => a.name.Split(',').First());
+
+                log.LogInformation($"C# Timer trigger function executed items: {items.Count}, groups: {test.Count()}");
+
+                //var index = _searchClient.InitIndex(_searchIndexConfig.IndexName);
+                //var indexResult = await index.SaveObjectsAsync(items);
+                
+                //log.LogInformation($"Search index function executed items: {indexResult.Responses.Count}");
+            }
+            catch (Exception e)
+            {
+                log.LogError(e, "C# Timer trigger function failed");
+            }
         }
 
         [FunctionName("SyncPartyShopTrigger")]
@@ -33,12 +60,7 @@ namespace SyncPartyShopSearchIndex
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            //var response = await _client.GetAsync("https://microsoft.com");
-            //var message = _service.GetMessage();
-
-            //return new OkObjectResult("Response from function with injected dependencies.");
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await Task.Delay(1);
+            await Run(null, log);
 
             return new OkObjectResult("Response from function with injected dependencies.");
         }
