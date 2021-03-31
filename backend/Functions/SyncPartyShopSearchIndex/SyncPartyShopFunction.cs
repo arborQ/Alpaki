@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using SyncPartyShopSearchIndex.Models;
+using static SyncPartyShopSearchIndex.Models.PartyShopIndexItem;
 
 namespace SyncPartyShopSearchIndex
 {
@@ -40,14 +42,17 @@ namespace SyncPartyShopSearchIndex
                 var reader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
                 var items = reader.GetRecords<PartyItem>().ToList();
 
-                var test = items.GroupBy(a => a.name.Split(',').First());
 
-                log.LogInformation($"C# Timer trigger function executed items: {items.Count}, groups: {test.Count()}");
+                log.LogInformation($"C# Timer trigger function executed items: {items.Count}");
 
-                //var index = _searchClient.InitIndex(_searchIndexConfig.IndexName);
-                //var indexResult = await index.SaveObjectsAsync(items);
-                
-                //log.LogInformation($"Search index function executed items: {indexResult.Responses.Count}");
+                var indexItems = GetIndexItems(items);
+                var index = _searchClient.InitIndex(_searchIndexConfig.IndexName);
+
+                log.LogInformation($"C# Timer trigger function executed items: {items.Count}, groups: {indexItems.Count()}");
+
+                var indexResult = await index.SaveObjectsAsync(indexItems);
+
+                log.LogInformation($"Search index function executed items: {indexResult.Responses.Count}");
             }
             catch (Exception e)
             {
@@ -63,6 +68,40 @@ namespace SyncPartyShopSearchIndex
             await Run(null, log);
 
             return new OkObjectResult("Response from function with injected dependencies.");
+        }
+
+        private IEnumerable<PartyShopIndexItem> GetIndexItems(IReadOnlyCollection<PartyItem> partyItems)
+        {
+            var groups = partyItems
+                .Select(i => new { ProductName = i.name.Split(',').First(), Item = i })
+                .GroupBy(a => new { a.ProductName })
+                .Select(a =>
+                {
+                    var productName = a.Key.ProductName;
+                    var key = productName.GetHashCode().ToString();
+                    var net_prices = a.Select(p => decimal.Parse(p.Item.price_net)).Distinct();
+                    var gross_prices = a.Select(p => decimal.Parse(p.Item.price_gross)).Distinct();
+                    var images = a.SelectMany(p => p.Item.photos.Split(';')).ToArray();
+
+                    return new PartyShopIndexItem
+                    {
+                        Key = key,
+                        ProductName = productName,
+                        FromPriceNet = net_prices.Min(),
+                        ToPriceNet = net_prices.Max(),
+                        FromPriceGross = gross_prices.Min(),
+                        ToPriceGross = gross_prices.Max(),
+                        ImageUrls = images,
+                        Variants = a.Select(p => new PartyShopIndexItemVariant
+                        {
+                            VariantName = p.Item.name,
+                            PriceNet = decimal.Parse(p.Item.price_net),
+                            PriceGross = decimal.Parse(p.Item.price_gross)
+                        }).ToArray()
+                    };
+                });
+
+            return groups;
         }
     }
 }
