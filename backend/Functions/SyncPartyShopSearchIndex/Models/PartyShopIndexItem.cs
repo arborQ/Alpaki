@@ -11,6 +11,8 @@ namespace SyncPartyShopSearchIndex.Models
 
         public string ProductDescription { get; set; }
 
+        public string CategoryPath { get; set; }
+
         public decimal FromPriceNet { get; set; }
 
         public decimal ToPriceNet { get; set; }

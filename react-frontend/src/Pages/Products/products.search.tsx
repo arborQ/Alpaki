@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'Components/Card'
 import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
+import { InstantSearch, SearchBox, Hits, RefinementList, ClearRefinements, Configure, Pagination } from 'react-instantsearch-dom';
 import { ProductSearchTile } from './product.search.tile';
 import { SearchItem } from './product.models';
 
@@ -13,12 +13,17 @@ export function ProductSearch() {
             <div className="w-full lg:w-3/4 p-4">
                 <Card>
                     <InstantSearch searchClient={searchClient} indexName="party-shop-proces-index">
-                        <SearchBox />
+                        <SearchBox  />
+                        <ClearRefinements />
+                        <RefinementList attribute="categoryPath" />
+                        <Configure hitsPerPage={10} />
+                        <Pagination />
                         <Hits hitComponent={hint => (
                             <div className="mt-4">
                                 <ProductSearchTile item={hint.hit as any}  />
                             </div>
                         )} />
+                        <Pagination />
                     </InstantSearch>
                 </Card>
             </div>

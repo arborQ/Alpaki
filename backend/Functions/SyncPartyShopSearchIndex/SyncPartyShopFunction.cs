@@ -50,6 +50,7 @@ namespace SyncPartyShopSearchIndex
 
                 log.LogInformation($"C# Timer trigger function executed items: {items.Count}, groups: {indexItems.Count()}");
 
+                await index.ClearObjectsAsync();
                 var indexResult = await index.SaveObjectsAsync(indexItems);
 
                 log.LogInformation($"Search index function executed items: {indexResult.Responses.Count}");
@@ -83,6 +84,7 @@ namespace SyncPartyShopSearchIndex
                     var gross_prices = a.Select(p => decimal.Parse(p.Item.price_gross)).Distinct();
                     var images = a.SelectMany(p => p.Item.photos.Split(';')).Take(1).ToArray();
                     var description = a.First().Item.description;
+                    var category = a.First().Item.category_path;
 
                     return new PartyShopIndexItem
                     {
@@ -93,6 +95,8 @@ namespace SyncPartyShopSearchIndex
                         FromPriceGross = gross_prices.Min(),
                         ToPriceGross = gross_prices.Max(),
                         ImageUrls = images,
+                        ProductDescription = description,
+                        CategoryPath = category,
                         Variants = a.Select(p => new PartyShopIndexItemVariant
                         {
                             VariantName = p.Item.name,
