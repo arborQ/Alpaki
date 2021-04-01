@@ -82,6 +82,7 @@ namespace SyncPartyShopSearchIndex
                     var net_prices = a.Select(p => decimal.Parse(p.Item.price_net)).Distinct();
                     var gross_prices = a.Select(p => decimal.Parse(p.Item.price_gross)).Distinct();
                     var images = a.SelectMany(p => p.Item.photos.Split(';')).Take(1).ToArray();
+                    var description = a.First().Item.description;
 
                     return new PartyShopIndexItem
                     {
