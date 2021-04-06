@@ -1,6 +1,7 @@
 import { LoginRoute } from './Pages/Authorize/LoginRoute';
 import { DashboardRoute } from './Pages/Dashboard/DashboardRoute';
 import { ProductsRoute } from './Pages/Products/products.route';
+import { BabyRoute } from './Pages/Baby/baby.route';
 import {
   BrowserRouter as Router,
   Switch,
@@ -21,6 +22,7 @@ function App() {
     { path: '/authorize/login', text: t('menu.login') },
     { path: '/shop/products', text: t('menu.shop.products') },
     { path: '/shop/products/ai', text: t('menu.shop.products.ai') },
+    { path: '/baby/oliwka', text: t('menu.baby.oliwia') },
   ];
   return (
     <Router>
@@ -37,6 +39,7 @@ function App() {
             <DashboardRoute path="/dashboard" />
             <LoginRoute path="/authorize/login" />
             <ProductsRoute path="/shop/products" />
+            <BabyRoute path="/baby/oliwka" />
             <Redirect to="/dashboard" />
           </Switch>
         </div>

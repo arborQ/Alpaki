@@ -1,7 +1,8 @@
 require('dotenv').config();
 const history = require('connect-history-api-fallback');
 const express = require('express');
-var httpProxy = require('http-proxy');
+const { AuthorizeUser } = require('./authorize');
+const httpProxy = require('http-proxy');
 const app = express()
 const port = 8080;
 const elasticSearchUrl = process.env.ELASTIC_SEARCH_URL;
@@ -18,6 +19,11 @@ app.post("/api/search", function (req, res) {
   req.url = `/indexes/${req.query.index}/docs/search?api-version=${process.env.API_VERSION}`;
   apiProxy.web(req, res, { target: elasticSearchUrl });
 });
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.post('/api/authorize', AuthorizeUser);
 
 app.use(history({
   verbose: true

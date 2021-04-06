@@ -14,6 +14,9 @@ const resources = {
             "menu.login": "Sign in!",
             "menu.shop.products": "Products",
             "menu.shop.products.ai": "Products (AI)",
+            "menu.baby.oliwia": "Olivia",
+            "direction.right": "Right",
+            "direction.left": "Left",
         }
     },
     pl: {
@@ -26,6 +29,9 @@ const resources = {
             "menu.login": "Zaloguj!",
             "menu.shop.products": "Produkty",
             "menu.shop.products.ai": "Produkty (AI)",
+            "menu.baby.oliwia": "Oliwia",
+            "direction.right": "Prawy",
+            "direction.left": "Lewy",
         }
     }
 };

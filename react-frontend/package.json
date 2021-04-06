@@ -3,13 +3,11 @@
   "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "@types/react-instantsearch-dom": "^6.10.0",
-    "algoliasearch": "^4.8.6",
     "connect-history-api-fallback": "^1.6.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http-proxy": "^1.18.1",
-    "react-instantsearch-dom": "^6.10.3"
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "@craco/craco": "^6.1.1",
@@ -24,7 +22,9 @@
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.2",
     "@types/react-i18next": "^8.1.0",
+    "@types/react-instantsearch-dom": "^6.10.0",
     "@types/react-router-dom": "^5.1.7",
+    "algoliasearch": "^4.8.6",
     "autoprefixer": "9",
     "formik": "^2.2.6",
     "http-proxy-middleware": "^1.0.6",
@@ -33,6 +33,8 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-i18next": "^11.8.10",
+    "react-icons": "^4.2.0",
+    "react-instantsearch-dom": "^6.10.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
@@ -43,7 +45,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "serve": "node ./production.server.js"
+    "serve": "node ./server/production.server.js"
   },
   "eslintConfig": {
     "extends": [

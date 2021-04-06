@@ -7,4 +7,4 @@ RUN yarn install --production=true
 COPY . .
 
 EXPOSE 8080
-CMD [ "node", "production.server.js" ]
+CMD [ "node", "server/production.server.js" ]
