@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { 
-    FaRegHandPointLeft as LeftIcon, 
+import {
+    FaRegHandPointLeft as LeftIcon,
     FaRegHandPointRight as RightIcon,
     FaTrashAlt as RemoveIcon
 } from "react-icons/fa";
@@ -9,7 +9,7 @@ import { ListComponent } from 'Components/List';
 
 interface BabyItem {
     side: 'left' | 'right';
-    date: string;
+    date: number;
 }
 
 function getStoredData(key: string): BabyItem[] {
@@ -31,7 +31,7 @@ export function BabyPage() {
         <div className="w-full flex justify-center flex flex-col">
             <div className="w-full lg:w-3/4 p-4 flex">
                 <button onClick={() => {
-                    const items = [{ side: 'left', date: new Date().toUTCString() } as BabyItem, ...history];
+                    const items = [{ side: 'left', date: new Date().getTime() } as BabyItem, ...history];
                     updateHistory(items);
                     addStoredData('oliwia', items);
                 }} className="shadow bg-gray-50 dark:bg-gray-500 hover:shadow-xl transition-shadow rounded-md p-4 w-1/2 flex justify-center">
@@ -41,7 +41,7 @@ export function BabyPage() {
                     </span>
                 </button>
                 <button onClick={() => {
-                    const items = [{ side: 'right', date: new Date().toUTCString() } as BabyItem, ...history];
+                    const items = [{ side: 'right', date: new Date().getTime() } as BabyItem, ...history];
                     updateHistory(items);
                     addStoredData('oliwia', items);
                 }} className="shadow bg-gray-50 dark:bg-gray-500 hover:shadow-xl transition-shadow rounded-md p-4 ml-2 flex justify-center w-1/2">
@@ -56,15 +56,17 @@ export function BabyPage() {
                     <ListComponent items={history}>
                         {
                             item => <div>
-                                <span className="flex flex-row h-full items-center">
-                                    {item.side === 'left' ? <LeftIcon className="mr-2" /> : <RightIcon className="mr-2" />}
-                                    {item.side === 'left' ? <span>{t('direction.left')}</span> : <span>{t('direction.right')}</span>}
-                                    {item.date}
-                                    <button className="outline-none" onClick={() => { 
+                                <span className="flex flex-row h-full items-center justify-between">
+                                    <span className="flex flex-row items-center">
+                                        {item.side === 'left' ? <LeftIcon className="mr-2" /> : <RightIcon className="mr-2" />}
+                                        {item.side === 'left' ? <b>{t('direction.left')}</b> : <b>{t('direction.right')}</b>}
+                                        <span className="pl-4">{new Date(item.date).toLocaleDateString()} <b>{new Date(item.date).toLocaleTimeString()}</b></span>
+                                    </span>
+                                    <button className="outline-none" onClick={() => {
                                         const items = [...history.filter(h => h !== item)];
                                         updateHistory(items);
                                         addStoredData('oliwia', items);
-                                     }}><RemoveIcon /></button>
+                                    }}><RemoveIcon /></button>
                                 </span>
                             </div>
                         }

@@ -27,14 +27,14 @@ function App() {
   return (
     <Router>
       <div className="w-screen h-screen flex">
-        <div className="w-1/6 flex flex flex-col bg-gray-100 dark:bg-gray-500">
+        <div className="w-1/6 flex flex flex-col bg-gray-100 dark:bg-gray-500 hidden sm:block">
           {
             menuOptions.map(o => <Link className="w-full block text-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2" key={o.path} to={o.path}>{o.text}</Link>)
           }
           <ToggleDarkModeSwitch />
           <ToggleLanguageSwitch /> 
         </div>
-        <div className="w-5/6 bg-back dark:bg-gray-700 h-screen overflow-hidden overflow-y-auto">
+        <div className="w-full sm:w-5/6 bg-back dark:bg-gray-700 h-screen overflow-hidden overflow-y-auto">
           <Switch>
             <DashboardRoute path="/dashboard" />
             <LoginRoute path="/authorize/login" />
