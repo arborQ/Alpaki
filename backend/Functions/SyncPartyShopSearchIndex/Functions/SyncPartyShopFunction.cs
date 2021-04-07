@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 using SyncPartyShopSearchIndex.Models;
 using static SyncPartyShopSearchIndex.Models.PartyShopIndexItem;
 
-namespace SyncPartyShopSearchIndex
+namespace SyncPartyShopSearchIndex.Functions
 {
     public class SyncPartyShopFunction
     {
