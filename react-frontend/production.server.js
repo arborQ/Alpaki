@@ -1,7 +1,6 @@
 require('dotenv').config();
 const history = require('connect-history-api-fallback');
 const express = require('express');
-const { AuthorizeUser } = require('./authorize');
 const httpProxy = require('http-proxy');
 const app = express()
 const port = 8080;
@@ -22,8 +21,6 @@ app.post("/api/search", function (req, res) {
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-
-app.post('/api/authorize', AuthorizeUser);
 
 app.use(history({
   verbose: true

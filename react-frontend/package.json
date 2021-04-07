@@ -45,7 +45,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "serve": "node ./server/production.server.js"
+    "serve": "node ./production.server.js"
   },
   "eslintConfig": {
     "extends": [
