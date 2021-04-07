@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "SyncPartyShopSearchIndex": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "SearchIndex:ApiKey": "5b8c3d0c7172da4de6a634f1413fc62f",
+        "SearchIndex:ApplicationId": "SR9N5725NZ",
+        "SearchIndex:IndexName": "party-shop-proces-index",
+        "SearchIndex:ProductsUrl": "https://shop.partydeco.pl/integrationFiles/20998/ab5ec542160e4bf706a77ca964f7c7ec7704e3f29858f8b43a3477bface010e5/products?format=csv&language=pl"
+      }
+    }
+  }
+}

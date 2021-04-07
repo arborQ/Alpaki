@@ -55,7 +55,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.WebJob", "Alpaki.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.Cake.WebApp", "Alpaki.Cake.WebApp\Alpaki.Cake.WebApp.csproj", "{0738D711-207C-4ADC-BD66-2A0736EE7014}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaki.SearchEngine", "Alpaki.SearchEngine\Alpaki.SearchEngine.csproj", "{F9F5FAFD-3342-403D-B195-A6AF23B2A4A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpaki.SearchEngine", "Alpaki.SearchEngine\Alpaki.SearchEngine.csproj", "{F9F5FAFD-3342-403D-B195-A6AF23B2A4A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{FE6AF3D1-10C0-4BFB-B187-398FA0918FF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncPartyShopSearchIndex", "Functions\SyncPartyShopSearchIndex\SyncPartyShopSearchIndex.csproj", "{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -319,6 +323,18 @@ Global
 		{F9F5FAFD-3342-403D-B195-A6AF23B2A4A8}.Release|x64.Build.0 = Release|Any CPU
 		{F9F5FAFD-3342-403D-B195-A6AF23B2A4A8}.Release|x86.ActiveCfg = Release|Any CPU
 		{F9F5FAFD-3342-403D-B195-A6AF23B2A4A8}.Release|x86.Build.0 = Release|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Debug|x64.Build.0 = Debug|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Debug|x86.Build.0 = Debug|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Release|x64.ActiveCfg = Release|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Release|x64.Build.0 = Release|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Release|x86.ActiveCfg = Release|Any CPU
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -343,6 +359,7 @@ Global
 		{005A766E-BDBD-4206-9DE2-5A15B9B7E27C} = {27CFBAD5-8ADF-423D-B6A0-322960E6C787}
 		{0738D711-207C-4ADC-BD66-2A0736EE7014} = {75A9672B-38A2-4ECC-92CA-6C7004931056}
 		{F9F5FAFD-3342-403D-B195-A6AF23B2A4A8} = {7C2A6EBE-ABB7-4428-9B50-956CD2FC6BB2}
+		{F49805F7-DF7F-4B58-B25F-C63A4C2A2998} = {FE6AF3D1-10C0-4BFB-B187-398FA0918FF9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF56E54C-11EB-4345-A6CF-D4ECDA5CA4D1}
