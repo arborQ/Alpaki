@@ -1,6 +1,4 @@
-import React from 'react';
 import { Card } from 'Components/Card';
-import { SearchItem } from './product.models';
 
 interface ProductSearchItem {
     productName: string;
@@ -18,7 +16,6 @@ interface ProductTileProps {
 
 export function ProductSearchTile(props: ProductTileProps) {
     const { item } = props;
-    const [photo] = item.imageUrls;
 
     return (
         <Card>

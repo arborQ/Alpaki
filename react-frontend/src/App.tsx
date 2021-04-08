@@ -29,7 +29,7 @@ function App() {
     { path: '/shop/products', text: t('menu.shop.products'), mode: AuthorizeMode.Shop },
     { path: '/shop/products/ai', text: t('menu.shop.products.ai'), mode: AuthorizeMode.Shop },
     { path: '/baby/oliwka', text: t('menu.baby.oliwia'), mode: AuthorizeMode.Baby },
-  ].filter(m => (m.show === undefined || m.show === true) && (m.mode === undefined || (m.mode & mode) == m.mode));
+  ].filter(m => (m.show === undefined || m.show === true) && (m.mode === undefined || (m.mode & mode) === m.mode));
 
   return (
     <Router>

@@ -1,9 +1,7 @@
-import React from 'react';
 import { Card } from 'Components/Card'
 import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox, Hits, RefinementList, ClearRefinements, Configure, Pagination } from 'react-instantsearch-dom';
 import { ProductSearchTile } from './product.search.tile';
-import { SearchItem } from './product.models';
 
 const searchClient = algoliasearch('SR9N5725NZ', '164a52f63b83b46dc1e9a88afc977f93');
 

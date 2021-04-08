@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Card } from 'Components/Card';
 import { TextInput } from 'Components/TextInput';
 import { debounceAsync } from 'Utils/Debounce';
@@ -30,7 +30,7 @@ export function ProductList() {
         if (search.length > 0) {
             callback(search).then(updateItems);
         }
-    }, [search]);
+    }, [search, callback]);
 
     return (
         <div className="w-full flex justify-center">

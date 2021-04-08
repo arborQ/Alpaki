@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     FaRegHandPointLeft as LeftIcon,
     FaRegHandPointRight as RightIcon,
@@ -19,7 +19,6 @@ function getStoredData(key: string): BabyItem[] {
 }
 
 function addStoredData(key: string, items: BabyItem[]): void {
-    const itemString = localStorage.getItem(`baby-data-${key}`) ?? '[]';
     localStorage.setItem(`baby-data-${key}`, JSON.stringify(items));
 }
 

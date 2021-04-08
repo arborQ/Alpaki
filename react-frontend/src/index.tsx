@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AuthorizeContextProvider, AuthorizeMode } from './Contexts/AuthorizeContext';
+import { AuthorizeContextProvider } from './Contexts/AuthorizeContext';
 
 ReactDOM.render(
   <React.StrictMode>

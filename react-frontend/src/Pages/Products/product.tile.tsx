@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from 'Components/Card';
 import { SearchItem } from './product.models';
 
@@ -16,7 +15,7 @@ export function ProductTile(props: ProductTileProps) {
                     <h1 className="font-bold">{item.name}</h1>
                     <h2 className="font-light">{item.description}</h2>
                 </div>
-                <img src={photo} className="h-10 w-10" />
+                <img src={photo} className="h-10 w-10" alt={item.name} />
             </div>
         </Card>
     );
