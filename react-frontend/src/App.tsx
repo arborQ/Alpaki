@@ -11,12 +11,10 @@ import {
 import { useEffect } from 'react';
 import './i18n';
 import { useTranslation } from 'react-i18next';
-
-import { ToggleDarkModeSwitch } from 'Parts/ToggleDarkModeSwitch';
-import { ToggleLanguageSwitch } from 'Parts/ToggleLanguageSwitch';
 import { useContext } from 'react';
 import { AuthorizeContext, AuthorizeMode } from './Contexts/AuthorizeContext';
-
+import { MenuComponent } from 'Components/Menu';
+import { FaHome, FaBaby, FaRegUser, FaCartArrowDown, FaCartPlus, FaPowerOff } from 'react-icons/fa';
 
 function App() {
   const { t } = useTranslation();
@@ -28,10 +26,10 @@ function App() {
   useEffect(() => {
     const metaThemeColor = document.querySelector("meta[name=theme-color]");
     const colors = {
-      [AuthorizeMode.Baby] : '#ff8882',
-      [AuthorizeMode.Shop] : '#9dbeb9',
-      [AuthorizeMode.Full] : '#ce1212',
-      [AuthorizeMode.None] : '#9ede73',
+      [AuthorizeMode.Baby]: '#ff8882',
+      [AuthorizeMode.Shop]: '#9dbeb9',
+      [AuthorizeMode.Full]: '#ce1212',
+      [AuthorizeMode.None]: '#9ede73',
     }
     if (metaThemeColor) {
       metaThemeColor.setAttribute("content", colors[mode] ?? '#9ede73');
@@ -39,27 +37,31 @@ function App() {
   }, [mode]);
 
   const menuOptions = [
-    { path: '/dashboard', text: t('menu.home') },
-    { path: '/authorize/login', text: t('menu.login'), show: !isAuthorized },
-    { path: '/shop/products', text: t('menu.shop.products'), mode: AuthorizeMode.Shop },
-    { path: '/shop/products/ai', text: t('menu.shop.products.ai'), mode: AuthorizeMode.Shop },
-    { path: '/baby/oliwka', text: t('menu.baby.oliwia'), mode: AuthorizeMode.Baby },
+    { path: '/dashboard', text: t('menu.home'), icon: <FaHome /> },
+    { path: '/authorize/login', text: t('menu.login'), icon: <FaRegUser />, show: !isAuthorized },
+    { path: '/shop/products', text: t('menu.shop.products'), icon: <FaCartArrowDown />, mode: AuthorizeMode.Shop },
+    { path: '/shop/products/ai', text: t('menu.shop.products.ai'), icon: <FaCartPlus />, mode: AuthorizeMode.Shop },
+    { path: '/baby/oliwka', text: t('menu.baby.oliwia'), icon: <FaBaby />, mode: AuthorizeMode.Baby },
   ].filter(m => (m.show === undefined || m.show === true) && (m.mode === undefined || (m.mode & mode) === m.mode));
 
   return (
     <Router>
       <div className="w-screen h-screen flex">
-        <div className="w-1/6 flex flex flex-col bg-gray-100 dark:bg-gray-500 hidden sm:block">
+        <MenuComponent>
           {
-            menuOptions.map(o => <Link className="w-full block text-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2" key={o.path} to={o.path}>{o.text}</Link>)
+            menuOptions.map(o => (
+              <Link className="w-full flex pl-1 text-2xl sm:text-base items-center sm:justify-start justify-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2" key={o.path} to={o.path}>
+                {o.icon}
+                <span className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1 hidden sm:block">{o.text}</span>
+              </Link>
+            ))
           }
           {!isAuthorized ? null : <button onClick={() => { updateUser(); }}
-            className="w-full block text-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2">
-            {t('log-out')}
+            className="absolute bottom-0 w-full flex pl-1 text-2xl sm:text-base items-center sm:justify-start justify-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2">
+              <FaPowerOff />
+              <span className="overflow-ellipsis overflow-hidden whitespace-nowrap pl-1 hidden sm:block">{t('log-out')}</span>
           </button>}
-          <ToggleDarkModeSwitch />
-          <ToggleLanguageSwitch />
-        </div>
+        </MenuComponent>
         <div className="w-full sm:w-5/6 bg-back dark:bg-gray-700 h-screen overflow-hidden overflow-y-auto">
           <Switch>
             <DashboardRoute path="/dashboard" />
