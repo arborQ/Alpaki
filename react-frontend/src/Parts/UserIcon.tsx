@@ -21,7 +21,7 @@ export function UserIcon() {
                 {
                     showDetails ? (
                         <>
-                            <div className="flex absolute left-0 top-0 shadow-lg p-2 w-screen bg-gray-50 z-20">
+                            <div className="flex absolute left-0 top-0 shadow-lg p-2 w-screen bg-gray-50 dark:bg-gray-500 z-20">
                                 <ToggleLanguageSwitch />
                                 <ToggleDarkModeSwitch />
                             </div>
