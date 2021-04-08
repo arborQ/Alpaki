@@ -8,6 +8,7 @@ import {
   Link,
   Redirect
 } from "react-router-dom";
+import { useEffect } from 'react';
 import './i18n';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +24,20 @@ function App() {
 
   const { mode } = currentUser;
   const isAuthorized = !!currentUser?.id;
+
+  useEffect(() => {
+    const metaThemeColor = document.querySelector("meta[name=theme-color]");
+    const colors = {
+      [AuthorizeMode.Baby] : '#ff8882',
+      [AuthorizeMode.Shop] : '#9dbeb9',
+      [AuthorizeMode.Full] : '#ce1212',
+      [AuthorizeMode.None] : '#9ede73',
+    }
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute("content", colors[mode] ?? '#9ede73');
+    }
+  }, [mode]);
+
   const menuOptions = [
     { path: '/dashboard', text: t('menu.home') },
     { path: '/authorize/login', text: t('menu.login'), show: !isAuthorized },
@@ -38,10 +53,10 @@ function App() {
           {
             menuOptions.map(o => <Link className="w-full block text-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2" key={o.path} to={o.path}>{o.text}</Link>)
           }
-          { !isAuthorized? null : <button onClick={() => { updateUser(); }}
-          className="w-full block text-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2">
-            { t('log-out') }
-          </button> }
+          {!isAuthorized ? null : <button onClick={() => { updateUser(); }}
+            className="w-full block text-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2">
+            {t('log-out')}
+          </button>}
           <ToggleDarkModeSwitch />
           <ToggleLanguageSwitch />
         </div>
