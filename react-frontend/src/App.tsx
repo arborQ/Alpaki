@@ -13,17 +13,24 @@ import { useTranslation } from 'react-i18next';
 
 import { ToggleDarkModeSwitch } from 'Parts/ToggleDarkModeSwitch';
 import { ToggleLanguageSwitch } from 'Parts/ToggleLanguageSwitch';
+import { useContext } from 'react';
+import { AuthorizeContext, AuthorizeMode } from './Contexts/AuthorizeContext';
+
 
 function App() {
   const { t } = useTranslation();
+  const { currentUser, updateUser } = useContext(AuthorizeContext);
 
+  const { mode } = currentUser;
+  const isAuthorized = !!currentUser?.id;
   const menuOptions = [
     { path: '/dashboard', text: t('menu.home') },
-    { path: '/authorize/login', text: t('menu.login') },
-    { path: '/shop/products', text: t('menu.shop.products') },
-    { path: '/shop/products/ai', text: t('menu.shop.products.ai') },
-    { path: '/baby/oliwka', text: t('menu.baby.oliwia') },
-  ];
+    { path: '/authorize/login', text: t('menu.login'), show: !isAuthorized },
+    { path: '/shop/products', text: t('menu.shop.products'), mode: AuthorizeMode.Shop },
+    { path: '/shop/products/ai', text: t('menu.shop.products.ai'), mode: AuthorizeMode.Shop },
+    { path: '/baby/oliwka', text: t('menu.baby.oliwia'), mode: AuthorizeMode.Baby },
+  ].filter(m => (m.show === undefined || m.show === true) && (m.mode === undefined || (m.mode & mode) == m.mode));
+
   return (
     <Router>
       <div className="w-screen h-screen flex">
@@ -31,8 +38,12 @@ function App() {
           {
             menuOptions.map(o => <Link className="w-full block text-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2" key={o.path} to={o.path}>{o.text}</Link>)
           }
+          { !isAuthorized? null : <button onClick={() => { updateUser(); }}
+          className="w-full block text-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2">
+            { t('log-out') }
+          </button> }
           <ToggleDarkModeSwitch />
-          <ToggleLanguageSwitch /> 
+          <ToggleLanguageSwitch />
         </div>
         <div className="w-full sm:w-5/6 bg-back dark:bg-gray-700 h-screen overflow-hidden overflow-y-auto">
           <Switch>
