@@ -19,6 +19,7 @@ module.exports = {
       padding: ['focus-within'],
       lineHeight: ['hover', 'focus'],
       fontSize: ['hover', 'focus'],
+      display: ['focus-within', 'group-focus']
     },
   },
   plugins: [],

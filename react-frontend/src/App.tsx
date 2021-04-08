@@ -13,8 +13,9 @@ import './i18n';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { AuthorizeContext, AuthorizeMode } from './Contexts/AuthorizeContext';
-import { MenuComponent } from 'Components/Menu';
+import { MenuComponent } from 'Parts/Menu';
 import { FaHome, FaBaby, FaRegUser, FaCartArrowDown, FaCartPlus, FaPowerOff } from 'react-icons/fa';
+import { UserIcon } from 'Parts/UserIcon';
 
 function App() {
   const { t } = useTranslation();
@@ -48,6 +49,7 @@ function App() {
     <Router>
       <div className="w-screen h-screen flex">
         <MenuComponent>
+          <UserIcon />
           {
             menuOptions.map(o => (
               <Link className="w-full flex pl-1 text-2xl sm:text-base items-center sm:justify-start justify-center text-primary hover:text-secondary dark:text-secondary dark:hover:text-primary pt-2 pb-2" key={o.path} to={o.path}>
