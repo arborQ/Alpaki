@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
+using JWT.Algorithms;
+using JWT.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -21,7 +25,23 @@ namespace SyncPartyShopSearchIndex.Functions
 
             var data = JsonConvert.DeserializeObject<LoginModel>(requestBody);
 
-            return new OkObjectResult(data);
+            if (data.Password != "test")
+            {
+                return new BadRequestResult();
+            }
+
+            return new OkObjectResult(GenerateAccessToken(data.Login, 1));
+        }
+
+        static string GenerateAccessToken(string login, int role)
+        {
+            return new JwtBuilder()
+                .WithAlgorithm(new HMACSHA256Algorithm())
+                .WithSecret(Encoding.ASCII.GetBytes(""))
+                .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds())
+                .AddClaim("username", login)
+                .AddClaim("role", role)
+                .Encode();
         }
     }
 
