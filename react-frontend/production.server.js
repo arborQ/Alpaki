@@ -9,6 +9,10 @@ var apiProxy = httpProxy.createProxyServer({
   changeOrigin: true
 });
 
+var azureFunctionsProxy = httpProxy.createProxyServer({
+  changeOrigin: true
+});
+
 apiProxy.on('proxyReq', function (proxyReq) {
   proxyReq.setHeader('api-key', process.env.API_KEY);
   proxyReq.setHeader('content-type', 'application/json; odata.metadata=minimal');
@@ -17,6 +21,11 @@ apiProxy.on('proxyReq', function (proxyReq) {
 app.post("/api/search", function (req, res) {
   req.url = `/indexes/${req.query.index}/docs/search?api-version=${process.env.API_VERSION}`;
   apiProxy.web(req, res, { target: elasticSearchUrl });
+});
+
+
+app.post("/api/ValidateUser", function (req, res) {
+  azureFunctionsProxy.web(req, res, { target: "https://alpaki-party.azurewebsites.net/api/ValidateUser" });
 });
 
 app.use(express.json());
