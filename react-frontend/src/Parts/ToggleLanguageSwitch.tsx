@@ -1,16 +1,17 @@
-import React from 'react';
 import { Switch as SwitchButton } from 'Components/Switch';
-import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { ConfigurationContext } from 'Contexts/ConfigurationContext';
+
 export function ToggleLanguageSwitch() {
-    const { i18n } = useTranslation();
+    const configContext = useContext(ConfigurationContext);
 
     return (
         <SwitchButton  
         name="language"
-        label={i18n.language}
-        checked={i18n.language === 'pl'} 
+        label={configContext.config.language}
+        checked={configContext.config.language === 'pl'} 
         onChecked={(isPl) => {
-            i18n.changeLanguage(isPl ? 'pl': 'en');
+            configContext.changeConfig({ language: isPl ? 'pl': 'en' })
         }} />
     );
 }

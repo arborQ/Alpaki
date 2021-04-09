@@ -9,7 +9,6 @@ import {
   Redirect
 } from "react-router-dom";
 import { useEffect } from 'react';
-import './i18n';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { AuthorizeContext, AuthorizeMode } from './Contexts/AuthorizeContext';
