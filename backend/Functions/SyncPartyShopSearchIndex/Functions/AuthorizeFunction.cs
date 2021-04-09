@@ -15,6 +15,13 @@ namespace SyncPartyShopSearchIndex.Functions
 {
     public class AuthorizeFunction
     {
+        private readonly AuthorizeConfig _authorizeConfig;
+
+        public AuthorizeFunction(AuthorizeConfig authorizeConfig)
+        {
+            _authorizeConfig = authorizeConfig;
+        }
+
         [FunctionName("ValidateUser")]
         public async Task<IActionResult> ValidateUser(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
@@ -30,14 +37,18 @@ namespace SyncPartyShopSearchIndex.Functions
                 return new BadRequestResult();
             }
 
-            return new OkObjectResult(GenerateAccessToken(data.Login, 1));
+            return new OkObjectResult(new
+            {
+                Token = GenerateAccessToken(data.Login, 1),
+                SeacretLength = _authorizeConfig.SeacretKey?.Length
+            });
         }
 
-        static string GenerateAccessToken(string login, int role)
+        string GenerateAccessToken(string login, int role)
         {
             return new JwtBuilder()
                 .WithAlgorithm(new HMACSHA256Algorithm())
-                .WithSecret(Encoding.ASCII.GetBytes(""))
+                .WithSecret(Encoding.ASCII.GetBytes(_authorizeConfig.SeacretKey))
                 .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds())
                 .AddClaim("username", login)
                 .AddClaim("role", role)

@@ -21,6 +21,11 @@ namespace SyncPartyShopSearchIndex
                 return  config.GetSection("SearchIndex").Get<SearchIndexConfig>();
             });
 
+            builder.Services.AddSingleton(services => {
+                var config = services.GetService<IConfiguration>();
+                return config.GetSection("AuthorizeConfig").Get<AuthorizeConfig>();
+            });
+            
             builder.Services.AddTransient<ISearchClient>(_ =>
             {
                 var config = _.GetService<SearchIndexConfig>();
