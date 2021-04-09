@@ -19,7 +19,9 @@ const resources = {
             "direction.right": "Right",
             "direction.left": "Left",
             "validation.loginRequired": 'Login is required',
-            "validation.passwordRequired": 'Password is required'
+            "validation.passwordRequired": 'Password is required',
+            "toggleLanguageFormat": 'Change to {{lng}}',
+            "toggleDarkModeFormat": "DarkMode {{mode}}"
         }
     },
     pl: {
@@ -37,7 +39,9 @@ const resources = {
             "direction.right": "Prawy",
             "direction.left": "Lewy",
             "validation.loginRequired": 'Login jest wymagany',
-            "validation.passwordRequired": 'Hasło jest wymagane'
+            "validation.passwordRequired": 'Hasło jest wymagane',
+            "toggleLanguageFormat": 'Zmień na {{lng}}',
+            "toggleDarkModeFormat": "DarkMode {{mode}}"
         }
     }
 };
@@ -46,7 +50,7 @@ i18n
     .use(initReactI18next) // passes i18n down to react-i18next
     .init({
         resources,
-        lng: "pl",
+        lng: "en",
 
         keySeparator: false, // we do not use keys in form messages.welcome
 

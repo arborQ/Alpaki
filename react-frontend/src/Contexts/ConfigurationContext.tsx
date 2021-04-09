@@ -7,13 +7,19 @@ export interface ConfigurationContextValue {
     changeConfig: (newConfig: Partial<ConfigModel>) => void;
 }
 
+export enum DarkModeOption {
+    On,
+    Off,
+    Auto
+}
+
 interface ConfigModel {
-    darkMode: 'on' | 'off' | 'auto';
+    darkMode: DarkModeOption;
     language: 'pl' | 'en'
 }
 
 const CONFIG_STORE_KEY = 'alpaki-config';
-const defaultConfig: ConfigModel = { darkMode: 'auto', language: 'pl' };
+const defaultConfig: ConfigModel = { darkMode: DarkModeOption.Auto, language: 'pl' };
 
 const configurationContext = createContext<ConfigurationContextValue>({ config: defaultConfig, changeConfig: () => { } });
 
@@ -27,7 +33,7 @@ export function ConfigurationContextProvider(props: { children: any }) {
     const { i18n } = useTranslation();
 
     useEffect(() => {
-        if (stateConfig.darkMode === 'on') {
+        if (stateConfig.darkMode === DarkModeOption.On || stateConfig.darkMode === DarkModeOption.Auto) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');

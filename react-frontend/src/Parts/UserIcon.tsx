@@ -14,25 +14,29 @@ export function UserIcon() {
     }
 
     return (
-        <>
-            <button className="flex justify-center p-2 relative w-full focus:outline-none" onClick={() => toggleDetails(true)}>
-                <FaUserCog className="text-6xl" />
-                <div>{showDetails}</div>
-                {
-                    showDetails ? (
-                        <>
-                            <div className="flex absolute left-0 top-0 shadow-lg p-2 w-screen bg-gray-50 dark:bg-gray-500 z-20">
-                                <ToggleLanguageSwitch />
-                                <ToggleDarkModeSwitch />
+        <div className="flex justify-center p-2 relative w-full focus:outline-none" onClick={() => toggleDetails(true)}>
+            <FaUserCog className="text-6xl" />
+            <div>{showDetails}</div>
+            {
+                showDetails ? (
+                    <>
+                        <div className="flex absolute left-0 top-0 shadow-lg w-screen z-20 bg-gray-50 dark:bg-gray-500 justify-end">
+                            <div className="p-4">
+                                <div className="pb-2">
+                                    <ToggleLanguageSwitch />
+                                </div>
+                                <div className="pb-2">
+                                    <ToggleDarkModeSwitch />
+                                </div>
                             </div>
-                            <div onClick={e => {
-                                e.stopPropagation();
-                                toggleDetails(false);
-                            }} className="w-screen h-screen fixed left-0 top-0 bg-fixed z-10 bg-gray-600 bg-opacity-75"></div>
-                        </>
-                    ) : null
-                }
-            </button>
-        </>
+                        </div>
+                        <div onClick={e => {
+                            e.stopPropagation();
+                            toggleDetails(false);
+                        }} className="w-screen h-screen fixed left-0 top-0 bg-fixed z-10 bg-gray-600 bg-opacity-75"></div>
+                    </>
+                ) : null
+            }
+        </div>
     );
 }
