@@ -6,6 +6,7 @@ using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Algolia.Search.Clients;
 using Microsoft.Extensions.Configuration;
+using Alpaki.SearchEngine;
 
 [assembly: FunctionsStartup(typeof(SyncPartyShopSearchIndex.Startup))]
 namespace SyncPartyShopSearchIndex
@@ -25,7 +26,9 @@ namespace SyncPartyShopSearchIndex
                 var config = services.GetService<IConfiguration>();
                 return config.GetSection("AuthorizeConfig").Get<AuthorizeConfig>();
             });
-            
+
+            builder.Services.InstalSearchEngine(new SearchClientConfiguration { ApiKey = "D76DC90A715CBEE3C80A3A7BE3E13BCE", EndPoint = "https://party-alpaki.search.windows.net" });
+
             builder.Services.AddTransient<ISearchClient>(_ =>
             {
                 var config = _.GetService<SearchIndexConfig>();

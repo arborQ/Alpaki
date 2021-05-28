@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Algolia.Search.Clients;
+using Alpaki.SearchEngine;
+using Azure.Search.Documents.Indexes;
 using CsvHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,43 +19,37 @@ using static SyncPartyShopSearchIndex.Models.PartyShopIndexItem;
 
 namespace SyncPartyShopSearchIndex.Functions
 {
+    public class SyncCognitivePartyShopFunction
+    {
+
+    }
+
+    public class IndexModel
+    {
+        [SimpleField(IsKey = true, IsFilterable = true)]
+        public string Id { get; set; }
+
+        [SearchableField(IsSortable = true)]
+        public string Name { get; set; }
+    }
+
     public class SyncPartyShopFunction
     {
-        private readonly HttpClient _httpClient;
-        private readonly ISearchClient _searchClient;
-        private readonly SearchIndexConfig _searchIndexConfig;
+        private readonly ISearchWriteClient _searchWriteClient;
 
-        public SyncPartyShopFunction(HttpClient httpClient, ISearchClient searchClient, SearchIndexConfig searchIndexConfig)
+        public SyncPartyShopFunction(ISearchWriteClient searchWriteClient)
         {
-            _httpClient = httpClient;
-            _searchClient = searchClient;
-            _searchIndexConfig = searchIndexConfig;
+            _searchWriteClient = searchWriteClient;
         }
 
-        [FunctionName("SyncPartyShop")]
+        [FunctionName("SyncAzurePartyShop")]
         public async Task Run([TimerTrigger("0 1 * * *")] TimerInfo myTimer, ILogger log)
         {
             try
             {
-                var response = await _httpClient.GetAsync(_searchIndexConfig.ProductsUrl);
+                var items = Enumerable.Range(0, 1000).Select(e => new IndexModel { Id = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString().Substring(0, 5) }).ToList();
 
-                using TextReader streamReader = new StreamReader(await response.Content.ReadAsStreamAsync());
-
-                var reader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
-                var items = reader.GetRecords<PartyItem>().ToList();
-
-
-                log.LogInformation($"C# Timer trigger function executed items: {items.Count}");
-
-                var indexItems = GetIndexItems(items);
-                var index = _searchClient.InitIndex(_searchIndexConfig.IndexName);
-
-                log.LogInformation($"C# Timer trigger function executed items: {items.Count}, groups: {indexItems.Count()}");
-
-                await index.ClearObjectsAsync();
-                var indexResult = await index.SaveObjectsAsync(indexItems);
-
-                log.LogInformation($"Search index function executed items: {indexResult.Responses.Count}");
+                await _searchWriteClient.RebuildSearchData(items, "party-shop-test");
             }
             catch (Exception e)
             {
@@ -61,7 +57,7 @@ namespace SyncPartyShopSearchIndex.Functions
             }
         }
 
-        [FunctionName("SyncPartyShopTrigger")]
+        [FunctionName("SyncAzurePartyShopTrigger")]
         public async Task<IActionResult> RunEndpoint(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)

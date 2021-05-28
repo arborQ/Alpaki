@@ -37,7 +37,10 @@ app.use(history({
 }));
 
 app.use(compression());
-app.use(express.static('.'));
+app.use(express.static('./build'));
+
+app.get("/healthy", (req, res) => res.send("ok"));
+
 app.listen(port, function () {
   console.log(`Example app listening on port http://localhost:${port}!`)
 });
