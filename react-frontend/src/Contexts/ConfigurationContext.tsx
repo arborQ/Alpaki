@@ -19,7 +19,7 @@ interface ConfigModel {
 }
 
 const CONFIG_STORE_KEY = 'alpaki-config';
-const defaultConfig: ConfigModel = { darkMode: DarkModeOption.Auto, language: 'pl' };
+const defaultConfig: ConfigModel = { darkMode: DarkModeOption.Off, language: 'pl' };
 
 const configurationContext = createContext<ConfigurationContextValue>({ config: defaultConfig, changeConfig: () => { } });
 
